@@ -1,0 +1,102 @@
+/*
+ * Procedural phoenix hero
+ *
+ * Add .phoenix-stage inside the hero visual container.  The stage is
+ * intentionally isolated from the resume layout so it can be removed or
+ * replaced by a licensed .glb model without touching the rest of the page.
+ */
+.phoenix-stage {
+  position: absolute;
+  /* Keep the licensed model inside the rounded hero card.  The previous
+   * oversized inset was useful for the abstract poster, but it clipped the
+   * real bird's long tail and wing tips on smaller cards. */
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.phoenix-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* The canvas can receive an optional click without blocking the copy or
+ * navigation.  The parent page opts in by adding .phoenix-stage--clickable. */
+.phoenix-stage--clickable canvas {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.phoenix-stage .phoenix-fallback-poster {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 177, 100, .24), transparent 29%),
+    radial-gradient(circle at 50% 70%, rgba(197, 70, 48, .2), transparent 46%),
+    linear-gradient(145deg, rgba(42, 31, 31, .94), rgba(76, 39, 32, .84));
+}
+
+.phoenix-stage .phoenix-fallback-poster::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border: 1px solid rgba(255, 187, 109, .28);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(239, 85, 49, .17), inset 0 0 50px rgba(255, 145, 65, .1);
+}
+
+.phoenix-stage .phoenix-fallback-label {
+  position: absolute;
+  right: 7%;
+  bottom: 7%;
+  z-index: 1;
+  color: rgba(255, 218, 173, .8);
+  font: 500 .66rem/1.4 "DM Mono", ui-monospace, monospace;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.phoenix-stage.is-static canvas {
+  filter: saturate(.82);
+}
+
+@media (max-width: 760px) {
+  .phoenix-stage {
+    inset: 0;
+    opacity: .86;
+  }
+
+  .phoenix-stage .phoenix-fallback-label {
+    right: 9%;
+    bottom: 5%;
+    font-size: .58rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phoenix-stage,
+  .phoenix-stage canvas {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* The licensed Phoenix is the hero focal point. Keep its canvas above the
+ * decorative grid/orbits, while the HUD and photo overlays retain their own
+ * higher z-index from style.css. */
+.hero-visual > .phoenix-stage{z-index:3}
+.hero-visual > .phoenix-stage .phoenix-canvas{position:relative;z-index:3}
+.hero-visual > .phoenix-stage .phoenix-fallback-poster{z-index:3}
+.hero-visual > .phoenix-stage .phoenix-fallback-label{z-index:4}
+
+@media (max-width: 760px) {
+  .hero-visual > .phoenix-stage{z-index:3}
+}

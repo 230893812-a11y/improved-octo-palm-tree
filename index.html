@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="黄鼎的在线个人主页——松山职业技术学院人工智能技术应用专业大一新生，含凤凰 3D 互动视觉、实习经历与证书作品集" />
+  <meta name="theme-color" content="#f7f4ee" />
+  <title>黄鼎 · 在线简历</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23263d3c'/%3E%3Cpath d='M16 44V16h8v20h24v8z' fill='%23f7f4ee'/%3E%3Ccircle cx='50' cy='44' r='4' fill='%23eb6a52'/%3E%3C/svg%3E" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260904-2" />
+  <link rel="stylesheet" href="phoenix/phoenix-prototype.css" />
+</head>
+<body>
+  <canvas id="fluidCanvas" class="fluid-canvas fluid-advanced is-hidden" aria-hidden="true"></canvas>
+  <canvas id="fluidFallback" class="fluid-canvas fluid-fallback" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="返回顶部">
+      <span class="brand-mark">L<span>.</span></span>
+      <span class="brand-copy">HUANG DING<small>PORTFOLIO / 2026</small></span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#about">关于我</a>
+      <a href="#experience">经历</a>
+      <a href="#projects">项目</a>
+      <a href="#skills">技能</a>
+      <a href="#certificates">证书</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-button" id="themeToggle" type="button" aria-label="切换深色模式" title="切换主题">◐</button>
+      <button class="reader-mode-button" id="readerMode" type="button" aria-pressed="false">阅读模式</button>
+      <button class="download-button" id="printResume" type="button"><span>下载简历</span><i>↗</i></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero section-wrap" id="about">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="status-dot"></span> READY TO LEARN · ZHONGSHAN / CHINA</p>
+        <p class="hero-name">黄鼎</p>
+        <p class="hero-positioning">人工智能技术应用专业大一新生｜关注 AI 工具、Web 交互与知识库应用，通过持续实践积累项目开发能力。</p>
+        <h1>让好奇心，<br /><em>展翼起飞。</em></h1>
+        <p class="hero-intro">你好，我是<span class="highlight">黄鼎</span>，中山人，松山职业技术学院人工智能技术应用专业的大一新生。我把凤凰作为探索的视觉符号：保持好奇，持续实践，让每一次尝试都向前一步。</p>
+        <div class="hero-facts" aria-label="个人基本信息"><span><b>身份</b>大一新生</span><span><b>专业</b>人工智能技术应用</span><span><b>方向</b>AI · 创意实践</span></div>
+        <div class="hero-actions">
+          <a class="primary-button" href="#experience">阅读简历 <span>↓</span></a>
+          <a class="outline-button ai-cta" href="https://zhimai-rag-knowledge.pages.dev/%E5%85%A8%E5%BA%93%E5%9B%BE%E8%B0%B1?refresh=1" target="_blank" rel="noreferrer">体验校园 AI 助手 <span>↗</span></a>
+          <a class="text-button hero-project-link" href="#projects">查看项目 <span>↗</span></a>
+          <button class="text-button" id="copyEmail" type="button">复制邮箱 <span>⌘</span></button>
+        </div>
+        <div class="hero-contact-links" aria-label="快捷联系方式">
+          <a href="mailto:230893812@qq.com">邮箱 · 230893812@qq.com</a>
+          <a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y ↗</a>
+          <a href="tel:15362928293">电话 · 153 6292 8293</a>
+        </div>
+      </div>
+      <div class="hero-flight" aria-label="凤凰滚动飞行区">
+        <div class="hero-visual phoenix-only reveal delay-1" aria-label="可交互凤凰 3D 视觉区">
+          <div class="visual-grid"></div><div class="visual-orbit visual-orbit-one"></div><div class="visual-orbit visual-orbit-two"></div>
+          <div class="phoenix-decor" aria-hidden="true">
+            <i class="ember ember-1"></i><i class="ember ember-2"></i><i class="ember ember-3"></i><i class="ember ember-4"></i><i class="ember ember-5"></i><i class="ember ember-6"></i>
+            <span class="phoenix-flare flare-left"></span><span class="phoenix-flare flare-right"></span>
+            <span class="phoenix-spark spark-one">✦</span><span class="phoenix-spark spark-two">✦</span>
+          </div>
+          <div id="phoenixStage" class="phoenix-stage" aria-label="凤凰互动舞台"></div>
+          <div class="phoenix-hud" aria-hidden="true"><span>PHOENIX / INTERACTIVE</span></div>
+          <div class="phoenix-instruction" aria-live="polite"><span class="phoenix-status-dot"></span><span id="phoenixStatus">加载凤凰视觉…</span></div>
+          <div class="phoenix-controls"><button class="phoenix-control" id="phoenixReplay" type="button">展翼一次 <span>↗</span></button><button class="phoenix-control" id="phoenixToggle" type="button" aria-pressed="false">暂停动画</button><button class="phoenix-control phoenix-skip" id="phoenixSkip" type="button">跳过凤凰动画</button></div>
+          <div class="visual-core"><span>HD</span><small>LEARN / BUILD / GROW</small></div>
+          <div class="visual-note note-bottom">ZHONGSHAN · 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="个人关键词">
+      <div class="ticker-track"><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span><b>✳</b><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span></div>
+    </section>
+
+    <section class="section-wrap split-section" id="experience">
+      <div class="section-heading reveal"><p class="section-kicker">01 — JOURNEY</p><h2>经历，<br /><span>是最好的作品集。</span></h2><p class="heading-note">我还在起步阶段，但愿意快速学习、主动承担，把每一次实践都变成下一次进步的基础。</p></div>
+      <div class="timeline reveal delay-1">
+        <article class="timeline-item featured"><div class="time-meta"><span>实习 6 个月</span><span class="tag">INTERNSHIP</span></div><h3>实习生 / 协作支持 <small>@ 加华微捷科技有限公司</small></h3><p>协助组长整理任务流程、统一信息记录方式并跟进执行，减少重复沟通，团队协作效率得到提升，工作表现获得主管表扬。</p><div class="tech-row"><span>团队协作</span><span>流程优化</span><span>执行力</span></div></article>
+        <article class="timeline-item"><div class="time-meta"><span>2026 — 至今</span><span class="tag">CAMPUS</span></div><h3>松山职业技术学院 <small>人工智能技术应用 · 中山</small></h3><p>正式开启大学学习，计划夯实编程基础，持续探索人工智能、数字媒体与产品实践。</p><div class="tech-row"><span>持续学习</span><span>主动探索</span><span>长期主义</span></div></article>
+      </div>
+    </section>
+
+    <section class="section-wrap metrics-section reveal" aria-label="个人数据">
+      <div class="metric"><strong>6</strong><span>个月实习经历</span></div><div class="metric"><strong>1</strong><span>次主管表扬</span></div><div class="metric"><strong>∞</strong><span>持续学习动力</span></div><div class="metric"><strong>01</strong><span>位大一新生</span></div>
+    </section>
+
+    <section class="section-wrap projects-section" id="projects">
+      <div class="section-heading reveal"><p class="section-kicker">02 — SELECTED PROJECTS</p><h2>从想法出发，<br /><span>把作品真正做出来。</span></h2><p class="heading-note">这里只展示已经完成、能够打开并验证的作品。</p></div>
+      <div class="project-grid reveal delay-1">
+        <article class="project-card project-card-featured"><span class="project-number">01</span><div><span class="project-status">当前作品 · 可在线浏览</span><h3>3D 交互式个人简历</h3><p>以真实 GLB 凤凰模型作为视觉主线，通过鼠标、触摸和滚动建立互动体验，同时完整呈现实习、技能、证书与联系方式。</p><div class="tech-row"><span>HTML / CSS</span><span>JavaScript</span><span>Three.js</span><span>WebGL</span></div></div><a href="#top">体验当前作品 ↑</a></article>
+        <article class="project-card"><span class="project-number">02</span><div><span class="project-status">已上线 · 可直接游玩</span><h3>浪尖儿坦克大战</h3><p>使用 HTML5、JavaScript 和 Canvas 实现移动、射击、碰撞、生命值及音效系统，并完成 GitHub Pages 在线部署。</p><div class="tech-row"><span>Canvas</span><span>JavaScript</span><span>游戏交互</span><span>音效系统</span></div></div><div class="project-links"><a href="tank-battle-fast/index.html?v=20260905-hitfix" target="_blank" rel="noreferrer">快速体验 ↗</a><a href="https://230893812-a11y.github.io/legendary-goggles/" target="_blank" rel="noreferrer">完整版本 ↗</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码 ↗</a></div></article>
+        <article class="project-card project-card-ai"><span class="project-number">03</span><div><span class="project-status">RAG 实践原型 · 在线演示</span><h3>知脉·校园知识库智能问答</h3><p>围绕大学新生校园问答场景，实践资料整理、知识切分、检索配置、提示词设计与前端交互。</p><div class="tech-row"><span>RAG</span><span>知识库</span><span>知识图谱</span><span>在线应用</span></div><span class="project-details"><span><b>项目背景</b>：帮助新生更快查询校园信息。</span><span><b>个人实践</b>：资料整理、知识切分、检索配置、提示词设计、前端交互与测试验证。</span><span><b>使用技术</b>：RAG、知识库、知识图谱、Cloudflare Pages。</span><span><b>项目成果</b>：提供可直接访问的全库图谱与问答体验入口。</span></span></div><div class="project-links"><a href="https://zhimai-rag-knowledge.pages.dev/%E5%85%A8%E5%BA%93%E5%9B%BE%E8%B0%B1?refresh=1" target="_blank" rel="noreferrer">立即体验 ↗</a></div></article>
+        <article class="project-card"><span class="project-number">04</span><div><span class="project-status">独立完成 · 2026.09</span><h3>API 模型路由一致性检测工具</h3><p>使用 Python 检查请求模型与接口返回模型字段的一致性，支持批量测试、多轮统计、异常识别和日志记录。</p><div class="tech-row"><span>Python</span><span>HTTP API</span><span>JSON</span><span>自动化测试</span></div><span class="project-details"><span><b>项目背景</b>：辅助判断 API 中转服务的模型路由是否与声明一致。</span><span><b>个人负责</b>：命令行设计、接口请求、结果比对、异常处理与日志系统。</span><span><b>技术实现</b>：Bearer 鉴权、代理配置、SSL 验证、多模型多轮测试和退出码。</span><span><b>项目成果</b>：形成可复现的检测流程并公开源码，便于持续测试和问题定位。</span></span></div><div class="project-links"><a href="https://github.com/230893812-a11y/miniature-fiesta" target="_blank" rel="noreferrer">查看源码 ↗</a></div></article>
+      </div>
+    </section>
+
+    <section class="section-wrap skills-section" id="skills">
+      <div class="section-heading reveal"><p class="section-kicker">03 — TOOLKIT</p><h2>我的工具箱，<br /><span>也装着好奇心。</span></h2></div>
+      <div class="skills-grid">
+        <article class="skill-card reveal"><div class="skill-icon">✦</div><h3>基础技术</h3><p>把兴趣沉淀为可复用、可展示的基础能力。</p><div class="skill-list"><div><span>HTML / CSS</span><b>响应式页面</b></div><div class="bar"><i style="width:68%"></i></div><div><span>JavaScript</span><b>基础交互</b></div><div class="bar"><i style="width:60%"></i></div><div><span>Python</span><b>项目实践</b></div><div class="bar"><i style="width:54%"></i></div><div><span>AI 工具</span><b>辅助学习</b></div><div class="bar"><i style="width:76%"></i></div></div></article>
+        <article class="skill-card accent reveal delay-1"><div class="skill-icon">✺</div><h3>证书与学习</h3><p>用作品和证书记录每一次认真投入。</p><div class="chip-cloud"><span>AI4S Cup</span><span>Python 基础</span><span>阿里云认证</span><span>自主学习</span></div></article>
+        <article class="skill-card reveal delay-2"><div class="skill-icon">↗</div><h3>协作方式</h3><p>在实习中养成可靠、主动、及时反馈的工作习惯。</p><ul class="principles"><li>先理解目标，再拆解任务</li><li>遇到问题及时沟通</li><li>把事情做到有交代</li></ul></article>
+      </div>
+    </section>
+
+    <section class="section-wrap certificates-section" id="certificates">
+      <div class="section-heading reveal"><p class="section-kicker">04 — CERTIFICATES</p><h2>19 份证书，<br /><span>记录每一步成长。</span></h2><p class="heading-note">按学习方向分类整理。点击任意证书可查看高清原图，也可以在新窗口中保存。</p></div>
+      <div class="cert-filter reveal delay-1" role="tablist" aria-label="证书分类">
+        <button class="filter-button active" type="button" data-filter="all" role="tab" aria-selected="true">全部 <b>19</b></button>
+        <button class="filter-button" type="button" data-filter="cloud" role="tab" aria-selected="false">云计算 / AIGC <b>6</b></button>
+        <button class="filter-button" type="button" data-filter="llm" role="tab" aria-selected="false">大模型工程 <b>7</b></button>
+        <button class="filter-button" type="button" data-filter="academy" role="tab" aria-selected="false">AI 大学堂 <b>3</b></button>
+        <button class="filter-button" type="button" data-filter="trainer" role="tab" aria-selected="false">Python / 训练师 <b>3</b></button>
+      </div>
+      <div class="certificate-exhibition reveal delay-2" id="certificateExhibition">
+        <div class="certificate-viewport" id="certificateViewport" tabindex="0" role="region" aria-label="左右拖动切换证书，按回车查看高清证书">
+          <div class="certificate-stack" id="certificateStack" aria-live="polite"></div>
+          <div class="certificate-drag-hint" aria-hidden="true"><span>←</span> 左右拖动 · 滚轮切换 <span>→</span></div>
+        </div>
+        <aside class="certificate-detail" aria-live="polite">
+          <span class="certificate-current" id="certificateCurrent">01 / 19</span>
+          <p class="section-kicker">CURRENT CERTIFICATE</p>
+          <h3 id="certificateTitle">阿里云 AIGC 设计基础</h3>
+          <p id="certificateCategory">云计算 / AIGC</p>
+          <button class="certificate-open-button" id="certificateOpen" type="button">查看高清证书 <span>↗</span></button>
+          <div class="certificate-tech"><span>CSS 3D</span><span>DRAG</span><span>TOUCH</span></div>
+        </aside>
+      </div>
+      <details class="certificate-list-toggle">
+        <summary>展开全部 19 张证书列表（含官方认证、课程结业与平台能力证明）</summary>
+      <div class="certificate-grid reveal delay-2">
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/1.jpg" target="_blank" rel="noreferrer"><img src="media/1.jpg" alt="阿里云 AIGC 设计基础证书" loading="lazy"><span class="cert-meta"><b>阿里云 AIGC 设计基础</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-featured="true" data-lightbox="certificate" href="media/2.jpg" target="_blank" rel="noreferrer"><img src="media/2.jpg" alt="阿里云 RAG 应用构建及优化证书" loading="lazy"><span class="cert-meta"><b>RAG 应用构建及优化</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/3a.jpg" target="_blank" rel="noreferrer"><img src="media/3a.jpg" alt="阿里云百炼平台智能体应用证书" loading="lazy"><span class="cert-meta"><b>百炼平台智能体应用</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/4.jpg" target="_blank" rel="noreferrer"><img src="media/4.jpg" alt="阿里云大模型内容生产能力证书" loading="lazy"><span class="cert-meta"><b>大模型内容生产能力</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/5.jpg" target="_blank" rel="noreferrer"><img src="media/5.jpg" alt="AI 数据分析能力认证证书" loading="lazy"><span class="cert-meta"><b>AI 数据分析能力</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-featured="true" data-lightbox="certificate" href="media/az.jpg" target="_blank" rel="noreferrer"><img src="media/az.jpg" alt="华为人工智能初识微认证证书" loading="lazy"><span class="cert-meta"><b>华为人工智能初识微认证</b><small>官方认证 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/6.jpg" target="_blank" rel="noreferrer"><img src="media/6.jpg" alt="大模型微调工程师证书" loading="lazy"><span class="cert-meta"><b>大模型微调工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/7.jpg" target="_blank" rel="noreferrer"><img src="media/7.jpg" alt="大模型工程师证书" loading="lazy"><span class="cert-meta"><b>大模型工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-featured="true" data-lightbox="certificate" href="media/8.jpg" target="_blank" rel="noreferrer"><img src="media/8.jpg" alt="大模型开发工程师证书" loading="lazy"><span class="cert-meta"><b>大模型开发工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/9.jpg" target="_blank" rel="noreferrer"><img src="media/9.jpg" alt="提示词工程师证书" loading="lazy"><span class="cert-meta"><b>提示词工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/10.jpg" target="_blank" rel="noreferrer"><img src="media/10.jpg" alt="智能体工程师（ModelScope）证书" loading="lazy"><span class="cert-meta"><b>智能体工程师（ModelScope）</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/11.jpg" target="_blank" rel="noreferrer"><img src="media/11.jpg" alt="智能体工程师（蚂蚁集团）证书" loading="lazy"><span class="cert-meta"><b>智能体工程师（蚂蚁集团）</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/12.jpg" target="_blank" rel="noreferrer"><img src="media/12.jpg" alt="AI 编程能力认证证书" loading="lazy"><span class="cert-meta"><b>AI 编程能力认证</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="academy" data-featured="true" data-lightbox="certificate" href="media/Ai大学认证证书.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书.jpg" alt="AI 大学堂智能体工程师认证" loading="lazy"><span class="cert-meta"><b>智能体工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="academy" data-lightbox="certificate" href="media/Ai大学认证证书2.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书2.jpg" alt="AI 大学堂微调工程师认证" loading="lazy"><span class="cert-meta"><b>微调工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="academy" data-lightbox="certificate" href="media/Ai大学认证证书3.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书3.jpg" alt="AI 大学堂提示词工程师认证" loading="lazy"><span class="cert-meta"><b>提示词工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="trainer" data-lightbox="certificate" href="media/certificate.jpg" target="_blank" rel="noreferrer"><img src="media/certificate.jpg" alt="AI4S Cup Python 基础能力认证" loading="eager"><span class="cert-meta"><b>AI4S Cup · Python 基础</b><small>平台能力证明 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="trainer" data-featured="true" data-lightbox="certificate" href="media/d.jpg" target="_blank" rel="noreferrer"><img src="media/d.jpg" alt="人工智能训练师高级证书" loading="eager"><span class="cert-meta"><b>人工智能训练师（高级）</b><small>官方认证 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="trainer" data-lightbox="certificate" href="media/h.jpg" target="_blank" rel="noreferrer"><img src="media/h.jpg" alt="人工智能训练师初级证书" loading="eager"><span class="cert-meta"><b>人工智能训练师（初级）</b><small>官方认证 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+      </div>
+      </details>
+    </section>
+
+    <section class="section-wrap showcase-section">
+      <div class="section-heading reveal"><p class="section-kicker">05 — BEYOND WORK</p><h2>工作之外，<br /><span>我在收集灵感。</span></h2></div>
+      <div class="showcase-grid reveal delay-1"><article class="note-card note-yellow"><span class="note-index">01</span><h3>运动与专注</h3><p>射击场记录代表我对专注和挑战的兴趣，<br />也提醒自己保持稳定的行动力。</p><span class="note-mark">☼</span></article><article class="note-card note-blue"><span class="note-index">02</span><h3>巅峰极速极限组<br />中国第145名</h3><p>游戏成就记录阶段性目标，<br />也体现我喜欢复盘与突破。</p><span class="note-mark">◉</span></article><article class="note-card note-red"><span class="note-index">03</span><h3>生活记录</h3><p>身高 185 cm，体重小于 75 kg，<br />保持规律状态与行动力。</p><span class="note-mark">✳</span></article></div>
+    </section>
+
+    <section class="section-wrap media-section" id="media">
+      <div class="section-heading reveal"><p class="section-kicker">06 — LIFE &amp; MEDIA</p><h2>工作之外，<br /><span>也保留真实的兴趣。</span></h2><p class="heading-note">生活照片、游戏成就和视频记录，帮助别人看到证书之外的我。所有素材都可点击查看高清版本。</p></div>
+      <div class="media-grid reveal delay-1">
+        <a class="media-card" data-lightbox="media" href="media/a.jpg" target="_blank" rel="noreferrer"><img src="media/a.jpg" alt="巅峰极速极限组中国第145名截图" loading="lazy"><span class="media-caption"><b>巅峰极速极限组 · 中国第145名</b><small>称号截图记录阶段性目标与复盘。</small></span></a>
+        <a class="media-card" data-lightbox="media" href="media/a (2).jpg" target="_blank" rel="noreferrer"><img src="media/a (2).jpg" alt="生活记录照片" loading="lazy"><span class="media-caption"><b>生活记录</b><small>身高 185 cm，体重小于 75 kg，保持真实状态与行动力。</small></span></a>
+        <a class="media-card" data-lightbox="media" href="media/go.jpg" target="_blank" rel="noreferrer"><img src="media/go.jpg" alt="黄鼎运动与专注：射击场记录" loading="lazy"><span class="media-caption"><b>运动与专注</b><small>射击场记录，展示我对专注、挑战和稳定行动的兴趣。</small></span></a>
+        <div class="media-card video-card"><video controls preload="none" playsinline poster="media/tank-poster.jpg" data-video-src="media/坦克大战小游戏.mp4" aria-label="坦克大战小游戏视频"><span class="video-placeholder">点击封面加载并播放视频</span>你的浏览器不支持视频播放。</video><span class="media-caption"><b>坦克大战小游戏</b><small>点击封面后才加载视频，减少首屏等待。</small></span></div>
+        <a class="media-card game-entry" href="tank-battle-fast/index.html?v=20260905-hitfix" target="_blank" rel="noreferrer" aria-label="打开浪尖儿坦克大战快速版"><div class="game-entry-art"><span class="game-entry-mark">HD</span><span class="game-entry-play" aria-hidden="true">▶</span><small>浪尖儿·战场</small><em>FAST · CLICK TO PLAY</em></div><span class="media-caption"><span class="project-status">快速加载 · 可直接游玩</span><b>浪尖儿坦克大战</b><small>点击立即进入轻量版，支持电脑和手机操作。</small><span class="project-details"><span><b>项目背景</b>：把经典坦克玩法做成可分享的网页小游戏。</span><span><b>负责内容</b>：游戏交互、音效整合与页面部署。</span><span><b>使用技术</b>：HTML5、JavaScript、Canvas、GitHub Pages。</span><span><b>项目亮点</b>：移动、射击、碰撞、生命值、爆炸音效与在线入口。</span></span></span><span class="game-entry-cta">立即开始 ↗</span></a>
+      </div>
+      <details class="all-media reveal"><summary>查看素材文件夹中的其它文件</summary><div class="media-list"><span>1—12.jpg：压缩后的编号证书</span><span>3.jpg：微信联系二维码</span><span>d.jpg、h.jpg：训练师证书</span><span>music.mp3：背景音乐素材（尝试自动播放）</span></div></details>
+    </section>
+
+    <section class="contact-section" id="contact"><div class="section-wrap contact-inner reveal"><div><p class="section-kicker">06 — SAY HELLO</p><h2>从一次交流，<br /><em>开始下一段成长。</em></h2></div><div class="contact-side"><p>如果你想了解我的实习经历、学习方向或合作可能，欢迎和我聊聊。</p><a class="email-link" href="mailto:230893812@qq.com">230893812@qq.com <span>↗</span></a><div class="contact-details"><a href="tel:15362928293">电话 · 153 6292 8293</a><a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y</a></div><div class="socials"><a href="#certificates">查看证书</a><a href="#top">Back to top ↑</a></div></div><div class="contact-qr"><div><p class="section-kicker">CONTACT QR</p><h3>扫码添加微信</h3><p>二维码单独放置在页面最底部，方便联系。</p></div><a class="qr-link" data-lightbox="contact" href="media/3.jpg" target="_blank" rel="noreferrer"><img src="media/3.jpg" alt="黄鼎微信联系二维码" loading="lazy"><span>点击查看高清 ↗</span></a></div></div></section>
+  </main>
+  <footer class="footer section-wrap"><span>© 2026 HUANG DING</span><span>DESIGNED &amp; CODED WITH CARE</span><span>中山 · 中国</span><a class="phoenix-footer-credit" href="https://sketchfab.com/3d-models/phoenix-bird-844ba0cf144a413ea92c779f18912042" target="_blank" rel="noreferrer">3D Phoenix · NORBERTO-3D · CC BY 4.0 ↗</a></footer>
+  <aside class="music-player" id="musicPlayer" aria-label="背景音乐播放器">
+    <audio id="musicAudio" preload="none" loop src="media/music.mp3"></audio>
+    <div class="player-copy"><span class="player-kicker">NOW PLAYING</span><strong>黄鼎的背景音乐</strong><small id="musicStatus">正在尝试自动播放…</small></div>
+    <button class="player-toggle" id="musicToggle" type="button" aria-label="播放音乐" title="播放音乐"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span></button>
+    <div class="player-progress"><span id="musicCurrent">0:00</span><input id="musicProgress" type="range" min="0" max="100" value="0" step="0.1" aria-label="音乐进度"><span id="musicDuration">0:00</span></div>
+  </aside>
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="素材高清预览">
+    <button class="lightbox-close" type="button" aria-label="关闭预览">×</button>
+    <button class="lightbox-prev" type="button" aria-label="上一张">‹</button>
+    <figure class="lightbox-figure"><img id="lightboxImage" alt="高清素材预览"><figcaption id="lightboxCaption"></figcaption></figure>
+    <button class="lightbox-next" type="button" aria-label="下一张">›</button>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite">邮箱已复制到剪贴板 ✓</div>
+  <!-- Version query forces browsers to fetch the model fix instead of reusing
+       a cached script that still points at the old fallback configuration. -->
+  <script src="phoenix/phoenix-prototype.js?v=20260831-2"></script>
+  <script src="phoenix/phoenix-model.js?v=20260904-8"></script>
+  <script>
+    (function () {
+      var status = document.querySelector('#phoenixStatus');
+      var toggle = document.querySelector('#phoenixToggle');
+      var replay = document.querySelector('#phoenixReplay');
+      var skip = document.querySelector('#phoenixSkip');
+      var api = null;
+      var paused = false;
+      var pendingBurst = false;
+      var pendingSkip = false;
+      function setStatus(text) { if (status) status.textContent = text; }
+      function setPaused(next) {
+        paused = next;
+        if (api) (paused ? api.pause : api.resume)();
+        window.dispatchEvent(new CustomEvent('resume-motion-state', { detail: { paused: paused } }));
+        if (toggle) {
+          toggle.textContent = paused ? '继续动画' : '暂停动画';
+          toggle.setAttribute('aria-pressed', String(paused));
+        }
+        setStatus(paused ? '动画已暂停 · 点击继续' : (api && api.renderer ? (api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲') : '静态海报模式'));
+      }
+      if (toggle) toggle.addEventListener('click', function () { setPaused(!paused); });
+      if (replay) replay.addEventListener('click', function () {
+        if (api && api.burst) api.burst();
+        else pendingBurst = true;
+        setStatus('展翼动作已触发 · 继续探索');
+      });
+      if (skip) skip.addEventListener('click', function () {
+        if (api && api.skipIntro) api.skipIntro();
+        else pendingSkip = true;
+        skip.disabled = true;
+        skip.textContent = '已跳过';
+        setStatus('已跳过凤凰动画 · 正在打开简历');
+        var experience = document.querySelector('#experience');
+        if (experience) {
+          window.setTimeout(function () {
+            experience.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+          }, 40);
+        }
+      });
+      if (!window.PhoenixHero) { setStatus('静态海报模式 · 当前浏览器未加载 WebGL'); return; }
+      window.phoenixMount = window.PhoenixHero.mount({
+        container: '#phoenixStage', scrollTrigger: '#about', scrollEnd: '+=480',
+        scrollDistanceDesktop: 480, scrollDistanceMobile: 430,
+        clickable: true, debug: false
+      });
+      var loadingTimer = window.setTimeout(function () {
+        if (!api) setStatus('静态海报模式 · 网络较慢，仍可继续浏览');
+      }, 6000);
+      Promise.resolve(window.phoenixMount).then(function (instance) {
+        window.clearTimeout(loadingTimer);
+        api = instance;
+        window.phoenixApi = instance;
+        if (pendingBurst && api && api.burst) { api.burst(); pendingBurst = false; }
+        if (pendingSkip && api && api.skipIntro) { api.skipIntro(); pendingSkip = false; }
+        if (paused && api && api.pause) api.pause();
+        if (api && api.renderer) setStatus(api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲');
+        else setStatus('静态海报模式 · 可继续浏览');
+      }).catch(function () { setStatus('静态海报模式 · 可继续浏览'); });
+    }());
+  </script>
+  <script src="script.js"></script>
+  <script>
+    // Some mobile WebViews keep lazy images as broken placeholders when a
+    // long certificate grid is scrolled quickly. Promote them to eager loads
+    // and retry the original URL once so every card remains visible.
+    (function () {
+      document.querySelectorAll('img[loading="lazy"]').forEach(function (img) {
+        var src = img.getAttribute('src');
+        img.loading = 'eager';
+        img.removeAttribute('loading');
+        if (src && (!img.complete || !img.naturalWidth)) img.src = src;
+      });
+    }());
+  </script>
+  <script>
+    // Horizontal 3D certificate exhibition: the certificate cards remain the
+    // accessible source list, while this stage adds drag, wheel and touch
+    // navigation without duplicating certificate data by hand.
+    (function () {
+      var viewport = document.querySelector('#certificateViewport');
+      var stack = document.querySelector('#certificateStack');
+      var detailTitle = document.querySelector('#certificateTitle');
+      var detailCategory = document.querySelector('#certificateCategory');
+      var current = document.querySelector('#certificateCurrent');
+      var openButton = document.querySelector('#certificateOpen');
+      var sourceCards = Array.from(document.querySelectorAll('.cert-card'));
+      if (!viewport || !stack || !sourceCards.length) return;
+      var cards = sourceCards.map(function (source, index) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'certificate-stage-card';
+        button.setAttribute('aria-label', '查看 ' + (source.querySelector('.cert-meta b')?.textContent.trim() || '证书'));
+        var image = document.createElement('img');
+        image.src = source.querySelector('img')?.getAttribute('src') || '';
+        image.alt = source.querySelector('img')?.alt || '证书 ' + (index + 1);
+        image.loading = index < 5 ? 'eager' : 'lazy';
+        var label = document.createElement('span');
+        label.className = 'stage-label';
+        label.textContent = String(index + 1).padStart(2, '0') + ' / ' + (source.querySelector('.cert-meta small')?.textContent.trim() || 'CERTIFICATE');
+        button.append(image, label);
+        stack.appendChild(button);
+        button.addEventListener('click', function () {
+          if (button.classList.contains('is-current')) source.click();
+          else {
+            var targetIndex = visibleItems.indexOf(cards[index]);
+            if (targetIndex >= 0) setActive(targetIndex);
+          }
+        });
+        return { source: source, node: button };
+      });
+      var activeIndex = 0;
+      // 首次进入只展示 5 张重点证书；展开列表仍保留全部 19 张。
+      var featuredCards = cards.filter(function (entry) { return entry.source.dataset.featured === 'true'; });
+      var visibleItems = featuredCards.length ? featuredCards : cards.slice();
+      function render() {
+        var total = visibleItems.length;
+        if (!total) return;
+        if (activeIndex >= total) activeIndex = 0;
+        var visibleSet = new Set(visibleItems);
+        cards.forEach(function (entry) {
+          if (!visibleSet.has(entry)) {
+            entry.node.hidden = true;
+            entry.node.classList.remove('is-current');
+            entry.node.removeAttribute('aria-current');
+          }
+        });
+        visibleItems.forEach(function (entry, i) {
+          var offset = i - activeIndex;
+          if (offset > total / 2) offset -= total;
+          if (offset < -total / 2) offset += total;
+          var abs = Math.abs(offset);
+          var node = entry.node;
+          var stageLabel = node.querySelector('.stage-label');
+          if (stageLabel) stageLabel.textContent = String(i + 1).padStart(2, '0') + ' / ' + (entry.source.querySelector('.cert-meta small')?.textContent.trim() || 'CERTIFICATE');
+          var transforms = {
+            '-2': 'translate(-50%,-50%) translateX(-520px) translateZ(-90px) rotateY(-52deg) scale(.7)',
+            '-1': 'translate(-50%,-50%) translateX(-300px) translateZ(-30px) rotateY(-28deg) scale(.87)',
+            '0': 'translate(-50%,-50%) translateY(0) translateZ(70px) scale(1.06)',
+            '1': 'translate(-50%,-50%) translateX(300px) translateZ(-30px) rotateY(28deg) scale(.87)',
+            '2': 'translate(-50%,-50%) translateX(520px) translateZ(-90px) rotateY(52deg) scale(.7)'
+          };
+          node.hidden = abs > 2;
+          node.classList.toggle('is-current', offset === 0);
+          node.style.transform = transforms[String(Math.max(-2, Math.min(2, offset)))] || transforms['0'];
+          node.style.opacity = abs > 2 ? '0' : String(1 - abs * .16);
+          node.style.filter = abs === 0 ? 'none' : 'blur(' + Math.min(2.2, abs * .7) + 'px)';
+          node.style.zIndex = String(10 - abs);
+          node.setAttribute('aria-current', offset === 0 ? 'true' : 'false');
+        });
+        var entry = visibleItems[activeIndex];
+        var title = entry.source.querySelector('.cert-meta b')?.textContent.trim() || '证书';
+        var category = entry.source.querySelector('.cert-meta small')?.textContent.trim() || '学习成果';
+        if (detailTitle) detailTitle.textContent = title;
+        if (detailCategory) detailCategory.textContent = category;
+        if (current) current.textContent = String(activeIndex + 1).padStart(2, '0') + ' / ' + total;
+      }
+      function setActive(index) {
+        if (!visibleItems.length) return;
+        activeIndex = (index + visibleItems.length) % visibleItems.length;
+        render();
+      }
+      function applyFilter(filter) {
+        visibleItems = filter === 'all'
+          ? (featuredCards.length ? featuredCards.slice() : cards.slice())
+          : cards.filter(function (entry) { return entry.source.dataset.category === filter; });
+        activeIndex = 0;
+        render();
+      }
+      document.querySelectorAll('.filter-button').forEach(function (button) {
+        button.addEventListener('click', function () { applyFilter(button.dataset.filter || 'all'); });
+      });
+      if (openButton) openButton.addEventListener('click', function () { visibleItems[activeIndex]?.source.click(); });
+      viewport.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowUp') { event.preventDefault(); setActive(activeIndex - 1); }
+        if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); }
+        if (event.key === 'Enter') { event.preventDefault(); visibleItems[activeIndex]?.source.click(); }
+      });
+      viewport.addEventListener('wheel', function (event) { event.preventDefault(); var delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY; setActive(activeIndex + (delta > 0 ? 1 : -1)); }, { passive: false });
+      var startX = null;
+      viewport.addEventListener('pointerdown', function (event) { startX = event.clientX; viewport.setPointerCapture?.(event.pointerId); });
+      viewport.addEventListener('pointerup', function (event) { if (startX == null) return; var delta = event.clientX - startX; if (Math.abs(delta) > 24) setActive(activeIndex + (delta < 0 ? 1 : -1)); startX = null; });
+      viewport.addEventListener('pointercancel', function () { startX = null; });
+      render();
+    }());
+  </script>
+</body>
+</html>

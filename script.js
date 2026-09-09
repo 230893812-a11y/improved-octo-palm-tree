@@ -375,18 +375,3 @@ aiBotToggle?.addEventListener('pointerleave', () => {
   phoenixEye?.style.setProperty('--eye-x', '0px');
   phoenixEye?.style.setProperty('--eye-y', '0px');
 });
-
-// Desktop-only realism upgrade: reuse the existing licensed Phoenix GLB through
-// the site's PhoenixHero loader. Phones and reduced-motion visitors keep the
-// lightweight CSS phoenix to avoid a second WebGL workload.
-const phoenixPet3d = document.querySelector('#phoenixPet3d');
-if (phoenixPet3d && window.PhoenixHero && window.matchMedia('(min-width: 801px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  window.phoenixPetMount = window.PhoenixHero.mount({
-    container: phoenixPet3d,
-    clickable: false,
-    scrollDistanceDesktop: 1,
-    scrollDistanceMobile: 1,
-    loadOnReducedMotion: false,
-    debug: false
-  }).catch(() => null);
-}

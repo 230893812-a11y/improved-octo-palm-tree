@@ -343,3 +343,50 @@ musicProgress.addEventListener('input', () => {
 // 音乐默认不自动播放，访客点击播放器后再加载并播放，避免打扰访客。
 musicAudio.volume = 0.42;
 musicStatus.textContent = '点击播放 · 按需加载音乐';
+
+// 纯前端项目导览机器人：只展示预设信息，不在 GitHub Pages 暴露任何密钥。
+const aiBot = document.querySelector('#aiBot');
+const aiBotToggle = document.querySelector('#aiBotToggle');
+const aiBotPanel = document.querySelector('#aiBotPanel');
+const aiBotClose = document.querySelector('#aiBotClose');
+const aiBotMessage = document.querySelector('#aiBotMessage');
+function setBotOpen(open) {
+  if (!aiBot || !aiBotToggle || !aiBotPanel) return;
+  aiBotPanel.hidden = !open;
+  aiBotToggle.setAttribute('aria-expanded', String(open));
+  aiBot.classList.toggle('is-open', open);
+}
+aiBotToggle?.addEventListener('click', () => setBotOpen(aiBotPanel.hidden));
+aiBotClose?.addEventListener('click', () => setBotOpen(false));
+document.querySelectorAll('[data-bot-message]').forEach((button) => {
+  button.addEventListener('click', () => {
+    if (aiBotMessage) aiBotMessage.textContent = button.dataset.botMessage || '';
+  });
+});
+const phoenixEye = document.querySelector('.phoenix-eye');
+aiBotToggle?.addEventListener('pointermove', (event) => {
+  const rect = aiBotToggle.getBoundingClientRect();
+  const x = Math.max(-2, Math.min(2, ((event.clientX - rect.left) / rect.width - 0.5) * 5));
+  const y = Math.max(-1.5, Math.min(1.5, ((event.clientY - rect.top) / rect.height - 0.5) * 4));
+  phoenixEye?.style.setProperty('--eye-x', `${x}px`);
+  phoenixEye?.style.setProperty('--eye-y', `${y}px`);
+});
+aiBotToggle?.addEventListener('pointerleave', () => {
+  phoenixEye?.style.setProperty('--eye-x', '0px');
+  phoenixEye?.style.setProperty('--eye-y', '0px');
+});
+
+// Desktop-only realism upgrade: reuse the existing licensed Phoenix GLB through
+// the site's PhoenixHero loader. Phones and reduced-motion visitors keep the
+// lightweight CSS phoenix to avoid a second WebGL workload.
+const phoenixPet3d = document.querySelector('#phoenixPet3d');
+if (phoenixPet3d && window.PhoenixHero && window.matchMedia('(min-width: 801px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  window.phoenixPetMount = window.PhoenixHero.mount({
+    container: phoenixPet3d,
+    clickable: false,
+    scrollDistanceDesktop: 1,
+    scrollDistanceMobile: 1,
+    loadOnReducedMotion: false,
+    debug: false
+  }).catch(() => null);
+}

@@ -128,7 +128,7 @@
     var reduced = reducedMotion();
     var width = Math.max(1, host.clientWidth || global.innerWidth);
     var height = Math.max(1, host.clientHeight || global.innerHeight);
-    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.25 : 1.65);
+    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 1.2);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(28, width / height, .1, 100);
     camera.position.set(0, .28, mobile ? 7.45 : 7.85);
@@ -229,6 +229,10 @@
     var paused = false;
     var destroyed = false;
     var raf = 0;
+    var lastRender = 0;
+    var pointerRaf = 0;
+    var pointerClientX = 0;
+    var pointerClientY = 0;
     var trigger = null;
     var scrollTarget = null;
     var scrollStart = null;
@@ -434,6 +438,16 @@
       state.energy = clamp(1.1 - Math.hypot(x - .5, y - .48) * 1.55, .42, 1.2);
     }
 
+    function schedulePointerMove(event) {
+      pointerClientX = event.clientX;
+      pointerClientY = event.clientY;
+      if (pointerRaf) return;
+      pointerRaf = global.requestAnimationFrame(function () {
+        pointerRaf = 0;
+        pointerMove({ clientX: pointerClientX, clientY: pointerClientY });
+      });
+    }
+
     function pointerDown(event) {
       if (!options.clickable) return;
       var box = host.getBoundingClientRect();
@@ -474,11 +488,16 @@
 
     function render(time) {
       if (destroyed) return;
+      if (time && time - lastRender < 33) {
+        raf = global.requestAnimationFrame(render);
+        return;
+      }
+      lastRender = time;
       if (visible && !paused) {
         apply(time);
         renderer.render(scene, camera);
       }
-      if (!reduced) raf = global.requestAnimationFrame(render);
+      if (!reduced && visible && !paused) raf = global.requestAnimationFrame(render);
     }
 
     function resize() {
@@ -486,14 +505,13 @@
       height = Math.max(1, host.clientHeight || global.innerHeight);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.25 : 1.65));
+      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 1.2));
       renderer.setSize(width, height, false);
       scrollStart = null;
       scrollDistance = 0;
     }
 
-    host.addEventListener('pointermove', pointerMove, { passive: true });
-    global.addEventListener('pointermove', pointerMove, { passive: true });
+    global.addEventListener('pointermove', schedulePointerMove, { passive: true });
     global.addEventListener('pointerdown', pointerDown, { passive: true });
     global.addEventListener('resize', resize, { passive: true });
     if (!reduced) {
@@ -502,9 +520,13 @@
     }
     var observer = global.IntersectionObserver ? new IntersectionObserver(function (entries) {
       visible = !!entries[0] && entries[0].isIntersecting;
+      if (visible && !paused && !raf && !reduced) raf = global.requestAnimationFrame(render);
     }, { threshold: .01, rootMargin: '160px 0px' }) : { observe: function () {}, disconnect: function () {} };
     observer.observe(host);
-    function onVisibility() { visible = !document.hidden; }
+    function onVisibility() {
+      visible = !document.hidden;
+      if (visible && !paused && !raf && !reduced) raf = global.requestAnimationFrame(render);
+    }
     document.addEventListener('visibilitychange', onVisibility);
 
     var cleaned = false;
@@ -513,13 +535,13 @@
       cleaned = true;
       destroyed = true;
       if (raf) global.cancelAnimationFrame(raf);
+      if (pointerRaf) global.cancelAnimationFrame(pointerRaf);
       if (introRaf) global.cancelAnimationFrame(introRaf);
       if (introTimer) global.clearTimeout(introTimer);
       if (trigger && trigger.kill) trigger.kill();
       observer.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      host.removeEventListener('pointermove', pointerMove);
-      global.removeEventListener('pointermove', pointerMove);
+      global.removeEventListener('pointermove', schedulePointerMove);
       global.removeEventListener('pointerdown', pointerDown);
       global.removeEventListener('resize', resize);
       global.removeEventListener('scroll', updateScrollProgress);

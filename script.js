@@ -151,6 +151,7 @@ const context = canvas?.getContext('2d');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let fluidRaf = 0;
 let fluidRunning = true;
+let fluidLastFrame = 0;
 let advancedFluid = null;
 let advancedFluidPaused = false;
 const pointer = { x: 0.5, y: 0.45, active: false };
@@ -174,6 +175,11 @@ function resizeCanvas() {
 }
 function drawFluid(time = 0) {
   if (!canvas || !context) return;
+  if (time && time - fluidLastFrame < 33) {
+    fluidRaf = window.requestAnimationFrame(drawFluid);
+    return;
+  }
+  fluidLastFrame = time;
   fluidRaf = 0;
   const paused = !fluidRunning || root.classList.contains('motion-paused');
   context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -208,12 +214,10 @@ window.addEventListener('pointermove', event => {
 resizeCanvas();
 drawFluid(0);
 
-// 在线部署时加载 WebGL Fluid Enhanced（MIT）。桌面端让流体背景与凤凰
-// 场景叠加，提供更明显的动态效果；手机端保留轻量 Canvas，避免两个
-// 大型 WebGL 场景同时运行造成发热或上下文不足。
+// 性能优先：不再加载额外的 WebGL 流体库，保留本地低负载 Canvas 背景。
 const advancedCanvas = document.querySelector('#fluidCanvas');
 const smallScreen = window.matchMedia?.('(max-width: 760px)').matches;
-if (advancedCanvas && (!window.__phoenixRequested || !smallScreen)) {
+if (advancedCanvas && false && (!window.__phoenixRequested || !smallScreen)) {
   window.addEventListener('pointermove', event => {
     // 库默认监听 canvas 的 mousemove；由于背景不能拦截页面点击，这里把窗口事件安全转发给它。
     advancedCanvas.dispatchEvent(new MouseEvent('mousemove', {
@@ -274,6 +278,14 @@ function setAmbientMotion(paused) {
   }
 }
 window.addEventListener('resume-motion-state', event => setAmbientMotion(Boolean(event.detail?.paused)));
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (fluidRaf) window.cancelAnimationFrame(fluidRaf);
+    fluidRaf = 0;
+  } else if (!reduceMotion && fluidRunning && !fluidRaf) {
+    fluidRaf = window.requestAnimationFrame(drawFluid);
+  }
+});
 const phoenixToggle = document.querySelector('#phoenixToggle');
 if (phoenixToggle) {
   const syncPhoenixPause = () => setAmbientMotion(phoenixToggle.getAttribute('aria-pressed') === 'true');

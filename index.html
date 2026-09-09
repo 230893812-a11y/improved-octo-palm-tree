@@ -212,7 +212,7 @@
   <!-- Version query forces browsers to fetch the model fix instead of reusing
        a cached script that still points at the old fallback configuration. -->
   <script src="phoenix/phoenix-prototype.js?v=20260831-2"></script>
-  <script src="phoenix/phoenix-model.js?v=20260904-8"></script>
+  <script src="phoenix/phoenix-model.js?v=20260910-perf1"></script>
   <script>
     (function () {
       var status = document.querySelector('#phoenixStatus');
@@ -274,7 +274,7 @@
       }).catch(function () { setStatus('静态海报模式 · 可继续浏览'); });
     }());
   </script>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260910-perf1"></script>
   <script>
     // Some mobile WebViews keep lazy images as broken placeholders when a
     // long certificate grid is scrolled quickly. Promote them to eager loads

@@ -4,3 +4,6 @@
 .joystick{width:72px;height:72px;border:2px solid #41636b;border-radius:50%;position:relative;background:#102d38;opacity:.9;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}.joystick.active{border-color:var(--accent);box-shadow:0 0 0 5px #ff9d4322}.joystick span{position:absolute;width:30px;height:30px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#ff9d43;pointer-events:none;will-change:transform}
 .controls button{user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
 @media(max-width:520px){.controls{display:flex;align-items:center;justify-content:center;gap:30px}.controls .fire{order:initial;flex-basis:auto;width:82px;height:72px;margin:0}}
+.hud{gap:18px;font-size:.86rem;flex-wrap:wrap}.hud .buff{color:#65d6c0;font-size:.76rem}.hud .mini{margin-left:auto}
+@media(max-width:520px){.hud{gap:8px 14px}.hud .buff{order:6;width:100%}.hud .mini{margin-left:0}}
+body{overflow-x:hidden}.shell,.game-card{min-width:0}canvas{max-width:100%}.overlay p{max-width:min(310px,80vw);white-space:normal;overflow-wrap:anywhere;margin-left:auto;margin-right:auto}

@@ -11,6 +11,9 @@
   let rapidFire = 0, last = 0, sound = true, audio;
   let joystickInput = { x: 0, y: 0 };
   let best = Number(localStorage.getItem('wave-edge-best') || 0);
+  const agentNames = { chaser: '追击型', sniper: '狙击型', flanker: '绕后型', defender: '防守型', boss: '精英指挥官' };
+  const agentMarks = { chaser: '追', sniper: '狙', flanker: '绕', defender: '守', boss: 'B' };
+  const agentColors = { chaser: '#ff665c', sniper: '#59c7ff', flanker: '#ff9d43', defender: '#55d68b', boss: '#a96cff' };
 
   function makeMap() {
     blocks = [];
@@ -41,12 +44,15 @@
     const boss = wave === 5;
     const scout = !boss && Math.random() < 0.38;
     const hp = boss ? 6 : scout ? 1 : 2;
+    const agentTypes = ['chaser', 'sniper', 'flanker', 'defender'];
+    const agentType = boss ? 'boss' : agentTypes[(9 - wave) % agentTypes.length];
     enemies.push({
       x: [35, W / 2, W - 35][side], y: boss ? 42 : 32, a: Math.PI / 2,
       r: boss ? 21 : scout ? 11 : 14, cd: rnd(30, 100),
       speed: boss ? 0.38 : scout ? 1.25 : rnd(0.55, 0.9), hp, maxHp: hp, turn: rnd(20, 80),
       kind: boss ? 'boss' : scout ? 'scout' : 'standard',
-      color: boss ? '#a96cff' : scout ? '#ff8b5c' : '#cc554b', value: boss ? 160 : scout ? 55 : 40
+      agentType, aiState: '扫描战场', decisionTimer: 0, strafe: Math.random() < 0.5 ? -1 : 1,
+      color: agentColors[agentType], value: boss ? 160 : scout ? 55 : 40
     });
   }
 
@@ -86,6 +92,78 @@
     pickups.push({ x: enemy.x, y: enemy.y, r: 10, type: enemy.kind === 'boss' || Math.random() < 0.55 ? 'rapid' : 'heal', life: 650 });
   }
 
+  function hasLineOfSight(enemy) {
+    const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+    const steps = Math.max(1, Math.ceil(distance / 14));
+    for (let step = 1; step < steps; step += 1) {
+      const ratio = step / steps;
+      const x = enemy.x + (player.x - enemy.x) * ratio;
+      const y = enemy.y + (player.y - enemy.y) * ratio;
+      if (blocks.some((block) => x > block.x && x < block.x + block.w && y > block.y && y < block.y + block.h)) return false;
+    }
+    return true;
+  }
+
+  function steerEnemy(enemy, targetX, targetY, stateLabel) {
+    const angle = Math.atan2(targetY - enemy.y, targetX - enemy.x);
+    enemy.a = angle;
+    enemy.aiState = stateLabel;
+    if (!move(enemy, Math.cos(angle), Math.sin(angle))) {
+      enemy.a += enemy.strafe * Math.PI / 2;
+      move(enemy, Math.cos(enemy.a), Math.sin(enemy.a));
+      enemy.aiState = '绕开障碍';
+    }
+  }
+
+  function runAgent(enemy, dt) {
+    enemy.cd -= dt;
+    enemy.decisionTimer -= dt;
+    const dx = player.x - enemy.x;
+    const dy = player.y - enemy.y;
+    const distance = Math.hypot(dx, dy);
+    const visible = hasLineOfSight(enemy);
+    const aimAtPlayer = () => { enemy.a = Math.atan2(dy, dx); };
+
+    if (enemy.agentType === 'chaser') {
+      steerEnemy(enemy, player.x, player.y, distance < 150 ? '近距压制' : '锁定追击');
+      if (visible && distance < 280 && enemy.cd < 0) { aimAtPlayer(); shoot(enemy, 'e'); enemy.aiState = '瞄准开火'; }
+      return;
+    }
+
+    if (enemy.agentType === 'sniper') {
+      if (distance < 165) steerEnemy(enemy, enemy.x - dx, enemy.y - dy, '拉开距离');
+      else if (distance > 310 || !visible) steerEnemy(enemy, player.x, player.y, visible ? '进入射程' : '寻找视野');
+      else {
+        enemy.a = Math.atan2(dy, dx) + enemy.strafe * Math.PI / 2;
+        move(enemy, Math.cos(enemy.a) * 0.45, Math.sin(enemy.a) * 0.45);
+        enemy.aiState = '侧移瞄准';
+      }
+      if (visible && distance >= 145 && enemy.cd < 0) { aimAtPlayer(); shoot(enemy, 'e'); enemy.aiState = '远程狙击'; }
+      return;
+    }
+
+    if (enemy.agentType === 'flanker') {
+      const flankDistance = 105;
+      const length = Math.max(1, distance);
+      const targetX = player.x + (-dy / length) * flankDistance * enemy.strafe;
+      const targetY = player.y + (dx / length) * flankDistance * enemy.strafe;
+      steerEnemy(enemy, targetX, targetY, distance < 135 ? '切入侧翼' : '绕后机动');
+      if (visible && distance < 230 && enemy.cd < 0) { aimAtPlayer(); shoot(enemy, 'e'); enemy.aiState = '侧翼开火'; }
+      return;
+    }
+
+    if (enemy.agentType === 'defender') {
+      if (enemy.hp <= 1 && distance < 230) steerEnemy(enemy, enemy.x - dx, enemy.y - dy, '低血撤退');
+      else if (visible) { aimAtPlayer(); enemy.aiState = '守位监视'; }
+      else steerEnemy(enemy, W / 2, H * 0.34, '回防阵地');
+      if (visible && enemy.cd < 0) { aimAtPlayer(); shoot(enemy, 'e'); enemy.aiState = '防守反击'; }
+      return;
+    }
+
+    steerEnemy(enemy, player.x, player.y, enemy.hp <= 2 ? '狂暴突击' : '指挥推进');
+    if (visible && enemy.cd < 0) { aimAtPlayer(); shoot(enemy, 'e'); enemy.aiState = '火力压制'; }
+  }
+
   function update(dt) {
     if (state !== 'play') return;
     player.cd = Math.max(0, player.cd - dt); player.inv = Math.max(0, player.inv - dt); rapidFire = Math.max(0, rapidFire - dt);
@@ -94,12 +172,7 @@
     if (!dx && !dy) ({ x: dx, y: dy } = joystickInput);
     if (dx || dy) { player.a = Math.atan2(dy, dx); player.speed = 2.6; move(player, dx, dy); }
     if (keys.has(' ') || keys.has('j')) shoot(player, 'p');
-    enemies.forEach((enemy) => {
-      enemy.cd -= dt; enemy.turn -= dt;
-      if (enemy.turn < 0) { enemy.a += rnd(-1.5, 1.5); enemy.turn = rnd(30, 90); }
-      move(enemy, Math.cos(enemy.a), Math.sin(enemy.a));
-      if (enemy.cd < 0) shoot(enemy, 'e');
-    });
+    enemies.forEach((enemy) => runAgent(enemy, dt));
     bullets.forEach((bullet) => {
       bullet.x += Math.cos(bullet.a) * 5 * dt; bullet.y += Math.sin(bullet.a) * 5 * dt; bullet.life -= dt;
       blocks.forEach((block) => { if (bullet.x > block.x && bullet.x < block.x + block.w && bullet.y > block.y && bullet.y < block.y + block.h) bullet.life = 0; });
@@ -140,6 +213,13 @@
     ctx.fillStyle = color; ctx.fillRect(0, -3, tank.r + 9, 6); ctx.restore();
     ctx.fillStyle = '#071014'; ctx.fillRect(tank.x - 15, tank.y - tank.r - 10, 30, 4);
     ctx.fillStyle = tank === player ? '#55d68b' : '#ff665c'; ctx.fillRect(tank.x - 15, tank.y - tank.r - 10, 30 * Math.max(0, tank.hp / tank.maxHp), 4);
+    if (tank !== player) {
+      ctx.fillStyle = color;
+      ctx.font = 'bold 10px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(agentMarks[tank.agentType] || 'AI', tank.x, tank.y - tank.r - 13);
+    }
   }
 
   function draw() {
@@ -199,6 +279,11 @@
     document.querySelector('#score').textContent = score; document.querySelector('#best').textContent = best;
     document.querySelector('#lives').textContent = lives; document.querySelector('#remaining').textContent = wave + enemies.length;
     document.querySelector('#buff').textContent = rapidFire > 0 ? `快速火力 ${Math.ceil(rapidFire / 60)}s` : '标准火力';
+    const activeAgents = enemies.filter((enemy) => enemy.hp > 0);
+    const focus = activeAgents.slice().sort((a, b) => Math.hypot(a.x - player.x, a.y - player.y) - Math.hypot(b.x - player.x, b.y - player.y))[0];
+    document.querySelector('#aiFocus').textContent = focus ? `${agentNames[focus.agentType]} · ${focus.aiState}` : '等待下一目标';
+    const counts = activeAgents.reduce((result, enemy) => { result[enemy.agentType] = (result[enemy.agentType] || 0) + 1; return result; }, {});
+    document.querySelector('#aiSummary').textContent = Object.entries(counts).map(([type, count]) => `${agentNames[type]} ${count}`).join(' · ') || '战场已清空';
   }, 100);
   reset(); requestAnimationFrame(loop);
 })();

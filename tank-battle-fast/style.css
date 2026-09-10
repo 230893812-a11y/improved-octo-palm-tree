@@ -7,3 +7,5 @@
 .hud{gap:18px;font-size:.86rem;flex-wrap:wrap}.hud .buff{color:#65d6c0;font-size:.76rem}.hud .mini{margin-left:auto}
 @media(max-width:520px){.hud{gap:8px 14px}.hud .buff{order:6;width:100%}.hud .mini{margin-left:0}}
 body{overflow-x:hidden}.shell,.game-card{min-width:0}canvas{max-width:100%}.overlay p{max-width:min(310px,80vw);white-space:normal;overflow-wrap:anywhere;margin-left:auto;margin-right:auto}
+.ai-monitor{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;align-items:center;margin:12px 0 2px;padding:10px 13px;border:1px solid #244452;border-radius:12px;background:#0d202b;color:#7ec6c4}.ai-monitor>span{grid-row:1 / span 2;font-size:.7rem;letter-spacing:.08em;color:#ff9d43}.ai-monitor strong{font-size:.86rem;color:#e9f5f4}.ai-monitor small{font-size:.72rem;color:#7f9aa1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:520px){.ai-monitor{grid-template-columns:1fr;gap:2px}.ai-monitor>span{grid-row:auto}.ai-monitor small{white-space:normal}}

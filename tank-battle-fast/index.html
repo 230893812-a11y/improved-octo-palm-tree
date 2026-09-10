@@ -7,9 +7,10 @@
 </head>
 <body>
   <main class="shell">
-    <header><div><span class="eyebrow">HD · WAVE EDGE COMMUNITY</span><h1>浪尖儿·坦克大战</h1><p>轻量 JavaScript 快速体验版</p></div><button id="sound" class="ghost" aria-label="切换音效">🔊 音效</button></header>
+    <header><div><span class="eyebrow">AI TANK ARENA · FSM LAB</span><h1>浪尖儿·AI 坦克竞技场</h1><p>有限状态机 Agent · 轻量 Canvas 实验版</p></div><button id="sound" class="ghost" aria-label="切换音效">🔊 音效</button></header>
     <section class="game-card"><div class="hud"><span>生命 <b id="lives">3</b></span><span>分数 <b id="score">0</b></span><span>最高 <b id="best">0</b></span><span>敌人 <b id="remaining">10</b></span><span class="buff" id="buff">标准火力</span><button id="pause" class="mini">暂停</button></div><canvas id="game" width="640" height="480" aria-label="坦克大战游戏区域"></canvas><div id="overlay" class="overlay"><h2>准备出击</h2><p>拖动摇杆移动，点击发射；击败精英并拾取补给</p><button id="start">开始游戏</button></div></div>
+    <aside class="ai-monitor" aria-live="polite"><span>AI 决策观察器</span><strong id="aiFocus">扫描战场</strong><small id="aiSummary">正在初始化 Agent</small></aside>
     <div class="controls"><div class="joystick" role="application" aria-label="移动摇杆，按住并拖动控制坦克"><span></span></div><button data-key="Space" class="fire">发射</button></div>
     <footer>基于原 Python/Pygame 版玩法重构 · Canvas + JavaScript · 无需安装</footer>
-  </main><script src="game.js?v=20260910-fast2"></script>
+  </main><script src="game.js?v=20260910-ai1"></script>
 </body></html>

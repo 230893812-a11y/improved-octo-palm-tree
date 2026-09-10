@@ -8,7 +8,7 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   let state = 'ready', score = 0, lives = 3, wave = 10, player;
   let bullets = [], enemies = [], blocks = [], effects = [], pickups = [];
-  let rapidFire = 0, last = 0, sound = true, audio;
+  let rapidFire = 0, last = 0, sound = true, audio, spawnCooldown = 0;
   let joystickInput = { x: 0, y: 0 };
   let best = Number(localStorage.getItem('wave-edge-best') || 0);
   const agentNames = { chaser: '追击型', sniper: '狙击型', flanker: '绕后型', defender: '防守型', boss: '精英指挥官' };
@@ -30,30 +30,47 @@
   }
 
   function reset() {
-    score = 0; lives = 3; wave = 10; bullets = []; enemies = []; effects = []; pickups = []; rapidFire = 0;
+    score = 0; lives = 3; wave = 10; bullets = []; enemies = []; effects = []; pickups = []; rapidFire = 0; spawnCooldown = 0;
     player = { x: W / 2, y: H - 92, a: -Math.PI / 2, r: 14, cd: 0, inv: 0, hp: 3, maxHp: 3 };
     makeMap();
     blocks = blocks.filter((block, index) => !blocks.slice(0, index).some((other) => block.x < other.x + other.w && block.x + block.w > other.x && block.y < other.y + other.h && block.y + block.h > other.y) && Math.hypot(block.x + block.w / 2 - player.x, block.y + block.h / 2 - player.y) > 24 + Math.max(block.w, block.h) / 2);
     for (let i = 0; i < 4; i += 1) spawn();
   }
 
+  function findSpawnPoint(radius) {
+    const points = [35, W * 0.25, W / 2, W * 0.75, W - 35].map((x) => ({ x, y: 32 }));
+    const offset = Math.floor(rnd(0, points.length));
+    for (let index = 0; index < points.length; index += 1) {
+      const point = points[(index + offset) % points.length];
+      const blocked = blocks.some((block) => point.x + radius > block.x && point.x - radius < block.x + block.w && point.y + radius > block.y && point.y - radius < block.y + block.h);
+      const occupied = enemies.some((enemy) => enemy.hp > 0 && Math.hypot(point.x - enemy.x, point.y - enemy.y) < radius + enemy.r + 16);
+      const nearPlayer = player && Math.hypot(point.x - player.x, point.y - player.y) < radius + player.r + 40;
+      if (!blocked && !occupied && !nearPlayer) return point;
+    }
+    return null;
+  }
+
   function spawn() {
-    if (wave <= 0) return;
-    wave -= 1;
-    const side = Math.floor(rnd(0, 3));
-    const boss = wave === 5;
+    if (wave <= 0) return false;
+    const nextWave = wave - 1;
+    const boss = nextWave === 5;
     const scout = !boss && Math.random() < 0.38;
     const hp = boss ? 6 : scout ? 1 : 2;
+    const radius = boss ? 21 : scout ? 11 : 14;
+    const point = findSpawnPoint(radius);
+    if (!point) return false;
+    wave = nextWave;
     const agentTypes = ['chaser', 'sniper', 'flanker', 'defender'];
     const agentType = boss ? 'boss' : agentTypes[(9 - wave) % agentTypes.length];
     enemies.push({
-      x: [35, W / 2, W - 35][side], y: boss ? 42 : 32, a: Math.PI / 2,
-      r: boss ? 21 : scout ? 11 : 14, cd: rnd(30, 100),
+      x: point.x, y: point.y, a: Math.PI / 2,
+      r: radius, cd: rnd(30, 100),
       speed: boss ? 0.38 : scout ? 1.25 : rnd(0.55, 0.9), hp, maxHp: hp, turn: rnd(20, 80),
       kind: boss ? 'boss' : scout ? 'scout' : 'standard',
       agentType, aiState: '扫描战场', decisionTimer: 0, strafe: Math.random() < 0.5 ? -1 : 1,
       color: agentColors[agentType], value: boss ? 160 : scout ? 55 : 40
     });
+    return true;
   }
 
   const hit = (a, b) => Math.hypot(a.x - b.x, a.y - b.y) < (a.r || 4) + (b.r || 4) + 6;
@@ -166,7 +183,7 @@
 
   function update(dt) {
     if (state !== 'play') return;
-    player.cd = Math.max(0, player.cd - dt); player.inv = Math.max(0, player.inv - dt); rapidFire = Math.max(0, rapidFire - dt);
+    player.cd = Math.max(0, player.cd - dt); player.inv = Math.max(0, player.inv - dt); rapidFire = Math.max(0, rapidFire - dt); spawnCooldown = Math.max(0, spawnCooldown - dt);
     let dx = Number(keys.has('ArrowRight') || keys.has('d')) - Number(keys.has('ArrowLeft') || keys.has('a'));
     let dy = Number(keys.has('ArrowDown') || keys.has('s')) - Number(keys.has('ArrowUp') || keys.has('w'));
     if (!dx && !dy) ({ x: dx, y: dy } = joystickInput);
@@ -195,7 +212,7 @@
     pickups = pickups.filter((pickup) => pickup.life > 0);
     bullets = bullets.filter((bullet) => bullet.life > 0 && bullet.x > 0 && bullet.x < W && bullet.y > 0 && bullet.y < H);
     enemies = enemies.filter((enemy) => enemy.hp > 0);
-    if (enemies.length < 4 && wave > 0) spawn();
+    if (enemies.length < 4 && wave > 0 && spawnCooldown <= 0) spawnCooldown = spawn() ? 28 : 12;
     if (!wave && !enemies.length) end('胜利！');
     effects.forEach((effect) => { effect.t -= dt; effect.r += dt * 1.5; });
     effects = effects.filter((effect) => effect.t > 0);

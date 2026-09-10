@@ -245,7 +245,8 @@
       pulse: 0
     };
     var clock = new THREE.Clock();
-    var visible = true;
+    var inViewport = true;
+    var pageVisible = !document.hidden;
     var paused = false;
     var destroyed = false;
     var raf = 0;
@@ -507,17 +508,27 @@
     }
 
     function render(time) {
+      // The callback has started, so the previously stored RAF id is no
+      // longer an active request. Clearing it lets resume/pageshow reliably
+      // restart rendering after a browser tab, sleep or WebGL interruption.
+      raf = 0;
       if (destroyed) return;
       if (time && time - lastRender < 33) {
         raf = global.requestAnimationFrame(render);
         return;
       }
       lastRender = time;
-      if (visible && !paused) {
+      if (inViewport && pageVisible && !paused) {
         apply(time);
         renderer.render(scene, camera);
       }
-      if (!reduced && visible && !paused) raf = global.requestAnimationFrame(render);
+      if (!reduced && inViewport && pageVisible && !paused) raf = global.requestAnimationFrame(render);
+    }
+
+    function restartRenderLoop() {
+      if (destroyed || reduced || raf || paused || !inViewport || !pageVisible) return;
+      clock.getDelta();
+      raf = global.requestAnimationFrame(render);
     }
 
     function resize() {
@@ -539,15 +550,38 @@
       trigger = { kill: function () { global.removeEventListener('scroll', updateScrollProgress); } };
     }
     var observer = global.IntersectionObserver ? new IntersectionObserver(function (entries) {
-      visible = !!entries[0] && entries[0].isIntersecting;
-      if (visible && !paused && !raf && !reduced) raf = global.requestAnimationFrame(render);
+      inViewport = !!entries[0] && entries[0].isIntersecting;
+      if (inViewport) restartRenderLoop();
     }, { threshold: .01, rootMargin: '160px 0px' }) : { observe: function () {}, disconnect: function () {} };
     observer.observe(host);
     function onVisibility() {
-      visible = !document.hidden;
-      if (visible && !paused && !raf && !reduced) raf = global.requestAnimationFrame(render);
+      pageVisible = !document.hidden;
+      if (pageVisible) {
+        if (raf) global.cancelAnimationFrame(raf);
+        raf = 0;
+        restartRenderLoop();
+      }
+    }
+    function onPageShow() {
+      pageVisible = true;
+      if (raf) global.cancelAnimationFrame(raf);
+      raf = 0;
+      restartRenderLoop();
+    }
+    function onContextLost(event) {
+      event.preventDefault();
+      if (raf) global.cancelAnimationFrame(raf);
+      raf = 0;
+    }
+    function onContextRestored() {
+      resize();
+      renderer.render(scene, camera);
+      restartRenderLoop();
     }
     document.addEventListener('visibilitychange', onVisibility);
+    global.addEventListener('pageshow', onPageShow);
+    renderer.domElement.addEventListener('webglcontextlost', onContextLost, false);
+    renderer.domElement.addEventListener('webglcontextrestored', onContextRestored, false);
 
     var cleaned = false;
     function disposeScene() {
@@ -562,6 +596,9 @@
       observer.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       global.removeEventListener('pointermove', schedulePointerMove);
+      global.removeEventListener('pageshow', onPageShow);
+      renderer.domElement.removeEventListener('webglcontextlost', onContextLost, false);
+      renderer.domElement.removeEventListener('webglcontextrestored', onContextRestored, false);
       global.removeEventListener('pointerdown', pointerDown);
       global.removeEventListener('resize', resize);
       global.removeEventListener('scroll', updateScrollProgress);
@@ -659,7 +696,7 @@
         resume: function () {
           paused = false;
           updateScrollProgress();
-          if (!reduced && !raf) render(global.performance ? global.performance.now() : Date.now());
+          restartRenderLoop();
         },
         isPaused: function () { return paused; },
         destroy: disposeScene

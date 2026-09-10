@@ -13,7 +13,7 @@
   if (!baseApi || typeof baseApi.mount !== 'function') return;
 
   var MODEL_URL = 'phoenix/models/phoenix-bird.glb';
-  var LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.140.0/examples/js/loaders/GLTFLoader.js';
+  var LOADER_URL = 'phoenix/vendor/GLTFLoader.js';
   var dependencyPromise = null;
 
   function mountLoadingPoster(host) {
@@ -42,6 +42,29 @@
 
   function reducedMotion() {
     return !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function lowPowerDevice() {
+    var connection = global.navigator && global.navigator.connection;
+    var saveData = !!(connection && connection.saveData);
+    var memory = Number(global.navigator && global.navigator.deviceMemory) || 0;
+    var cores = Number(global.navigator && global.navigator.hardwareConcurrency) || 0;
+    return saveData || (memory > 0 && memory <= 2) || (cores > 0 && cores <= 2);
+  }
+
+  function staticPosterApi(poster) {
+    return {
+      renderer: null,
+      isModel: false,
+      burst: function () {},
+      skipIntro: function () {},
+      pause: function () {},
+      resume: function () {},
+      isPaused: function () { return true; },
+      destroy: function () {
+        if (poster && poster.parentNode) poster.parentNode.removeChild(poster);
+      }
+    };
   }
 
   function loadScript(src, ready) {
@@ -76,7 +99,7 @@
     if (dependencyPromise) return dependencyPromise;
     var threeUrl = baseApi.cdn && baseApi.cdn.three
       ? baseApi.cdn.three
-      : 'https://cdn.jsdelivr.net/npm/three@0.140.0/build/three.min.js';
+      : 'phoenix/vendor/three.min.js';
     dependencyPromise = (global.THREE
       ? Promise.resolve()
       : loadScript(threeUrl, function () { return !!global.THREE; }))
@@ -712,13 +735,13 @@
     host.classList.add('phoenix-stage');
     if (options.clickable) host.classList.add('phoenix-stage--clickable');
     var reduced = reducedMotion();
+    var loadingPoster = mountLoadingPoster(host);
 
-    // A reduced-motion visitor should get the reliable static poster
-    // immediately. Do not start loading a GLB or a second renderer that will
-    // be disabled by the accessibility preference anyway.
-    if (reduced && options.loadOnReducedMotion !== true) {
+    // Reduced-motion and genuinely constrained devices keep the real static
+    // Phoenix poster. This avoids an empty stage and skips Three.js/GLB work.
+    if ((reduced && options.loadOnReducedMotion !== true) || lowPowerDevice()) {
       host.classList.add('phoenix-model-fallback');
-      return Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
+      return Promise.resolve(staticPosterApi(loadingPoster));
     }
 
     // Mark the page as soon as the model layer is requested.  The main page
@@ -730,7 +753,6 @@
     // baseApi.mount() started a complete procedural WebGL renderer here, so
     // slow devices briefly ran two 3D scenes at once. The static poster keeps
     // the first paint immediate without competing for CPU/GPU resources.
-    var loadingPoster = mountLoadingPoster(host);
     return loadDependencies().then(function (THREE) {
       return createModelScene(host, options, THREE).then(function (modelApi) {
         host.classList.add('phoenix-model-ready');
@@ -739,14 +761,12 @@
       }).catch(function (error) {
         if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
         host.classList.add('phoenix-model-fallback');
-        if (loadingPoster.parentNode) loadingPoster.parentNode.removeChild(loadingPoster);
-        return Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
+        return staticPosterApi(loadingPoster);
       });
     }).catch(function (error) {
       if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
       host.classList.add('phoenix-model-fallback');
-      if (loadingPoster.parentNode) loadingPoster.parentNode.removeChild(loadingPoster);
-      return Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
+      return staticPosterApi(loadingPoster);
     });
   }
 

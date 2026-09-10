@@ -28,7 +28,7 @@
     // Keep the classic Three.js build aligned with the GLTFLoader used by the
     // licensed Phoenix model layer. Mixing releases can make GLTF parsing fail
     // and silently switch the page to the procedural fallback poster.
-    three: 'https://cdn.jsdelivr.net/npm/three@0.140.0/build/three.min.js',
+    three: 'phoenix/vendor/three.min.js',
     gsap: 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
     scrollTrigger: 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js'
   };

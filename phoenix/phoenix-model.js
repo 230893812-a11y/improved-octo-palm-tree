@@ -136,7 +136,7 @@
     // Keep the particles as a supporting ember field.  A smaller mobile
     // budget leaves the licensed model, touch input and page scroll plenty of
     // headroom, while desktop still gets a visible halo of embers.
-    var count = mobile ? 64 : 220;
+    var count = mobile ? 36 : 120;
     var positions = new Float32Array(count * 3);
     var phases = new Float32Array(count);
     var speeds = new Float32Array(count);
@@ -202,7 +202,7 @@
     var keyLight = new THREE.PointLight(0xff8750, 3.55, 11, 2);
     keyLight.position.set(2.3, 2.8, 3.5);
     scene.add(keyLight);
-    var rimLight = new THREE.PointLight(0x9bc1b2, 1.35, 9, 2);
+    var rimLight = new THREE.PointLight(0xffc08a, .9, 9, 2);
     rimLight.position.set(-2.6, 1.2, -1.8);
     scene.add(rimLight);
 
@@ -520,10 +520,10 @@
       var scale = 1.02 + breathing + state.pulse * .04;
       modelHolder.scale.setScalar(scale);
       particles.points.rotation.y += reduced ? 0 : dt * .16;
-      aura.material.opacity = .22 + state.energy * .15 + state.pulse * .12;
+      aura.material.opacity = .14 + state.energy * .1 + state.pulse * .08;
       aura.scale.set(4.05 + breathing * 4, 4.05 + breathing * 4, 1);
       halo.material.opacity = .16 + state.energy * .11;
-      particles.material.opacity = .44 + state.energy * .25;
+      particles.material.opacity = .32 + state.energy * .18;
       keyLight.intensity = 3.1 + state.energy * 1.5 + state.pulse * 1.1;
       if (action) syncWingAction();
       if (mixer && modelReady) mixer.update(dt);

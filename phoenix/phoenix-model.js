@@ -16,6 +16,26 @@
   var LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.140.0/examples/js/loaders/GLTFLoader.js';
   var dependencyPromise = null;
 
+  function mountLoadingPoster(host) {
+    var poster = document.createElement('img');
+    poster.className = 'phoenix-loading-poster';
+    poster.src = 'media/phoenix-fallback.png';
+    poster.alt = '';
+    poster.setAttribute('aria-hidden', 'true');
+    poster.decoding = 'async';
+    poster.fetchPriority = 'high';
+    host.appendChild(poster);
+    return poster;
+  }
+
+  function removeLoadingPoster(poster) {
+    if (!poster) return;
+    poster.classList.add('is-leaving');
+    global.setTimeout(function () {
+      if (poster.parentNode) poster.parentNode.removeChild(poster);
+    }, 260);
+  }
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -669,27 +689,26 @@
     // simulation while the Phoenix scene is loading.
     global.__phoenixRequested = true;
 
-    // Load the model loader first, then start the original scene.  This
-    // ordering lets both scenes share one Three.js instance (and avoids a
-    // second WebGL context) while the licensed model downloads.
-    // Mount the lightweight poster first so a slow CDN or GLB download never
-    // leaves the hero stage empty. The licensed model replaces it when ready.
-    var fallbackPromise = Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
+    // Show a real image while the dependencies and GLB download. Previously
+    // baseApi.mount() started a complete procedural WebGL renderer here, so
+    // slow devices briefly ran two 3D scenes at once. The static poster keeps
+    // the first paint immediate without competing for CPU/GPU resources.
+    var loadingPoster = mountLoadingPoster(host);
     return loadDependencies().then(function (THREE) {
       return createModelScene(host, options, THREE).then(function (modelApi) {
-        return fallbackPromise.then(function (fallbackApi) {
-          if (fallbackApi && fallbackApi.destroy) fallbackApi.destroy();
-          host.classList.add('phoenix-model-ready');
-          return modelApi;
-        });
+        host.classList.add('phoenix-model-ready');
+        removeLoadingPoster(loadingPoster);
+        return modelApi;
       }).catch(function (error) {
         if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
         host.classList.add('phoenix-model-fallback');
-        return fallbackPromise;
+        if (loadingPoster.parentNode) loadingPoster.parentNode.removeChild(loadingPoster);
+        return Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
       });
     }).catch(function (error) {
       if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
       host.classList.add('phoenix-model-fallback');
+      if (loadingPoster.parentNode) loadingPoster.parentNode.removeChild(loadingPoster);
       return Promise.resolve(baseApi.mount(options)).catch(function () { return null; });
     });
   }

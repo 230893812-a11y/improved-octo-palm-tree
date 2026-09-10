@@ -1,0 +1,6 @@
+.project-showcase-grid .project-card h3::after{display:block;margin-top:5px;color:var(--muted);font:500 9px "DM Mono";letter-spacing:.09em;text-transform:uppercase}
+.project-flagship h3::after{content:"校园资料 RAG 应用"}
+.project-battle-card h3::after{content:"AI Agent 网页战场"}
+.project-portfolio-card h3::after{content:"交互式个人作品集与移动端性能优化"}
+.project-api-card h3::after{content:"OpenAI 兼容接口诊断工具"}
+.cinematic-preview .project-showcase-grid .project-card h3::after{color:rgba(247,244,238,.48)}

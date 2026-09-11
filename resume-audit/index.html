@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="简历压力测试助手：先检查简历本身，再对照目标岗位发现证据缺口。">
+  <title>简历压力测试 · 黄鼎</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="audit-shell">
+    <header class="audit-header">
+      <a class="back-link" href="../">← 返回黄鼎的个人网站</a>
+      <span class="audit-kicker">RESUME / EVIDENCE CHECK</span>
+    </header>
+
+    <section class="audit-hero">
+      <div>
+        <p class="eyebrow">简历压力测试 · MVP 框架</p>
+        <h1>你的简历，<br><em>经得起第一轮阅读吗？</em></h1>
+        <p class="hero-copy">先别急着润色。上传或粘贴简历，检查结构、表达、成果证据与个人贡献；如果你有目标岗位，再进一步做岗位要求—简历证据压力测试。</p>
+      </div>
+      <aside class="principle-card">
+        <span>OUR RULE</span>
+        <strong>只评价简历证据，<br>不评价人的价值。</strong>
+        <p>不凭空添加数字、职责或成果。当前页面是前端框架，真实 AI 分析将在后端 API 接入后启用。</p>
+      </aside>
+    </section>
+
+    <section class="audit-workspace" aria-label="简历分析输入">
+      <div class="mode-switch" role="tablist" aria-label="分析模式">
+        <button class="mode-button is-active" type="button" data-mode="general" role="tab" aria-selected="true">通用简历体检<span>不需要 JD</span></button>
+        <button class="mode-button" type="button" data-mode="targeted" role="tab" aria-selected="false">目标岗位压力测试<span>需要 JD</span></button>
+      </div>
+
+      <div class="input-grid">
+        <section class="input-card">
+          <div class="card-heading"><div><span class="step-number">01</span><h2>放入你的简历</h2></div><span class="optional-label">必填</span></div>
+          <label class="dropzone" for="resumeFile"><span class="drop-icon">↥</span><strong>拖入 PDF / DOCX，或点击选择</strong><small>当前框架限制：单文件 ≤ 5 MB · PDF ≤ 5 页</small><input id="resumeFile" type="file" accept=".pdf,.docx,.txt,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span id="fileStatus" class="file-status">也可以直接粘贴下面的文本</span></label>
+          <label class="field-label" for="resumeText">简历文本</label>
+          <textarea id="resumeText" maxlength="12000" placeholder="把简历内容粘贴到这里……"></textarea>
+          <div class="field-meta"><span>文本上限 12,000 字</span><span id="charCount">0 / 12,000</span></div>
+        </section>
+
+        <section class="input-card jd-card" id="jdCard" hidden>
+          <div class="card-heading"><div><span class="step-number">02</span><h2>加入目标岗位</h2></div><span class="optional-label">岗位模式必填</span></div>
+          <label class="field-label" for="jobText">岗位 JD</label>
+          <textarea id="jobText" placeholder="粘贴目标岗位描述，系统会拆解核心要求并检查简历证据……"></textarea>
+          <p class="helper-text">没有 JD？先使用通用简历体检。它只检查简历本身，不判断你适合什么职位。</p>
+        </section>
+
+        <section class="input-card privacy-card">
+          <div class="card-heading"><div><span class="step-number">03</span><h2>使用边界</h2></div></div>
+          <ul class="guard-list">
+            <li><span>✓</span>默认不公开、不展示给其他用户</li>
+            <li><span>✓</span>每日每个匿名访客最多分析 3 次</li>
+            <li><span>✓</span>后端上线后分析完成自动删除临时文件</li>
+            <li><span>✓</span>改写必须基于你确认过的真实事实</li>
+          </ul>
+          <button id="analyzeButton" class="analyze-button" type="button">开始框架演示 <span>→</span></button>
+          <p class="demo-note">当前为静态 MVP 框架，按钮会展示示例报告，不会上传你的内容。</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="results-section" id="results" aria-live="polite" hidden>
+      <div class="results-heading"><div><p class="eyebrow" id="resultEyebrow">分析预览 · GENERAL CHECK</p><h2 id="resultTitle">先处理最影响可信度的三件事。</h2></div><span class="demo-badge">示例结果</span></div>
+      <div class="result-grid">
+        <article class="result-card result-summary"><span class="result-label">一句话判断</span><p id="resultSummary">这份简历可能不是经历不足，而是没有把个人贡献、交付结果和能够证明能力的证据说清楚。</p></article>
+        <article class="result-card"><span class="result-label" id="issueLabel1">优先级 01 · 个人贡献</span><h3 id="issueTitle1">“负责 / 参与”出现多次</h3><p id="issueBody1">这些词本身没有错，但当前没有说明你具体负责了哪个环节，招聘者难以区分个人贡献和团队成果。</p><button type="button" class="question-button" id="issueQuestion1">可能追问：你独立完成了哪一部分？</button></article>
+        <article class="result-card"><span class="result-label" id="issueLabel2">优先级 02 · 成果证据</span><h3 id="issueTitle2">行动多，结果少</h3><p id="issueBody2">项目描述包含工作动作，但没有交付物、上线状态、用户反馈、时间变化或其他可验证结果。</p><button type="button" class="question-button" id="issueQuestion2">需要补充：最终交付了什么？</button></article>
+        <article class="result-card"><span class="result-label" id="issueLabel3">优先级 03 · 表达清晰度</span><h3 id="issueTitle3">技能和经历没有连起来</h3><p id="issueBody3">技能列表中的工具或技术没有在项目经历中出现使用场景，容易被看成关键词堆砌。</p><button type="button" class="question-button" id="issueQuestion3">可能追问：在哪个项目中实际使用？</button></article>
+      </div>
+      <div class="next-step"><strong>下一步</strong><span id="nextStepText">补充真实事实后，系统才会生成安全改写。当前演示不会替你编造数字、职责或成果。</span></div>
+    </section>
+
+    <footer class="audit-footer"><a href="../">黄鼎 · Portfolio</a><span>Evidence-first resume review · MVP</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

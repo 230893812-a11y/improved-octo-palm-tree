@@ -105,8 +105,11 @@ function normalizeQuestion(question) {
 
   return question
     .replace(/具体独立完成了哪些/g, "具体负责或参与了哪些")
+    .replace(/具体独立负责了哪些/g, "具体负责或参与了哪些")
     .replace(/独立完成了哪些/g, "负责或参与了哪些")
+    .replace(/独立负责了哪些/g, "负责或参与了哪些")
     .replace(/独立完成/g, "负责或参与")
+    .replace(/独立负责/g, "负责或参与")
     .trim();
 }
 
@@ -288,6 +291,7 @@ async function callDeepSeek(modelInput) {
 module.exports = {
   buildModelInput,
   callDeepSeek,
+  normalizeQuestion,
   runMockModel,
   validateModelOutput
 };

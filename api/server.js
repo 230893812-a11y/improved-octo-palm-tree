@@ -1,4 +1,9 @@
 const http = require("http");
+const {
+  buildModelInput,
+  runMockModel,
+  validateModelOutput
+} = require("./model-adapter");
 
 const PORT = 3000;
 const MAX_RESUME_LENGTH = 12000;
@@ -37,6 +42,17 @@ function validateRequest(body) {
     return {
       code: "INVALID_MODE",
       message: "分析模式必须是 general 或 targeted。"
+    };
+  }
+
+  if (
+    body.engine !== undefined
+    && body.engine !== "rules"
+    && body.engine !== "hybrid-mock"
+  ) {
+    return {
+      code: "INVALID_ENGINE",
+      message: "分析引擎必须是 rules 或 hybrid-mock。"
     };
   }
 
@@ -243,6 +259,38 @@ function buildRuleResult(body) {
   };
 }
 
+function buildAnalysisResult(body) {
+  const ruleResult = buildRuleResult(body);
+  const engine = body.engine || "rules";
+
+  if (engine === "rules") {
+    return ruleResult;
+  }
+
+  const modelInput = buildModelInput({
+    mode: body.mode,
+    resumeText: body.resume_text,
+    jobText: body.job_text || "",
+    ruleResult
+  });
+  const modelAnalysis = runMockModel(modelInput);
+  const outputError = validateModelOutput(modelAnalysis);
+
+  if (outputError) {
+    const error = new Error(outputError);
+    error.code = "INVALID_MODEL_OUTPUT";
+    throw error;
+  }
+
+  return {
+    ok: true,
+    mode: body.mode,
+    analysis_type: "hybrid-mock",
+    rule_analysis: ruleResult,
+    model_analysis: modelAnalysis
+  };
+}
+
 const server = http.createServer((request, response) => {
   if (request.method === "OPTIONS") {
     response.writeHead(204, {
@@ -292,7 +340,16 @@ const server = http.createServer((request, response) => {
       return;
     }
 
-    sendJson(response, 200, buildRuleResult(body));
+    try {
+      sendJson(response, 200, buildAnalysisResult(body));
+    } catch (error) {
+      sendError(
+        response,
+        500,
+        error.code || "ANALYSIS_FAILED",
+        "分析流程失败，请稍后重试。"
+      );
+    }
   });
 });
 

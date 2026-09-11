@@ -1,0 +1,7 @@
+name = "huangding-resume-audit-api"
+main = "src/index.js"
+compatibility_date = "2026-09-11"
+
+[vars]
+ALLOWED_ORIGINS = "https://230893812-a11y.github.io"
+DEEPSEEK_MODEL = "deepseek-chat"

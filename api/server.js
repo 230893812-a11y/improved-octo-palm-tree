@@ -1,4 +1,6 @@
 const http = require("http");
+const fs = require("fs");
+const path = require("path");
 const {
   buildModelInput,
   callDeepSeek,
@@ -11,6 +13,12 @@ const MAX_RESUME_LENGTH = 12000;
 const MAX_JOB_LENGTH = 12000;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const TEXT_PREVIEW_LENGTH = 200;
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+const LOCAL_PAGE_FILES = new Map([
+  ["/resume-audit/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
+  ["/resume-audit/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
+  ["/resume-audit/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
+]);
 
 function sendJson(response, statusCode, data) {
   response.writeHead(statusCode, {
@@ -103,6 +111,42 @@ function addIssue(issues, issue) {
     description: issue.description,
     follow_up: issue.follow_up
   });
+}
+
+function serveLocalPage(request, response) {
+  const pathname = new URL(request.url, "http://localhost").pathname;
+
+  if (pathname === "/resume-audit") {
+    response.writeHead(302, {
+      Location: "/resume-audit/",
+      "Cache-Control": "no-store"
+    });
+    response.end();
+    return true;
+  }
+
+  const asset = LOCAL_PAGE_FILES.get(pathname);
+
+  if (!asset) {
+    return false;
+  }
+
+  const absolutePath = path.join(PROJECT_ROOT, asset.file);
+
+  fs.readFile(absolutePath, (error, content) => {
+    if (error) {
+      sendError(response, 500, "LOCAL_PAGE_FAILED", "本地测试页面读取失败。");
+      return;
+    }
+
+    response.writeHead(200, {
+      "Content-Type": asset.type,
+      "Cache-Control": "no-store"
+    });
+    response.end(content);
+  });
+
+  return true;
 }
 
 function handleTextFileExtraction(request, response) {
@@ -389,6 +433,10 @@ async function buildAnalysisResult(body) {
 }
 
 const server = http.createServer((request, response) => {
+  if (request.method === "GET" && serveLocalPage(request, response)) {
+    return;
+  }
+
   if (request.method === "OPTIONS") {
     response.writeHead(204, {
       "Access-Control-Allow-Origin": "*",

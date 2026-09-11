@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: huangding-resume-audit-api
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://230893812-a11y.github.io
+      - key: TRUST_PROXY
+        value: "true"

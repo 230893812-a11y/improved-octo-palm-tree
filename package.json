@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Evidence-first resume audit backend and local test page.",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "start": "node api/server.js",
     "check": "node --check api/server.js && node --check api/model-adapter.js && node --check resume-audit/app.js"

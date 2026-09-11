@@ -120,9 +120,11 @@ function getClientAddress(request) {
   let address = request.socket.remoteAddress || "unknown";
 
   if (TRUST_PROXY) {
-    const forwardedFor = String(request.headers["x-forwarded-for"] || "")
-      .split(",", 1)[0]
-      .trim();
+    const forwardedChain = String(request.headers["x-forwarded-for"] || "")
+      .split(",")
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+    const forwardedFor = forwardedChain[0];
 
     if (forwardedFor) {
       address = forwardedFor;
@@ -711,11 +713,20 @@ async function buildAnalysisResult(body) {
 }
 
 const server = http.createServer((request, response) => {
+  const pathname = new URL(request.url, "http://localhost").pathname;
+
+  if (request.method === "GET" && pathname === "/health") {
+    sendJson(response, 200, {
+      ok: true,
+      service: "resume-evidence-audit-api"
+    });
+    return;
+  }
+
   if (request.method === "GET" && serveLocalPage(request, response)) {
     return;
   }
 
-  const pathname = new URL(request.url, "http://localhost").pathname;
   const isApiRequest = pathname === "/api/analyze" || pathname === "/api/extract-resume";
 
   if (isApiRequest && !isAllowedOrigin(request)) {
@@ -803,7 +814,7 @@ const server = http.createServer((request, response) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Resume audit API is running at http://localhost:${PORT}`);
   console.log(`Test endpoint: POST http://localhost:${PORT}/api/analyze`);
 });

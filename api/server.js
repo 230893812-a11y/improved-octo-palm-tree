@@ -12,6 +12,7 @@ const PORT = Number(process.env.PORT) || 3000;
 const MAX_RESUME_LENGTH = 12000;
 const MAX_JOB_LENGTH = 12000;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_PDF_PAGES = 5;
 const TEXT_PREVIEW_LENGTH = 200;
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const LOCAL_PAGE_FILES = new Map([
@@ -19,6 +20,15 @@ const LOCAL_PAGE_FILES = new Map([
   ["/resume-audit/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
   ["/resume-audit/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
 ]);
+let pdfjsPromise;
+
+function loadPdfJs() {
+  if (!pdfjsPromise) {
+    pdfjsPromise = import("pdfjs-dist/legacy/build/pdf.mjs");
+  }
+
+  return pdfjsPromise;
+}
 
 function sendJson(response, statusCode, data) {
   response.writeHead(statusCode, {
@@ -149,7 +159,58 @@ function serveLocalPage(request, response) {
   return true;
 }
 
-function handleTextFileExtraction(request, response) {
+async function extractPdfText(fileBuffer) {
+  const pdfjs = await loadPdfJs();
+  const loadingTask = pdfjs.getDocument({
+    data: new Uint8Array(fileBuffer),
+    useWorkerFetch: false,
+    isEvalSupported: false
+  });
+  const document = await loadingTask.promise;
+
+  try {
+    if (document.numPages > MAX_PDF_PAGES) {
+      const error = new Error("PDF 不能超过 5 页。");
+      error.code = "PDF_TOO_MANY_PAGES";
+      throw error;
+    }
+
+    const pageTexts = [];
+
+    for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+      const page = await document.getPage(pageNumber);
+      const content = await page.getTextContent();
+      const pageText = content.items
+        .map((item) => typeof item.str === "string" ? item.str : "")
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      pageTexts.push(pageText);
+    }
+
+    const text = pageTexts.filter(Boolean).join("\n\n").trim();
+
+    if (!text) {
+      const error = new Error("这个 PDF 没有可提取的文字，可能是扫描图片。");
+      error.code = "PDF_NO_TEXT";
+      throw error;
+    }
+
+    return {
+      text,
+      page_count: document.numPages
+    };
+  } finally {
+    if (typeof document.destroy === "function") {
+      await document.destroy();
+    } else if (typeof document.cleanup === "function") {
+      document.cleanup();
+    }
+  }
+}
+
+function handleResumeFileExtraction(request, response) {
   const contentType = String(request.headers["content-type"] || "")
     .split(";", 1)[0]
     .trim()
@@ -165,8 +226,12 @@ function handleTextFileExtraction(request, response) {
     return;
   }
 
-  if (contentType !== "text/plain" || !fileName.toLowerCase().endsWith(".txt")) {
-    sendError(response, 415, "UNSUPPORTED_FILE_TYPE", "第 8A 阶段只支持 TXT 文件。");
+  const extension = path.extname(fileName).toLowerCase();
+  const isTxt = extension === ".txt" && contentType === "text/plain";
+  const isPdf = extension === ".pdf" && contentType === "application/pdf";
+
+  if (!isTxt && !isPdf) {
+    sendError(response, 415, "UNSUPPORTED_FILE_TYPE", "当前支持 TXT 和文字型 PDF；DOCX 尚未接入。");
     request.resume();
     return;
   }
@@ -191,18 +256,35 @@ function handleTextFileExtraction(request, response) {
 
   request.on("end", () => {
     if (tooLarge) {
-      sendError(response, 413, "FILE_TOO_LARGE", "TXT 文件不能超过 5 MB。");
+      sendError(response, 413, "FILE_TOO_LARGE", "简历文件不能超过 5 MB。");
       return;
     }
 
     const fileBuffer = Buffer.concat(chunks);
 
     if (fileBuffer.length === 0) {
-      sendError(response, 400, "FILE_EMPTY", "TXT 文件不能为空。");
+      sendError(response, 400, "FILE_EMPTY", "简历文件不能为空。");
       return;
     }
 
     let extractedText;
+    let pageCount = null;
+
+    if (isPdf) {
+      extractPdfText(fileBuffer)
+        .then(({ text, page_count }) => {
+          sendExtractedFile(response, "application/pdf", text, page_count);
+        })
+        .catch((error) => {
+          const status = error.code === "PDF_TOO_MANY_PAGES" ? 400 : 422;
+          const code = error.code || "PDF_PARSE_FAILED";
+          const message = code === "PDF_PARSE_FAILED"
+            ? "PDF 文件损坏、加密或格式不受支持，无法提取文字。"
+            : error.message;
+          sendError(response, status, code, message);
+        });
+      return;
+    }
 
     try {
       extractedText = new TextDecoder("utf-8", { fatal: true })
@@ -223,21 +305,36 @@ function handleTextFileExtraction(request, response) {
       return;
     }
 
-    sendJson(response, 200, {
-      ok: true,
-      file_type: "text/plain",
-      character_count: extractedText.length,
-      text_preview: extractedText.slice(0, TEXT_PREVIEW_LENGTH),
-      resume_text: extractedText,
-      stored: false
-    });
+    sendExtractedFile(response, "text/plain", extractedText, pageCount);
   });
 
   request.on("error", () => {
     if (!response.headersSent) {
-      sendError(response, 400, "UPLOAD_FAILED", "TXT 文件上传失败。");
+      sendError(response, 400, "UPLOAD_FAILED", "简历文件上传失败。");
     }
   });
+}
+
+function sendExtractedFile(response, fileType, extractedText, pageCount) {
+  if (extractedText.trim() === "") {
+    sendError(response, 400, "FILE_EMPTY", "文件没有可用文字。");
+    return;
+  }
+
+  if (extractedText.length > MAX_RESUME_LENGTH) {
+    sendError(response, 400, "RESUME_TOO_LONG", "提取出的简历内容不能超过 12,000 字。");
+    return;
+  }
+
+  sendJson(response, 200, {
+      ok: true,
+      file_type: fileType,
+      character_count: extractedText.length,
+      text_preview: extractedText.slice(0, TEXT_PREVIEW_LENGTH),
+      resume_text: extractedText,
+      page_count: pageCount,
+      stored: false
+    });
 }
 
 const JOB_REQUIREMENT_RULES = [
@@ -449,7 +546,7 @@ const server = http.createServer((request, response) => {
   }
 
   if (request.method === "POST" && request.url === "/api/extract-resume") {
-    handleTextFileExtraction(request, response);
+    handleResumeFileExtraction(request, response);
     return;
   }
 

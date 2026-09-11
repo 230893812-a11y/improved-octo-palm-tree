@@ -49,17 +49,19 @@
     var file=fileInput.files[0];
     if(!file)return;
     if(file.size>5*1024*1024){fileStatus.textContent='文件超过 5 MB，请更换文件';fileStatus.classList.add('is-error');fileInput.value='';return}
-    if(!file.name.toLowerCase().endsWith('.txt')){fileStatus.textContent='第 8A 阶段只支持 TXT；PDF / DOCX 尚未接入';fileStatus.classList.add('is-error');fileInput.value='';return}
-    fileStatus.textContent='正在通过本地后端读取 TXT……';
+    var isTxt=file.name.toLowerCase().endsWith('.txt');
+    var isPdf=file.name.toLowerCase().endsWith('.pdf');
+    if(!isTxt&&!isPdf){fileStatus.textContent='当前支持 TXT 和文字型 PDF；DOCX 尚未接入';fileStatus.classList.add('is-error');fileInput.value='';return}
+    fileStatus.textContent='正在通过本地后端读取 '+(isPdf?'PDF':'TXT')+'……';
     fileStatus.classList.remove('is-error');
     fileInput.disabled=true;
     try{
-      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':'text/plain; charset=utf-8','X-File-Name':encodeURIComponent(file.name)},body:file});
+      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':isPdf?'application/pdf':'text/plain; charset=utf-8','X-File-Name':encodeURIComponent(file.name)},body:file});
       var payload=await response.json();
       if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'TXT 读取失败');
       resumeText.value=payload.resume_text;
       updateCount();
-      fileStatus.textContent='TXT 已读取：'+payload.character_count.toLocaleString()+' 字符；原文件未保存';
+      fileStatus.textContent=(isPdf?'PDF 已读取：'+payload.page_count+' 页，':'TXT 已读取：')+payload.character_count.toLocaleString()+' 字符；原文件未保存';
     }catch(error){
       fileStatus.textContent=error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message;
       fileStatus.classList.add('is-error');

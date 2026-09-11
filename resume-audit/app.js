@@ -8,7 +8,7 @@
   var charCount=document.getElementById('charCount');
   var analyzeButton=document.getElementById('analyzeButton');
   var results=document.getElementById('results');
-  var apiBase=window.RESUME_AUDIT_API_BASE||'https://huangding-resume-audit-api.230893812.workers.dev';
+  var apiBase=window.RESUME_AUDIT_API_BASE||'https://knowledge-rag-d3gfdtvrf17fca5f7-1480424263.ap-shanghai.app.tcloudbase.com/resume-audit-api';
   var currentMode='general';
   var resultFields={
     general:{

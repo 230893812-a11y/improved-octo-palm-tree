@@ -16,6 +16,18 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_PDF_PAGES = 5;
 const TEXT_PREVIEW_LENGTH = 200;
 const PROJECT_ROOT = path.resolve(__dirname, "..");
+const DEFAULT_ALLOWED_ORIGINS = [
+  `http://localhost:${PORT}`,
+  `http://127.0.0.1:${PORT}`
+];
+const CONFIGURED_ALLOWED_ORIGINS = String(process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const ALLOWED_ORIGINS = new Set([
+  ...DEFAULT_ALLOWED_ORIGINS,
+  ...CONFIGURED_ALLOWED_ORIGINS
+]);
 const LOCAL_PAGE_FILES = new Map([
   ["/resume-audit/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
   ["/resume-audit/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
@@ -25,7 +37,10 @@ const LOCAL_PAGE_FILES = new Map([
   ["/resume-audit-8b/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }],
   ["/resume-audit-8c/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
   ["/resume-audit-8c/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
-  ["/resume-audit-8c/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
+  ["/resume-audit-8c/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }],
+  ["/resume-audit-8d/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
+  ["/resume-audit-8d/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
+  ["/resume-audit-8d/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
 ]);
 let pdfjsPromise;
 
@@ -63,13 +78,40 @@ async function extractDocxText(fileBuffer) {
   }
 }
 
-function sendJson(response, statusCode, data) {
-  response.writeHead(statusCode, {
+function getCorsHeaders(request) {
+  const origin = request.headers.origin;
+
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
+    return {};
+  }
+
+  return {
+    "Access-Control-Allow-Origin": origin,
+    Vary: "Origin"
+  };
+}
+
+function getApiHeaders(request) {
+  return {
     "Content-Type": "application/json; charset=utf-8",
-    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-File-Name"
-  });
+    "Access-Control-Allow-Headers": "Content-Type, X-File-Name",
+    "Cache-Control": "no-store",
+    Pragma: "no-cache",
+    Expires: "0",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    ...getCorsHeaders(request)
+  };
+}
+
+function isAllowedOrigin(request) {
+  const origin = request.headers.origin;
+  return !origin || ALLOWED_ORIGINS.has(origin);
+}
+
+function sendJson(response, statusCode, data) {
+  response.writeHead(statusCode, getApiHeaders(response.req));
 
   response.end(JSON.stringify(data, null, 2));
 }
@@ -159,7 +201,12 @@ function addIssue(issues, issue) {
 function serveLocalPage(request, response) {
   const pathname = new URL(request.url, "http://localhost").pathname;
 
-  if (pathname === "/resume-audit" || pathname === "/resume-audit-8b" || pathname === "/resume-audit-8c") {
+  if (
+    pathname === "/resume-audit"
+    || pathname === "/resume-audit-8b"
+    || pathname === "/resume-audit-8c"
+    || pathname === "/resume-audit-8d"
+  ) {
     response.writeHead(302, {
       Location: `${pathname}/`,
       "Cache-Control": "no-store"
@@ -590,23 +637,28 @@ const server = http.createServer((request, response) => {
     return;
   }
 
+  const pathname = new URL(request.url, "http://localhost").pathname;
+  const isApiRequest = pathname === "/api/analyze" || pathname === "/api/extract-resume";
+
+  if (isApiRequest && !isAllowedOrigin(request)) {
+    sendError(response, 403, "ORIGIN_NOT_ALLOWED", "当前网页来源无权调用此接口。");
+    request.resume();
+    return;
+  }
+
   if (request.method === "OPTIONS") {
-    response.writeHead(204, {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, X-File-Name"
-    });
+    response.writeHead(204, getApiHeaders(request));
 
     response.end();
     return;
   }
 
-  if (request.method === "POST" && request.url === "/api/extract-resume") {
+  if (request.method === "POST" && pathname === "/api/extract-resume") {
     handleResumeFileExtraction(request, response);
     return;
   }
 
-  if (request.method !== "POST" || request.url !== "/api/analyze") {
+  if (request.method !== "POST" || pathname !== "/api/analyze") {
     sendError(response, 404, "NOT_FOUND", "找不到这个接口。");
     return;
   }

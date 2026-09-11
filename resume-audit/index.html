@@ -26,7 +26,7 @@
       <aside class="principle-card">
         <span>OUR RULE</span>
         <strong>只评价简历证据，<br>不评价人的价值。</strong>
-        <p>不凭空添加数字、职责或成果。当前页面是前端框架，真实 AI 分析将在后端 API 接入后启用。</p>
+        <p>不凭空添加数字、职责或成果。后端已具备规则与 DeepSeek 分析能力；当前公开按钮仍是示例演示，尚未提交真实分析。</p>
       </aside>
     </section>
 
@@ -39,16 +39,16 @@
       <div class="input-grid">
         <section class="input-card">
           <div class="card-heading"><div><span class="step-number">01</span><h2>放入你的简历</h2></div><span class="optional-label">必填</span></div>
-          <label class="dropzone" for="resumeFile"><span class="drop-icon">↥</span><strong>选择 TXT PDF 或 DOCX 简历</strong><small>第 8C 阶段：单文件 ≤ 5 MB · PDF ≤ 5 页 · 内容 ≤ 12,000 字；扫描 PDF 和旧版 DOC 不支持</small><input id="resumeFile" type="file" accept=".pdf,.docx,.txt,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span id="fileStatus" class="file-status">正在载入第 8C 文件解析脚本……</span></label>
+          <label class="dropzone" for="resumeFile"><span class="drop-icon">↥</span><strong>选择 TXT PDF 或 DOCX 简历</strong><small>第 8D 阶段：单文件 ≤ 5 MB · PDF ≤ 5 页 · 内容 ≤ 12,000 字；扫描 PDF 和旧版 DOC 不支持</small><input id="resumeFile" type="file" accept=".pdf,.docx,.txt,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span id="fileStatus" class="file-status">正在载入第 8D 隐私保护脚本……</span></label>
           <label class="field-label" for="resumeText">简历文本</label>
-          <textarea id="resumeText" maxlength="12000" placeholder="把简历内容粘贴到这里……"></textarea>
+          <textarea id="resumeText" maxlength="12000" autocomplete="off" placeholder="把简历内容粘贴到这里……"></textarea>
           <div class="field-meta"><span>文本上限 12,000 字</span><span id="charCount">0 / 12,000</span></div>
         </section>
 
         <section class="input-card jd-card" id="jdCard" hidden>
           <div class="card-heading"><div><span class="step-number">02</span><h2>加入目标岗位</h2></div><span class="optional-label">岗位模式必填</span></div>
           <label class="field-label" for="jobText">岗位 JD</label>
-          <textarea id="jobText" placeholder="粘贴目标岗位描述，系统会拆解核心要求并检查简历证据……"></textarea>
+          <textarea id="jobText" maxlength="12000" autocomplete="off" placeholder="粘贴目标岗位描述，系统会拆解核心要求并检查简历证据……"></textarea>
           <p class="helper-text">没有 JD？先使用通用简历体检。它只检查简历本身，不判断你适合什么职位。</p>
         </section>
 
@@ -57,11 +57,12 @@
           <ul class="guard-list">
             <li><span>✓</span>TXT / PDF / DOCX 只在内存中读取，不写入项目目录</li>
             <li><span>✓</span>文件解析接口不调用外部大模型</li>
-            <li><span>✓</span>扫描 PDF、旧版 DOC 与每日 3 次限流尚未接入</li>
+            <li><span>✓</span>扫描 PDF 与旧版 DOC 不支持；每日 3 次限流尚未接入</li>
+            <li><span>✓</span>页面刷新后清空简历与岗位文本，不在浏览器长期保存</li>
             <li><span>✓</span>改写必须基于你确认过的真实事实</li>
           </ul>
           <button id="analyzeButton" class="analyze-button" type="button">开始框架演示 <span>→</span></button>
-          <p class="demo-note">选择 TXT、文字型 PDF 或 DOCX 会发送到本地解析接口并回填文本；“开始框架演示”仍只展示示例报告，不会提交给大模型。</p>
+          <p class="demo-note">文件解析阶段不调用大模型；“开始框架演示”仍只展示示例报告。正式启用 AI 分析后，提取文字会发送给配置的大模型服务。请先删除身份证号、银行卡号、密码等无关敏感信息。</p>
         </section>
       </div>
     </section>
@@ -79,6 +80,6 @@
 
     <footer class="audit-footer"><a href="../">黄鼎 · Portfolio</a><span>Evidence-first resume review · MVP</span></footer>
   </main>
-  <script src="app.js?v=8c-20260911-1"></script>
+  <script src="app.js?v=8d-20260911-1"></script>
 </body>
 </html>

@@ -68,15 +68,16 @@
     }catch(error){
       fileStatus.textContent=(error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message)+'；文本框保留上一次成功读取的内容';
       fileStatus.classList.add('is-error');
-      fileInput.value='';
     }finally{
+      fileInput.value='';
       fileInput.disabled=false;
     }
   });
   analyzeButton.addEventListener('click',function(){if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();return}renderResults(currentMode);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'});});
-  fileInput.value='';
-  fileStatus.textContent='第 8C 脚本已就绪：可选择 TXT、文字型 PDF 或 DOCX';
+  function clearPrivateInputs(){fileInput.value='';resumeText.value='';jobText.value='';results.hidden=true;updateCount();}
+  clearPrivateInputs();
+  window.addEventListener('pageshow',function(event){if(event.persisted)clearPrivateInputs();});
+  fileStatus.textContent='第 8D 脚本已就绪：文件不落盘，页面刷新后清空文本';
   fileStatus.classList.remove('is-error');
-  document.documentElement.dataset.auditBuild='8c-20260911-1';
-  updateCount();
+  document.documentElement.dataset.auditBuild='8d-20260911-1';
 })();

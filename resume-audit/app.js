@@ -63,6 +63,27 @@
   }
   modeButtons.forEach(function(button){button.addEventListener('click',function(){currentMode=button.dataset.mode;modeButtons.forEach(function(item){var active=item===button;item.classList.toggle('is-active',active);item.setAttribute('aria-selected',String(active));});jdCard.hidden=currentMode!=='targeted';if(!results.hidden)renderResults(currentMode);});});
   resumeText.addEventListener('input',updateCount);
+  async function readLocalFile(file,isTxt,isPdf,isDocx){
+    if(isTxt)return await file.text();
+    if(isDocx){
+      if(!window.mammoth)throw new Error('DOCX 解析组件尚未加载，请刷新页面后重试');
+      var doc=await window.mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});
+      return doc.value||'';
+    }
+    if(isPdf){
+      if(!window.pdfjsLib)throw new Error('PDF 解析组件尚未加载，请刷新页面后重试');
+      var pdf=await window.pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+      if(pdf.numPages>5)throw new Error('PDF 超过 5 页，请精简后重试');
+      var pages=[];
+      for(var pageNo=1;pageNo<=pdf.numPages;pageNo++){
+        var page=await pdf.getPage(pageNo);
+        var content=await page.getTextContent();
+        pages.push(content.items.map(function(item){return item.str||'';}).join(' '));
+      }
+      return pages.join('\n');
+    }
+    return '';
+  }
   fileInput.addEventListener('change',async function(){
     var file=fileInput.files[0];
     if(!file)return;
@@ -72,17 +93,16 @@
     var isDocx=file.name.toLowerCase().endsWith('.docx');
     if(!isTxt&&!isPdf&&!isDocx){fileStatus.textContent='当前支持 TXT、文字型 PDF 和 DOCX；不支持旧版 DOC';fileStatus.classList.add('is-error');fileInput.value='';return}
     var fileLabel=isPdf?'PDF':(isDocx?'DOCX':'TXT');
-    fileStatus.textContent='正在通过本地后端读取 '+fileLabel+'……';
+    fileStatus.textContent='正在浏览器本地读取 '+fileLabel+'……';
     fileStatus.classList.remove('is-error');
     fileInput.disabled=true;
     try{
-      var contentType=isPdf?'application/pdf':(isDocx?'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'text/plain; charset=utf-8');
-      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':contentType,'X-File-Name':encodeURIComponent(file.name)},body:file});
-      var payload=await response.json();
-      if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'TXT 读取失败');
-      resumeText.value=payload.resume_text;
+      var text=await readLocalFile(file,isTxt,isPdf,isDocx);
+      if(!text.trim())throw new Error(isPdf?'PDF 中没有可读取的文字，可能是扫描件':'文件中没有可读取的文字');
+      if(text.length>12000)throw new Error('提取文字超过 12,000 字，请精简后重试');
+      resumeText.value=text;
       updateCount();
-      fileStatus.textContent=(isPdf?'PDF 已读取：'+payload.page_count+' 页，':fileLabel+' 已读取：')+payload.character_count.toLocaleString()+' 字符；原文件未保存';
+      fileStatus.textContent=(isPdf?'PDF 已在浏览器本地读取：':fileLabel+' 已在浏览器本地读取：')+text.length.toLocaleString()+' 字符；原文件未上传';
     }catch(error){
       fileStatus.textContent=(error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message)+'；文本框保留上一次成功读取的内容';
       fileStatus.classList.add('is-error');

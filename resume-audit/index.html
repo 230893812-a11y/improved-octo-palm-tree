@@ -57,12 +57,12 @@
           <ul class="guard-list">
             <li><span>✓</span>TXT / PDF / DOCX 只在内存中读取，不写入项目目录</li>
             <li><span>✓</span>文件解析接口不调用外部大模型</li>
-            <li><span>✓</span>扫描 PDF 与旧版 DOC 不支持；每日 3 次限流尚未接入</li>
+            <li><span>✓</span>扫描 PDF 与旧版 DOC 不支持；分析接口同一网络来源每 24 小时最多 3 次</li>
             <li><span>✓</span>页面刷新后清空简历与岗位文本，不在浏览器长期保存</li>
             <li><span>✓</span>改写必须基于你确认过的真实事实</li>
           </ul>
           <button id="analyzeButton" class="analyze-button" type="button">开始框架演示 <span>→</span></button>
-          <p class="demo-note">文件解析阶段不调用大模型；“开始框架演示”仍只展示示例报告。正式启用 AI 分析后，提取文字会发送给配置的大模型服务。请先删除身份证号、银行卡号、密码等无关敏感信息。</p>
+          <p class="demo-note">文件解析阶段不调用大模型；“开始框架演示”仍只展示示例报告，也不占用分析次数。正式启用 AI 分析后，提取文字会发送给配置的大模型服务。请先删除身份证号、银行卡号、密码等无关敏感信息。</p>
         </section>
       </div>
     </section>

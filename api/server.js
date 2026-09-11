@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const mammoth = require("mammoth");
 const {
   buildModelInput,
@@ -15,6 +16,11 @@ const MAX_JOB_LENGTH = 12000;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_PDF_PAGES = 5;
 const TEXT_PREVIEW_LENGTH = 200;
+const ANALYSIS_LIMIT = 3;
+const ANALYSIS_WINDOW_MS = 24 * 60 * 60 * 1000;
+const TRUST_PROXY = process.env.TRUST_PROXY === "true";
+const RATE_LIMIT_SALT = crypto.randomBytes(32);
+const analysisAttempts = new Map();
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const DEFAULT_ALLOWED_ORIGINS = [
   `http://localhost:${PORT}`,
@@ -108,6 +114,78 @@ function getApiHeaders(request) {
 function isAllowedOrigin(request) {
   const origin = request.headers.origin;
   return !origin || ALLOWED_ORIGINS.has(origin);
+}
+
+function getClientAddress(request) {
+  let address = request.socket.remoteAddress || "unknown";
+
+  if (TRUST_PROXY) {
+    const forwardedFor = String(request.headers["x-forwarded-for"] || "")
+      .split(",", 1)[0]
+      .trim();
+
+    if (forwardedFor) {
+      address = forwardedFor;
+    }
+  }
+
+  return address.startsWith("::ffff:") ? address.slice(7) : address;
+}
+
+function hashClientAddress(request) {
+  return crypto
+    .createHash("sha256")
+    .update(RATE_LIMIT_SALT)
+    .update(getClientAddress(request))
+    .digest("hex");
+}
+
+function removeExpiredAttempts(now) {
+  for (const [key, record] of analysisAttempts.entries()) {
+    if (now >= record.resetAt) {
+      analysisAttempts.delete(key);
+    }
+  }
+}
+
+function consumeAnalysisAttempt(request) {
+  const now = Date.now();
+  removeExpiredAttempts(now);
+
+  const key = hashClientAddress(request);
+  let record = analysisAttempts.get(key);
+
+  if (!record) {
+    record = {
+      count: 0,
+      resetAt: now + ANALYSIS_WINDOW_MS
+    };
+    analysisAttempts.set(key, record);
+  }
+
+  if (record.count >= ANALYSIS_LIMIT) {
+    return {
+      allowed: false,
+      limit: ANALYSIS_LIMIT,
+      remaining: 0,
+      resetAt: record.resetAt
+    };
+  }
+
+  record.count += 1;
+
+  return {
+    allowed: true,
+    limit: ANALYSIS_LIMIT,
+    remaining: ANALYSIS_LIMIT - record.count,
+    resetAt: record.resetAt
+  };
+}
+
+function setRateLimitHeaders(response, rateLimit) {
+  response.setHeader("X-RateLimit-Limit", String(rateLimit.limit));
+  response.setHeader("X-RateLimit-Remaining", String(rateLimit.remaining));
+  response.setHeader("X-RateLimit-Reset", String(Math.ceil(rateLimit.resetAt / 1000)));
 }
 
 function sendJson(response, statusCode, data) {
@@ -691,6 +769,21 @@ const server = http.createServer((request, response) => {
         400,
         validationError.code,
         validationError.message
+      );
+      return;
+    }
+
+    const rateLimit = consumeAnalysisAttempt(request);
+    setRateLimitHeaders(response, rateLimit);
+
+    if (!rateLimit.allowed) {
+      const retryAfterSeconds = Math.max(1, Math.ceil((rateLimit.resetAt - Date.now()) / 1000));
+      response.setHeader("Retry-After", String(retryAfterSeconds));
+      sendError(
+        response,
+        429,
+        "RATE_LIMIT_EXCEEDED",
+        "同一网络来源每 24 小时最多发起 3 次有效分析，请在限制重置后重试。"
       );
       return;
     }

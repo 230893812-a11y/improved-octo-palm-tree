@@ -203,16 +203,27 @@ async function callDeepSeek(body, env, ruleResult) {
     "只返回合法 JSON，不要返回 Markdown。JSON 必须包含 summary、evidence_found、evidence_gaps、follow_up_questions、rewrite_readiness、safety_note。",
     "evidence_gaps 每项只能使用 category、claim、explanation、severity、related_evidence；severity 只能是 blocking 或 enhancement。"
   ].join("\n");
-  const response = await fetch(`${endpoint}/chat/completions`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
-    body: JSON.stringify({
-      model: env.DEEPSEEK_MODEL || "deepseek-chat",
-      temperature: 0.1,
-      response_format: { type: "json_object" },
-      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: JSON.stringify(modelInput(body, ruleResult)) }]
-    })
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 25000);
+  let response;
+  try {
+    response = await fetch(`${endpoint}/chat/completions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model: env.DEEPSEEK_MODEL || "deepseek-chat",
+        temperature: 0.1,
+        response_format: { type: "json_object" },
+        messages: [{ role: "system", content: systemPrompt }, { role: "user", content: JSON.stringify(modelInput(body, ruleResult)) }]
+      })
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") throw Object.assign(new Error("DeepSeek 上游请求超过 25 秒未响应，请稍后重试。"), { code: "DEEPSEEK_TIMEOUT" });
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
   const text = await response.text();
   let payload;
   try { payload = JSON.parse(text); } catch { throw Object.assign(new Error("DeepSeek 返回了无法解析的响应。"), { code: "DEEPSEEK_INVALID_RESPONSE" }); }

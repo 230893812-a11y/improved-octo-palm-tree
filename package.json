@@ -8,6 +8,7 @@
     "check": "node --check api/server.js && node --check api/model-adapter.js && node --check resume-audit/app.js"
   },
   "dependencies": {
+    "mammoth": "^1.12.2",
     "pdfjs-dist": "6.3.289"
   }
 }

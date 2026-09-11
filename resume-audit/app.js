@@ -51,19 +51,22 @@
     if(file.size>5*1024*1024){fileStatus.textContent='文件超过 5 MB，请更换文件';fileStatus.classList.add('is-error');fileInput.value='';return}
     var isTxt=file.name.toLowerCase().endsWith('.txt');
     var isPdf=file.name.toLowerCase().endsWith('.pdf');
-    if(!isTxt&&!isPdf){fileStatus.textContent='当前支持 TXT 和文字型 PDF；DOCX 尚未接入';fileStatus.classList.add('is-error');fileInput.value='';return}
-    fileStatus.textContent='正在通过本地后端读取 '+(isPdf?'PDF':'TXT')+'……';
+    var isDocx=file.name.toLowerCase().endsWith('.docx');
+    if(!isTxt&&!isPdf&&!isDocx){fileStatus.textContent='当前支持 TXT、文字型 PDF 和 DOCX；不支持旧版 DOC';fileStatus.classList.add('is-error');fileInput.value='';return}
+    var fileLabel=isPdf?'PDF':(isDocx?'DOCX':'TXT');
+    fileStatus.textContent='正在通过本地后端读取 '+fileLabel+'……';
     fileStatus.classList.remove('is-error');
     fileInput.disabled=true;
     try{
-      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':isPdf?'application/pdf':'text/plain; charset=utf-8','X-File-Name':encodeURIComponent(file.name)},body:file});
+      var contentType=isPdf?'application/pdf':(isDocx?'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'text/plain; charset=utf-8');
+      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':contentType,'X-File-Name':encodeURIComponent(file.name)},body:file});
       var payload=await response.json();
       if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'TXT 读取失败');
       resumeText.value=payload.resume_text;
       updateCount();
-      fileStatus.textContent=(isPdf?'PDF 已读取：'+payload.page_count+' 页，':'TXT 已读取：')+payload.character_count.toLocaleString()+' 字符；原文件未保存';
+      fileStatus.textContent=(isPdf?'PDF 已读取：'+payload.page_count+' 页，':fileLabel+' 已读取：')+payload.character_count.toLocaleString()+' 字符；原文件未保存';
     }catch(error){
-      fileStatus.textContent=error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message;
+      fileStatus.textContent=(error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message)+'；文本框保留上一次成功读取的内容';
       fileStatus.classList.add('is-error');
       fileInput.value='';
     }finally{
@@ -72,8 +75,8 @@
   });
   analyzeButton.addEventListener('click',function(){if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();return}renderResults(currentMode);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'});});
   fileInput.value='';
-  fileStatus.textContent='第 8B 脚本已就绪：可选择 TXT 或文字型 PDF';
+  fileStatus.textContent='第 8C 脚本已就绪：可选择 TXT、文字型 PDF 或 DOCX';
   fileStatus.classList.remove('is-error');
-  document.documentElement.dataset.auditBuild='8b-20260911-2';
+  document.documentElement.dataset.auditBuild='8c-20260911-1';
   updateCount();
 })();

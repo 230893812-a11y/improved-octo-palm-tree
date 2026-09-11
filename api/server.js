@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const mammoth = require("mammoth");
 const {
   buildModelInput,
   callDeepSeek,
@@ -21,7 +22,10 @@ const LOCAL_PAGE_FILES = new Map([
   ["/resume-audit/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }],
   ["/resume-audit-8b/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
   ["/resume-audit-8b/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
-  ["/resume-audit-8b/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
+  ["/resume-audit-8b/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }],
+  ["/resume-audit-8c/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
+  ["/resume-audit-8c/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
+  ["/resume-audit-8c/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
 ]);
 let pdfjsPromise;
 
@@ -31,6 +35,32 @@ function loadPdfJs() {
   }
 
   return pdfjsPromise;
+}
+
+async function extractDocxText(fileBuffer) {
+  try {
+    const result = await mammoth.extractRawText({ buffer: fileBuffer });
+    const text = result.value
+      .replace(/\r\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
+    if (!text) {
+      const error = new Error("这个 DOCX 没有可提取的文字。");
+      error.code = "DOCX_NO_TEXT";
+      throw error;
+    }
+
+    return text;
+  } catch (error) {
+    if (error.code === "DOCX_NO_TEXT") {
+      throw error;
+    }
+
+    const safeError = new Error("DOCX 文件损坏、加密或格式不受支持，无法提取文字。");
+    safeError.code = "DOCX_PARSE_FAILED";
+    throw safeError;
+  }
 }
 
 function sendJson(response, statusCode, data) {
@@ -129,7 +159,7 @@ function addIssue(issues, issue) {
 function serveLocalPage(request, response) {
   const pathname = new URL(request.url, "http://localhost").pathname;
 
-  if (pathname === "/resume-audit" || pathname === "/resume-audit-8b") {
+  if (pathname === "/resume-audit" || pathname === "/resume-audit-8b" || pathname === "/resume-audit-8c") {
     response.writeHead(302, {
       Location: `${pathname}/`,
       "Cache-Control": "no-store"
@@ -234,9 +264,11 @@ function handleResumeFileExtraction(request, response) {
   const extension = path.extname(fileName).toLowerCase();
   const isTxt = extension === ".txt" && contentType === "text/plain";
   const isPdf = extension === ".pdf" && contentType === "application/pdf";
+  const isDocx = extension === ".docx"
+    && contentType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-  if (!isTxt && !isPdf) {
-    sendError(response, 415, "UNSUPPORTED_FILE_TYPE", "当前支持 TXT 和文字型 PDF；DOCX 尚未接入。");
+  if (!isTxt && !isPdf && !isDocx) {
+    sendError(response, 415, "UNSUPPORTED_FILE_TYPE", "当前支持 TXT、文字型 PDF 和 DOCX；不支持旧版 DOC。");
     request.resume();
     return;
   }
@@ -290,6 +322,22 @@ function handleResumeFileExtraction(request, response) {
             ? "PDF 文件损坏、加密或格式不受支持，无法提取文字。"
             : error.message;
           sendError(response, status, code, message);
+        });
+      return;
+    }
+
+    if (isDocx) {
+      extractDocxText(fileBuffer)
+        .then((text) => {
+          sendExtractedFile(
+            response,
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            text,
+            null
+          );
+        })
+        .catch((error) => {
+          sendError(response, 422, error.code, error.message);
         });
       return;
     }

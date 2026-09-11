@@ -8,7 +8,7 @@
   var charCount=document.getElementById('charCount');
   var analyzeButton=document.getElementById('analyzeButton');
   var results=document.getElementById('results');
-  var apiBase=window.RESUME_AUDIT_API_BASE||'http://localhost:3000';
+  var apiBase=window.RESUME_AUDIT_API_BASE||'https://huangding-resume-audit-api.230893812.workers.dev';
   var currentMode='general';
   var resultFields={
     general:{
@@ -43,6 +43,24 @@
     document.getElementById('nextStepText').textContent=data.next;
   }
   function updateCount(){charCount.textContent=resumeText.value.length.toLocaleString()+' / 12,000';}
+  function renderApiResults(payload){
+    var analysis=payload&&payload.model_analysis?payload.model_analysis:payload&&payload.rule_analysis;
+    if(!analysis)throw new Error('服务器返回的数据缺少分析结果');
+    document.getElementById('resultEyebrow').textContent=currentMode==='targeted'?'线上分析 · TARGETED CHECK':'线上分析 · GENERAL CHECK';
+    document.getElementById('resultTitle').textContent=analysis.summary||resultFields[currentMode].title;
+    var gaps=Array.isArray(analysis.evidence_gaps)?analysis.evidence_gaps:[];
+    for(var i=0;i<3;i++){
+      var gap=gaps[i];
+      var n=i+1;
+      document.getElementById('issueLabel'+n).textContent=gap?('优先级 0'+n+' · '+(gap.category||'证据缺口')):('优先级 0'+n);
+      document.getElementById('issueTitle'+n).textContent=gap?(gap.claim||'需要补充事实'):'暂无更多问题';
+      document.getElementById('issueBody'+n).textContent=gap?(gap.explanation||'当前证据不足。'):'当前没有更多结构化问题。';
+      document.getElementById('issueQuestion'+n).textContent=gap&&gap.related_evidence?('相关原文：'+gap.related_evidence):((analysis.follow_up_questions||[])[i]||'请补充可验证的真实事实。');
+    }
+    document.getElementById('nextStepText').textContent=analysis.safety_note||'结果仅基于你提供的简历和岗位信息。';
+    var badge=document.querySelector('.demo-badge');
+    if(badge)badge.textContent=analysis.provider==='deepseek'?'DeepSeek 结果':'规则结果';
+  }
   modeButtons.forEach(function(button){button.addEventListener('click',function(){currentMode=button.dataset.mode;modeButtons.forEach(function(item){var active=item===button;item.classList.toggle('is-active',active);item.setAttribute('aria-selected',String(active));});jdCard.hidden=currentMode!=='targeted';if(!results.hidden)renderResults(currentMode);});});
   resumeText.addEventListener('input',updateCount);
   fileInput.addEventListener('change',async function(){
@@ -73,7 +91,22 @@
       fileInput.disabled=false;
     }
   });
-  analyzeButton.addEventListener('click',function(){if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();return}renderResults(currentMode);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'});});
+  analyzeButton.addEventListener('click',async function(){
+    if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}
+    if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}
+    if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();fileStatus.textContent='目标岗位模式需要先填写 JD';fileStatus.classList.add('is-error');return}
+    analyzeButton.disabled=true;
+    analyzeButton.textContent='正在分析……';
+    fileStatus.textContent='正在提交文本，原文不会保存到页面；请稍候';
+    fileStatus.classList.remove('is-error');
+    try{
+      var response=await fetch(apiBase+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:currentMode,engine:'deepseek',resume_text:resumeText.value,job_text:currentMode==='targeted'?jobText.value:''})});
+      var payload=await response.json();
+      if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'分析请求失败');
+      renderApiResults(payload); results.hidden=false; results.scrollIntoView({behavior:'smooth',block:'start'}); fileStatus.textContent='线上分析完成；页面不会保存你的原文';
+    }catch(error){fileStatus.textContent=error.message+'；你可以稍后重试';fileStatus.classList.add('is-error');}
+    finally{analyzeButton.disabled=false;analyzeButton.innerHTML='开始分析 <span>→</span>';}
+  });
   function clearPrivateInputs(){fileInput.value='';resumeText.value='';jobText.value='';results.hidden=true;updateCount();}
   clearPrivateInputs();
   window.addEventListener('pageshow',function(event){if(event.persisted)clearPrivateInputs();});

@@ -94,6 +94,15 @@ function validateModelOutput(output) {
   return null;
 }
 
+function enforceFactBoundary(output) {
+  if (output.evidence_gaps.length > 0) {
+    output.rewrite_readiness = "needs_facts";
+    output.safety_note = `${output.safety_note} 后端安全规则：存在证据缺口，必须先补充事实，暂不进入改写。`;
+  }
+
+  return output;
+}
+
 function extractJsonObject(content) {
   if (typeof content !== "string") {
     throw new Error("DeepSeek 返回内容不是文本。");
@@ -182,12 +191,12 @@ async function callDeepSeek(modelInput) {
     throw error;
   }
 
-  return {
+  return enforceFactBoundary({
     provider: "deepseek",
     model,
     is_real_ai: true,
     ...output
-  };
+  });
 }
 
 module.exports = {

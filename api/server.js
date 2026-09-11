@@ -18,7 +18,10 @@ const PROJECT_ROOT = path.resolve(__dirname, "..");
 const LOCAL_PAGE_FILES = new Map([
   ["/resume-audit/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
   ["/resume-audit/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
-  ["/resume-audit/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
+  ["/resume-audit/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }],
+  ["/resume-audit-8b/", { file: "resume-audit/index.html", type: "text/html; charset=utf-8" }],
+  ["/resume-audit-8b/app.js", { file: "resume-audit/app.js", type: "application/javascript; charset=utf-8" }],
+  ["/resume-audit-8b/style.css", { file: "resume-audit/style.css", type: "text/css; charset=utf-8" }]
 ]);
 let pdfjsPromise;
 
@@ -126,9 +129,9 @@ function addIssue(issues, issue) {
 function serveLocalPage(request, response) {
   const pathname = new URL(request.url, "http://localhost").pathname;
 
-  if (pathname === "/resume-audit") {
+  if (pathname === "/resume-audit" || pathname === "/resume-audit-8b") {
     response.writeHead(302, {
-      Location: "/resume-audit/",
+      Location: `${pathname}/`,
       "Cache-Control": "no-store"
     });
     response.end();
@@ -151,7 +154,9 @@ function serveLocalPage(request, response) {
 
     response.writeHead(200, {
       "Content-Type": asset.type,
-      "Cache-Control": "no-store"
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0"
     });
     response.end(content);
   });

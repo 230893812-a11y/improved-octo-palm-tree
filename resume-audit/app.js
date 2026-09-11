@@ -71,5 +71,9 @@
     }
   });
   analyzeButton.addEventListener('click',function(){if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();return}renderResults(currentMode);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'});});
+  fileInput.value='';
+  fileStatus.textContent='第 8B 脚本已就绪：可选择 TXT 或文字型 PDF';
+  fileStatus.classList.remove('is-error');
+  document.documentElement.dataset.auditBuild='8b-20260911-2';
   updateCount();
 })();

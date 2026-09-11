@@ -8,6 +8,7 @@
   var charCount=document.getElementById('charCount');
   var analyzeButton=document.getElementById('analyzeButton');
   var results=document.getElementById('results');
+  var apiBase=window.RESUME_AUDIT_API_BASE||'http://localhost:3000';
   var currentMode='general';
   var resultFields={
     general:{
@@ -15,7 +16,7 @@
       title:'先处理最影响可信度的三件事。',
       summary:'这份简历可能不是经历不足，而是没有把个人贡献、交付结果和能够证明能力的证据说清楚。',
       issues:[
-        ['优先级 01 · 个人贡献','“负责 / 参与”出现多次','这些词本身没有错，但当前没有说明你具体负责了哪个环节，招聘者难以区分个人贡献和团队成果。','可能追问：你独立完成了哪一部分？'],
+        ['优先级 01 · 个人贡献','“负责 / 参与”出现多次','这些词本身没有错，但当前没有说明你具体负责了哪个环节，招聘者难以区分个人贡献和团队成果。','可能追问：你具体负责或参与了哪一部分？'],
         ['优先级 02 · 成果证据','行动多，结果少','项目描述包含工作动作，但没有交付物、上线状态、用户反馈、时间变化或其他可验证结果。','需要补充：最终交付了什么？'],
         ['优先级 03 · 表达清晰度','技能和经历没有连起来','技能列表中的工具或技术没有在项目经历中出现使用场景，容易被看成关键词堆砌。','可能追问：在哪个项目中实际使用？']
       ],
@@ -44,7 +45,29 @@
   function updateCount(){charCount.textContent=resumeText.value.length.toLocaleString()+' / 12,000';}
   modeButtons.forEach(function(button){button.addEventListener('click',function(){currentMode=button.dataset.mode;modeButtons.forEach(function(item){var active=item===button;item.classList.toggle('is-active',active);item.setAttribute('aria-selected',String(active));});jdCard.hidden=currentMode!=='targeted';if(!results.hidden)renderResults(currentMode);});});
   resumeText.addEventListener('input',updateCount);
-  fileInput.addEventListener('change',function(){var file=fileInput.files[0];if(!file)return;if(file.size>5*1024*1024){fileStatus.textContent='文件超过 5 MB，请更换文件';fileStatus.classList.add('is-error');fileInput.value='';return}fileStatus.textContent='已选择：'+file.name+'（后端接入后解析）';fileStatus.classList.remove('is-error');});
+  fileInput.addEventListener('change',async function(){
+    var file=fileInput.files[0];
+    if(!file)return;
+    if(file.size>5*1024*1024){fileStatus.textContent='文件超过 5 MB，请更换文件';fileStatus.classList.add('is-error');fileInput.value='';return}
+    if(!file.name.toLowerCase().endsWith('.txt')){fileStatus.textContent='第 8A 阶段只支持 TXT；PDF / DOCX 尚未接入';fileStatus.classList.add('is-error');fileInput.value='';return}
+    fileStatus.textContent='正在通过本地后端读取 TXT……';
+    fileStatus.classList.remove('is-error');
+    fileInput.disabled=true;
+    try{
+      var response=await fetch(apiBase+'/api/extract-resume',{method:'POST',headers:{'Content-Type':'text/plain; charset=utf-8','X-File-Name':encodeURIComponent(file.name)},body:file});
+      var payload=await response.json();
+      if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'TXT 读取失败');
+      resumeText.value=payload.resume_text;
+      updateCount();
+      fileStatus.textContent='TXT 已读取：'+payload.character_count.toLocaleString()+' 字符；原文件未保存';
+    }catch(error){
+      fileStatus.textContent=error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message;
+      fileStatus.classList.add('is-error');
+      fileInput.value='';
+    }finally{
+      fileInput.disabled=false;
+    }
+  });
   analyzeButton.addEventListener('click',function(){if(!resumeText.value.trim()&&!fileInput.files.length){fileStatus.textContent='请先粘贴简历文本或选择文件';fileStatus.classList.add('is-error');return}if(resumeText.value.length>12000){fileStatus.textContent='文本超过 12,000 字，请精简后重试';fileStatus.classList.add('is-error');return}if(currentMode==='targeted'&&!jobText.value.trim()){jobText.focus();return}renderResults(currentMode);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'});});
   updateCount();
 })();

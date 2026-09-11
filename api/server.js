@@ -6,16 +6,18 @@ const {
   validateModelOutput
 } = require("./model-adapter");
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const MAX_RESUME_LENGTH = 12000;
 const MAX_JOB_LENGTH = 12000;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const TEXT_PREVIEW_LENGTH = 200;
 
 function sendJson(response, statusCode, data) {
   response.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type, X-File-Name"
   });
 
   response.end(JSON.stringify(data, null, 2));
@@ -100,6 +102,97 @@ function addIssue(issues, issue) {
     title: issue.title,
     description: issue.description,
     follow_up: issue.follow_up
+  });
+}
+
+function handleTextFileExtraction(request, response) {
+  const contentType = String(request.headers["content-type"] || "")
+    .split(";", 1)[0]
+    .trim()
+    .toLowerCase();
+  const rawFileName = String(request.headers["x-file-name"] || "").trim();
+  let fileName = rawFileName;
+
+  try {
+    fileName = decodeURIComponent(rawFileName);
+  } catch {
+    sendError(response, 400, "INVALID_FILE_NAME", "文件名格式无效。");
+    request.resume();
+    return;
+  }
+
+  if (contentType !== "text/plain" || !fileName.toLowerCase().endsWith(".txt")) {
+    sendError(response, 415, "UNSUPPORTED_FILE_TYPE", "第 8A 阶段只支持 TXT 文件。");
+    request.resume();
+    return;
+  }
+
+  const chunks = [];
+  let receivedBytes = 0;
+  let tooLarge = false;
+
+  request.on("data", (chunk) => {
+    receivedBytes += chunk.length;
+
+    if (receivedBytes > MAX_FILE_SIZE) {
+      tooLarge = true;
+      chunks.length = 0;
+      return;
+    }
+
+    if (!tooLarge) {
+      chunks.push(chunk);
+    }
+  });
+
+  request.on("end", () => {
+    if (tooLarge) {
+      sendError(response, 413, "FILE_TOO_LARGE", "TXT 文件不能超过 5 MB。");
+      return;
+    }
+
+    const fileBuffer = Buffer.concat(chunks);
+
+    if (fileBuffer.length === 0) {
+      sendError(response, 400, "FILE_EMPTY", "TXT 文件不能为空。");
+      return;
+    }
+
+    let extractedText;
+
+    try {
+      extractedText = new TextDecoder("utf-8", { fatal: true })
+        .decode(fileBuffer)
+        .replace(/^\uFEFF/, "");
+    } catch {
+      sendError(response, 400, "INVALID_TEXT_ENCODING", "TXT 文件必须使用 UTF-8 编码。");
+      return;
+    }
+
+    if (extractedText.trim() === "") {
+      sendError(response, 400, "FILE_EMPTY", "TXT 文件没有可用文字。");
+      return;
+    }
+
+    if (extractedText.length > MAX_RESUME_LENGTH) {
+      sendError(response, 400, "RESUME_TOO_LONG", "TXT 内容不能超过 12,000 字。");
+      return;
+    }
+
+    sendJson(response, 200, {
+      ok: true,
+      file_type: "text/plain",
+      character_count: extractedText.length,
+      text_preview: extractedText.slice(0, TEXT_PREVIEW_LENGTH),
+      resume_text: extractedText,
+      stored: false
+    });
+  });
+
+  request.on("error", () => {
+    if (!response.headersSent) {
+      sendError(response, 400, "UPLOAD_FAILED", "TXT 文件上传失败。");
+    }
   });
 }
 
@@ -196,8 +289,8 @@ function analyzeRules(body) {
       priority: 1,
       category: "个人贡献",
       title: "个人贡献边界不够清晰",
-      description: "当前文本没有明显区分团队成果和你本人独立完成的工作。",
-      follow_up: "你具体独立完成了哪些模块、接口、测试或交付工作？"
+      description: "当前文本没有明显区分团队成果和你本人负责或参与的具体工作。",
+      follow_up: "你具体负责或参与了哪些模块、接口、测试或交付工作？"
     });
   } else {
     evidence.push("检测到个人贡献描述");
@@ -300,10 +393,15 @@ const server = http.createServer((request, response) => {
     response.writeHead(204, {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
+      "Access-Control-Allow-Headers": "Content-Type, X-File-Name"
     });
 
     response.end();
+    return;
+  }
+
+  if (request.method === "POST" && request.url === "/api/extract-resume") {
+    handleTextFileExtraction(request, response);
     return;
   }
 

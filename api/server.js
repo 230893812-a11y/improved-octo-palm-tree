@@ -276,8 +276,11 @@ function handleResumeFileExtraction(request, response) {
           sendExtractedFile(response, "application/pdf", text, page_count);
         })
         .catch((error) => {
-          const status = error.code === "PDF_TOO_MANY_PAGES" ? 400 : 422;
-          const code = error.code || "PDF_PARSE_FAILED";
+          const knownCode = ["PDF_TOO_MANY_PAGES", "PDF_NO_TEXT"].includes(error.code)
+            ? error.code
+            : "PDF_PARSE_FAILED";
+          const status = knownCode === "PDF_TOO_MANY_PAGES" ? 400 : 422;
+          const code = knownCode;
           const message = code === "PDF_PARSE_FAILED"
             ? "PDF 文件损坏、加密或格式不受支持，无法提取文字。"
             : error.message;

@@ -120,11 +120,14 @@
     fileStatus.textContent='正在提交文本，原文不会保存到页面；请稍候';
     fileStatus.classList.remove('is-error');
     try{
-      var response=await fetch(apiBase+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:currentMode,engine:'deepseek',resume_text:resumeText.value,job_text:currentMode==='targeted'?jobText.value:''})});
+      var controller=new AbortController();
+      var timeoutId=setTimeout(function(){controller.abort();},45000);
+      var response=await fetch(apiBase+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({mode:currentMode,engine:'deepseek',resume_text:resumeText.value,job_text:currentMode==='targeted'?jobText.value:''})});
+      clearTimeout(timeoutId);
       var payload=await response.json();
       if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'分析请求失败');
       renderApiResults(payload); results.hidden=false; results.scrollIntoView({behavior:'smooth',block:'start'}); fileStatus.textContent='线上分析完成；页面不会保存你的原文';
-    }catch(error){fileStatus.textContent=error.message+'；你可以稍后重试';fileStatus.classList.add('is-error');}
+    }catch(error){fileStatus.textContent=error.name==='AbortError'?'分析等待超过 45 秒，可能是网络或模型服务较慢，请稍后重试':(error.message||'分析请求失败')+'；你可以稍后重试';fileStatus.classList.add('is-error');}
     finally{analyzeButton.disabled=false;analyzeButton.innerHTML='开始分析 <span>→</span>';}
   });
   function clearPrivateInputs(){fileInput.value='';resumeText.value='';jobText.value='';results.hidden=true;updateCount();}

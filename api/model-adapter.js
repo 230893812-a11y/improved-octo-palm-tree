@@ -94,8 +94,105 @@ function validateModelOutput(output) {
   return null;
 }
 
+function extractJsonObject(content) {
+  if (typeof content !== "string") {
+    throw new Error("DeepSeek 返回内容不是文本。");
+  }
+
+  const trimmed = content.trim();
+  const withoutFence = trimmed
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  try {
+    return JSON.parse(withoutFence);
+  } catch {
+    throw new Error("DeepSeek 返回的内容不是有效 JSON。");
+  }
+}
+
+async function callDeepSeek(modelInput) {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  const endpoint = process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com";
+  const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
+
+  if (!apiKey) {
+    const error = new Error("未配置 DEEPSEEK_API_KEY。请先设置后端环境变量。");
+    error.code = "DEEPSEEK_KEY_MISSING";
+    throw error;
+  }
+
+  const systemPrompt = [
+    "你是一个证据优先的简历审阅助手。",
+    "你只能根据用户提供的简历和岗位 JD 判断证据，不评价人的价值。",
+    "严格禁止编造数字、职责、用户规模、公司名称、上线结果或任何简历中没有的事实。",
+    "简历没有写某项能力时，只能说当前缺少证据，不能断言用户没有这项能力。",
+    "如果事实不足，提出追问，不要直接替用户补写事实。",
+    "只返回合法 JSON，不要返回 Markdown，不要添加 JSON 以外的解释。",
+    "JSON 必须包含 summary、evidence_found、evidence_gaps、follow_up_questions、rewrite_readiness、safety_note。",
+    "rewrite_readiness 只能是 needs_facts 或 ready_for_limited_rewrite。"
+  ].join("\n");
+
+  const response = await fetch(`${endpoint.replace(/\/$/, "")}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model,
+      temperature: 0.1,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: JSON.stringify(modelInput, null, 2)
+        }
+      ]
+    }, null, 2)
+  });
+
+  const responseText = await response.text();
+  let payload;
+
+  try {
+    payload = JSON.parse(responseText);
+  } catch {
+    const error = new Error("DeepSeek 返回了无法解析的响应。");
+    error.code = "DEEPSEEK_INVALID_RESPONSE";
+    throw error;
+  }
+
+  if (!response.ok) {
+    const error = new Error(payload.error?.message || `DeepSeek 请求失败（HTTP ${response.status}）。`);
+    error.code = "DEEPSEEK_REQUEST_FAILED";
+    throw error;
+  }
+
+  const content = payload.choices?.[0]?.message?.content;
+  const output = extractJsonObject(content);
+  const validationError = validateModelOutput(output);
+
+  if (validationError) {
+    const error = new Error(validationError);
+    error.code = "INVALID_MODEL_OUTPUT";
+    throw error;
+  }
+
+  return {
+    provider: "deepseek",
+    model,
+    is_real_ai: true,
+    ...output
+  };
+}
+
 module.exports = {
   buildModelInput,
+  callDeepSeek,
   runMockModel,
   validateModelOutput
 };

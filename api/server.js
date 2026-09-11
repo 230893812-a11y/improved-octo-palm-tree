@@ -1,6 +1,7 @@
 const http = require("http");
 const {
   buildModelInput,
+  callDeepSeek,
   runMockModel,
   validateModelOutput
 } = require("./model-adapter");
@@ -49,10 +50,11 @@ function validateRequest(body) {
     body.engine !== undefined
     && body.engine !== "rules"
     && body.engine !== "hybrid-mock"
+    && body.engine !== "deepseek"
   ) {
     return {
       code: "INVALID_ENGINE",
-      message: "分析引擎必须是 rules 或 hybrid-mock。"
+      message: "分析引擎必须是 rules、hybrid-mock 或 deepseek。"
     };
   }
 
@@ -259,7 +261,7 @@ function buildRuleResult(body) {
   };
 }
 
-function buildAnalysisResult(body) {
+async function buildAnalysisResult(body) {
   const ruleResult = buildRuleResult(body);
   const engine = body.engine || "rules";
 
@@ -273,7 +275,9 @@ function buildAnalysisResult(body) {
     jobText: body.job_text || "",
     ruleResult
   });
-  const modelAnalysis = runMockModel(modelInput);
+  const modelAnalysis = engine === "deepseek"
+    ? await callDeepSeek(modelInput)
+    : runMockModel(modelInput);
   const outputError = validateModelOutput(modelAnalysis);
 
   if (outputError) {
@@ -285,7 +289,7 @@ function buildAnalysisResult(body) {
   return {
     ok: true,
     mode: body.mode,
-    analysis_type: "hybrid-mock",
+    analysis_type: engine === "deepseek" ? "hybrid-deepseek" : "hybrid-mock",
     rule_analysis: ruleResult,
     model_analysis: modelAnalysis
   };
@@ -340,16 +344,18 @@ const server = http.createServer((request, response) => {
       return;
     }
 
-    try {
-      sendJson(response, 200, buildAnalysisResult(body));
-    } catch (error) {
+    buildAnalysisResult(body)
+      .then((result) => {
+        sendJson(response, 200, result);
+      })
+      .catch((error) => {
       sendError(
         response,
-        500,
+        error.code === "DEEPSEEK_KEY_MISSING" ? 500 : 502,
         error.code || "ANALYSIS_FAILED",
-        "分析流程失败，请稍后重试。"
+        error.message || "分析流程失败，请稍后重试。"
       );
-    }
+      });
   });
 });
 

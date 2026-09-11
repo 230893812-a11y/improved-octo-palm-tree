@@ -23,7 +23,13 @@ function buildModelInput({ mode, resumeText, jobText, ruleResult }) {
     required_output: {
       summary: "string",
       evidence_found: "string[]",
-      evidence_gaps: "object[]",
+      evidence_gaps: [{
+        category: "string",
+        claim: "string",
+        explanation: "string",
+        severity: "blocking | enhancement",
+        related_evidence: "string"
+      }],
       follow_up_questions: "string[]",
       rewrite_readiness: "needs_facts | ready_for_limited_rewrite",
       safety_note: "string"
@@ -36,7 +42,8 @@ function runMockModel(modelInput) {
     category: issue.category,
     claim: issue.title,
     explanation: issue.description,
-    source: "rule_analysis"
+    severity: "blocking",
+    related_evidence: "规则分析未定位到完整原文"
   }));
 
   const followUpQuestions = modelInput.rule_issues
@@ -62,6 +69,66 @@ function runMockModel(modelInput) {
   };
 }
 
+function firstText(...values) {
+  return values.find((value) => typeof value === "string" && value.trim() !== "")?.trim() || "";
+}
+
+function normalizeGap(gap) {
+  const item = gap && typeof gap === "object" ? gap : {};
+  const category = firstText(item.category, item.requirement, "证据缺口");
+  const claim = firstText(item.claim, item.gap, item.description, item.note, item.status, "需要补充事实");
+  const explanation = firstText(
+    item.explanation,
+    item.detail,
+    item.description,
+    item.note,
+    item.impact,
+    item.status,
+    claim
+  );
+
+  return {
+    category,
+    claim,
+    explanation,
+    severity: ["blocking", "enhancement"].includes(item.severity)
+      ? item.severity
+      : "blocking",
+    related_evidence: firstText(item.related_evidence, item.evidence, item.source)
+  };
+}
+
+function normalizeQuestion(question) {
+  if (typeof question !== "string") {
+    return "";
+  }
+
+  return question
+    .replace(/具体独立完成了哪些/g, "具体负责或参与了哪些")
+    .replace(/独立完成了哪些/g, "负责或参与了哪些")
+    .replace(/独立完成/g, "负责或参与")
+    .trim();
+}
+
+function normalizeModelOutput(output) {
+  const item = output && typeof output === "object" ? output : {};
+
+  return {
+    summary: firstText(item.summary),
+    evidence_found: Array.isArray(item.evidence_found)
+      ? item.evidence_found.filter((evidence) => typeof evidence === "string" && evidence.trim() !== "")
+      : [],
+    evidence_gaps: Array.isArray(item.evidence_gaps)
+      ? item.evidence_gaps.map(normalizeGap)
+      : [],
+    follow_up_questions: Array.isArray(item.follow_up_questions)
+      ? item.follow_up_questions.map(normalizeQuestion).filter(Boolean)
+      : [],
+    rewrite_readiness: item.rewrite_readiness,
+    safety_note: firstText(item.safety_note)
+  };
+}
+
 function validateModelOutput(output) {
   if (!output || typeof output !== "object") {
     return "模型输出不是对象。";
@@ -77,6 +144,19 @@ function validateModelOutput(output) {
 
   if (!Array.isArray(output.evidence_gaps)) {
     return "模型输出的 evidence_gaps 必须是数组。";
+  }
+
+  const invalidGap = output.evidence_gaps.find((gap) => {
+    return !gap
+      || typeof gap.category !== "string"
+      || typeof gap.claim !== "string"
+      || typeof gap.explanation !== "string"
+      || !["blocking", "enhancement"].includes(gap.severity)
+      || typeof gap.related_evidence !== "string";
+  });
+
+  if (invalidGap) {
+    return "模型输出包含无效的 evidence_gaps 项。";
   }
 
   if (!Array.isArray(output.follow_up_questions)) {
@@ -145,6 +225,8 @@ async function callDeepSeek(modelInput) {
     "必须保持动作归属准确：发现并反馈问题不等于修复问题，参与联调不等于开发接口，协助测试不等于主导测试。",
     "只返回合法 JSON，不要返回 Markdown，不要添加 JSON 以外的解释。",
     "JSON 必须包含 summary、evidence_found、evidence_gaps、follow_up_questions、rewrite_readiness、safety_note。",
+    "evidence_gaps 中每一项必须且只能使用 category、claim、explanation、severity、related_evidence 字段。severity 只能是 blocking 或 enhancement。",
+    "blocking 表示缺少关键事实、事实归属或真实性依据，暂不应改写；enhancement 表示已有基本事实，只是可继续补充细节。",
     "rewrite_readiness 只能是 needs_facts 或 ready_for_limited_rewrite。"
   ].join("\n");
 
@@ -186,7 +268,7 @@ async function callDeepSeek(modelInput) {
   }
 
   const content = payload.choices?.[0]?.message?.content;
-  const output = extractJsonObject(content);
+  const output = normalizeModelOutput(extractJsonObject(content));
   const validationError = validateModelOutput(output);
 
   if (validationError) {

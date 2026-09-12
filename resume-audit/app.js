@@ -63,6 +63,59 @@
   }
   modeButtons.forEach(function(button){button.addEventListener('click',function(){currentMode=button.dataset.mode;modeButtons.forEach(function(item){var active=item===button;item.classList.toggle('is-active',active);item.setAttribute('aria-selected',String(active));});jdCard.hidden=currentMode!=='targeted';if(!results.hidden)renderResults(currentMode);});});
   resumeText.addEventListener('input',updateCount);
+  function formatPdfTextItems(items){
+    var lines=[];
+    var currentLine=[];
+    var currentY=null;
+    var currentHeight=0;
+    function flushLine(){
+      if(!currentLine.length)return;
+      var text='';
+      var previous=null;
+      currentLine.forEach(function(part){
+        if(previous){
+          var gap=part.x-(previous.x+previous.width);
+          var spacingThreshold=Math.max(1.5,Math.max(previous.height,part.height)*0.18);
+          if(gap>spacingThreshold&&!/\s$/.test(text)&&!/^\s/.test(part.text))text+=' ';
+        }
+        text+=part.text;
+        previous=part;
+      });
+      text=text.replace(/[ \t]+/g,' ').trim();
+      if(text)lines.push({text:text,y:currentY,height:currentHeight||10});
+      currentLine=[];
+      currentY=null;
+      currentHeight=0;
+    }
+    items.forEach(function(item){
+      var text=typeof item.str==='string'?item.str:'';
+      if(!text)return;
+      var transform=Array.isArray(item.transform)?item.transform:[];
+      var y=Number(transform[5]);
+      var x=Number(transform[4]);
+      var height=Math.abs(Number(item.height)||Number(transform[3])||10);
+      if(!Number.isFinite(y))y=currentY===null?0:currentY;
+      if(!Number.isFinite(x))x=currentLine.length?currentLine[currentLine.length-1].x+currentLine[currentLine.length-1].width:0;
+      var lineTolerance=Math.max(2,height*0.25);
+      if(currentY!==null&&Math.abs(y-currentY)>lineTolerance)flushLine();
+      if(currentY===null)currentY=y;
+      currentHeight=Math.max(currentHeight,height);
+      currentLine.push({text:text,x:x,width:Math.abs(Number(item.width)||0),height:height});
+      if(item.hasEOL)flushLine();
+    });
+    flushLine();
+    var output='';
+    lines.forEach(function(line,index){
+      if(index){
+        var previous=lines[index-1];
+        var verticalGap=Math.abs(previous.y-line.y);
+        var paragraphGap=Math.max(previous.height,line.height)*1.65;
+        output+=verticalGap>paragraphGap?'\n\n':'\n';
+      }
+      output+=line.text;
+    });
+    return output.trim();
+  }
   async function readLocalFile(file,isTxt,isPdf,isDocx){
     if(isTxt)return await file.text();
     if(isDocx){
@@ -78,9 +131,9 @@
       for(var pageNo=1;pageNo<=pdf.numPages;pageNo++){
         var page=await pdf.getPage(pageNo);
         var content=await page.getTextContent();
-        pages.push(content.items.map(function(item){return item.str||'';}).join(' '));
+        pages.push(formatPdfTextItems(content.items));
       }
-      return pages.join('\n');
+      return pages.filter(Boolean).join('\n\n');
     }
     return '';
   }
@@ -135,5 +188,5 @@
   window.addEventListener('pageshow',function(event){if(event.persisted)clearPrivateInputs();});
   fileStatus.textContent='第 8D 脚本已就绪：文件不落盘，页面刷新后清空文本';
   fileStatus.classList.remove('is-error');
-  document.documentElement.dataset.auditBuild='8d-20260911-1';
+  document.documentElement.dataset.auditBuild='pdf-layout-20260912-1';
 })();

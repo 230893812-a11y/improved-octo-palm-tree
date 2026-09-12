@@ -43,6 +43,19 @@
     document.getElementById('nextStepText').textContent=data.next;
   }
   function updateCount(){charCount.textContent=resumeText.value.length.toLocaleString()+' / 12,000';}
+  function localFileError(error){
+    var message=error&&error.message?error.message:'';
+    if(/Load failed|Failed to fetch|NetworkError/i.test(message))return '文件读取失败，请重新选择文件或改用 TXT 文件';
+    return message||'文件读取失败，请检查文件格式后重试';
+  }
+  function analyzeError(error,payload,response){
+    var code=payload&&payload.error&&payload.error.code;
+    if(error&&error.name==='AbortError')return '分析服务响应超过 45 秒，请稍后重试';
+    if(code==='RATE_LIMIT_EXCEEDED'||(response&&response.status===429))return '今天的分析次数已达到上限，请 24 小时后再试';
+    if(error&&error.name==='TypeError')return '无法连接分析服务，请检查网络后重试';
+    if(/Failed to fetch|Load failed|NetworkError/i.test(error&&error.message||''))return '无法连接分析服务，请检查网络后重试';
+    return error&&error.message?error.message:'分析服务暂时不可用，请稍后重试';
+  }
   function renderApiResults(payload){
     var analysis=payload&&payload.model_analysis?payload.model_analysis:payload&&payload.rule_analysis;
     if(!analysis)throw new Error('服务器返回的数据缺少分析结果');
@@ -157,7 +170,7 @@
       updateCount();
       fileStatus.textContent=(isPdf?'PDF 已在浏览器本地读取：':fileLabel+' 已在浏览器本地读取：')+text.length.toLocaleString()+' 字符；原文件未上传';
     }catch(error){
-      fileStatus.textContent=(error instanceof TypeError?'无法连接本地后端，请确认服务器正在运行':error.message)+'；文本框保留上一次成功读取的内容';
+      fileStatus.textContent=localFileError(error)+'；文本框保留上一次成功读取的内容';
       fileStatus.classList.add('is-error');
     }finally{
       fileInput.value='';
@@ -178,9 +191,18 @@
       var response=await fetch(apiBase+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({mode:currentMode,engine:'deepseek',resume_text:resumeText.value,job_text:currentMode==='targeted'?jobText.value:''})});
       clearTimeout(timeoutId);
       var payload=await response.json();
-      if(!response.ok)throw new Error(payload&&payload.error&&payload.error.message?payload.error.message:'分析请求失败');
+      if(!response.ok){
+        var serviceError=new Error(payload&&payload.error&&payload.error.message?payload.error.message:'分析请求失败');
+        serviceError.payload=payload;
+        serviceError.response=response;
+        throw serviceError;
+      }
       renderApiResults(payload); results.hidden=false; results.scrollIntoView({behavior:'smooth',block:'start'}); fileStatus.textContent='线上分析完成；页面不会保存你的原文';
-    }catch(error){fileStatus.textContent=error.name==='AbortError'?'分析等待超过 45 秒，可能是网络或模型服务较慢，请稍后重试':(error.message||'分析请求失败')+'；你可以稍后重试';fileStatus.classList.add('is-error');}
+    }catch(error){
+      var errorPayload=error&&error.payload;
+      fileStatus.textContent=analyzeError(error,errorPayload,error.response)+'；你可以稍后重试';
+      fileStatus.classList.add('is-error');
+    }
     finally{analyzeButton.disabled=false;analyzeButton.innerHTML='开始分析 <span>→</span>';}
   });
   function clearPrivateInputs(){fileInput.value='';resumeText.value='';jobText.value='';results.hidden=true;updateCount();}
@@ -188,5 +210,5 @@
   window.addEventListener('pageshow',function(event){if(event.persisted)clearPrivateInputs();});
   fileStatus.textContent='第 8D 脚本已就绪：文件不落盘，页面刷新后清空文本';
   fileStatus.classList.remove('is-error');
-  document.documentElement.dataset.auditBuild='pdf-layout-20260912-1';
+  document.documentElement.dataset.auditBuild='error-copy-20260912-1';
 })();

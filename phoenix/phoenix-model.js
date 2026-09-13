@@ -171,7 +171,10 @@
     var reduced = reducedMotion();
     var width = Math.max(1, host.clientWidth || global.innerWidth);
     var height = Math.max(1, host.clientHeight || global.innerHeight);
-    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 1.2);
+    // Desktop uses the display's native density up to a safe 2.5x ceiling.
+    // Mobile keeps the low-cost path so the sharper desktop canvas does not
+    // make phones pay the GPU cost.
+    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 2.5);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(28, width / height, .1, 100);
     camera.position.set(0, .28, mobile ? 7.45 : 7.85);
@@ -575,7 +578,7 @@
       height = Math.max(1, host.clientHeight || global.innerHeight);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 1.2));
+      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.05 : 2.5));
       renderer.setSize(width, height, false);
       scrollStart = null;
       scrollDistance = 0;

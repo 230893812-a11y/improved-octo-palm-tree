@@ -329,7 +329,7 @@
     var width = Math.max(1, host.clientWidth || global.innerWidth);
     var height = Math.max(1, host.clientHeight || global.innerHeight);
     var mobile = global.matchMedia && global.matchMedia('(max-width: 760px)').matches;
-    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.35 : 1.75);
+    var ratio = Math.min(global.devicePixelRatio || 1, mobile ? 1.35 : 2.5);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(28, width / height, .1, 100);
     camera.position.set(0, .5, 7.2);
@@ -670,7 +670,7 @@
       height = Math.max(1, host.clientHeight || global.innerHeight);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.35 : 1.75));
+      renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, mobile ? 1.35 : 2.5));
       renderer.setSize(width, height, false);
       scrollStart = null;
       scrollDistance = 0;

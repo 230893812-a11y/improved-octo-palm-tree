@@ -331,7 +331,7 @@ if (advancedCanvas && false && (!window.__phoenixRequested || !smallScreen)) {
 
 // The existing Phoenix pause control also quiets the ambient layers.  The
 // custom event keeps this bridge independent from the Phoenix implementation
-// (model or fallback), while the optional library pause API prevents the
+// model stage, while the optional library pause API prevents the
 // desktop WebGL simulation from continuing to render in the background.
 function setAmbientMotion(paused) {
   fluidRunning = !paused;
@@ -360,7 +360,7 @@ const phoenixToggle = document.querySelector('#phoenixToggle');
 if (phoenixToggle) {
   const syncPhoenixPause = () => setAmbientMotion(phoenixToggle.getAttribute('aria-pressed') === 'true');
   phoenixToggle.addEventListener('click', () => window.setTimeout(syncPhoenixPause, 0));
-  // Also catch state changes made by the loading/fallback controller without
+  // Also catch state changes made by the loading controller without
   // requiring a second click handler.
   new MutationObserver(syncPhoenixPause).observe(phoenixToggle, { attributes: true, attributeFilter: ['aria-pressed'] });
   syncPhoenixPause();

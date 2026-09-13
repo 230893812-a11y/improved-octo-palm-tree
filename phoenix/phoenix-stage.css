@@ -1,0 +1,9 @@
+/* 3D-only Phoenix stage. The stage stays empty when WebGL/model loading is unavailable. */
+.phoenix-stage{position:absolute;inset:0;z-index:3;overflow:visible;pointer-events:none;isolation:isolate}
+.phoenix-stage canvas{display:block;width:100%;height:100%;pointer-events:none}
+.phoenix-stage--clickable canvas{pointer-events:auto;cursor:pointer}
+.phoenix-stage.is-static canvas{filter:saturate(.82)}
+.hero-visual > .phoenix-stage{z-index:3}
+.hero-visual > .phoenix-stage .phoenix-canvas{position:relative;z-index:3}
+@media (max-width:760px){.phoenix-stage{inset:0;opacity:.92}.hero-visual > .phoenix-stage{z-index:3}}
+@media (prefers-reduced-motion:reduce){.phoenix-stage,.phoenix-stage canvas{animation:none!important;transition:none!important}}

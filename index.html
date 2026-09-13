@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="project-showcase.css?v=20260913-clean1" />
   <link rel="stylesheet" href="project-type-labels.css?v=20260910-preview1" />
   <link rel="stylesheet" href="project-polish.css?v=20260910-polish1" />
-  <link rel="stylesheet" href="phoenix/phoenix-prototype.css?v=20260910-load1" />
+  <link rel="stylesheet" href="phoenix/phoenix-stage.css?v=20260913-3d-only1" />
 </head>
 <body>
   <canvas id="fluidCanvas" class="fluid-canvas fluid-advanced is-hidden" aria-hidden="true"></canvas>
@@ -190,7 +190,7 @@
         <a class="media-card photography-entry" href="photography/" target="_blank" rel="noreferrer" aria-label="进入黄鼎的独立摄影空间"><div class="photography-entry-art" aria-hidden="true"><span class="photo-orbit photo-orbit-one"></span><span class="photo-orbit photo-orbit-two"></span><i class="photo-frame frame-one"></i><i class="photo-frame frame-two"></i><i class="photo-frame frame-three"></i><b>22</b><small>FRAMES IN SPACE</small></div><span class="media-caption"><span class="project-status">独立空间 · 交互画廊</span><b>个人摄影 · 光影观察</b><small>用手机记录天空、自然与城市中的光线变化。点击进入独立影像空间。</small></span><span class="photography-entry-cta">进入摄影空间 ↗</span></a>
         <a class="media-card game-entry" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer" aria-label="打开浪尖儿战场快速版"><div class="game-entry-art"><span class="game-entry-mark">HD</span><span class="game-entry-play" aria-hidden="true">▶</span><small>浪尖儿·战场</small><em>FAST · CLICK TO PLAY</em></div><span class="media-caption"><span class="project-status">快速加载 · 可直接游玩</span><b>浪尖儿战场</b><small>点击进入轻量战场，支持电脑与手机操作。</small><span class="project-details"><span><b>项目背景</b>：把经典坦克玩法升级为可观察 AI 决策的网页战场。</span><span><b>负责内容</b>：战斗系统、FSM Agent、移动端控制、音效整合与双版本部署。</span><span><b>使用技术</b>：JavaScript、Canvas、Python、Pygame、Pygbag、WebAssembly。</span><span><b>项目亮点</b>：追击、狙击、绕后、防守与 Boss Agent，支持实时状态观察。</span></span></span><span class="game-entry-cta">立即开始 ↗</span></a>
       </div>
-      <details class="all-media reveal"><summary>查看素材文件夹中的其它文件</summary><div class="media-list"><span>1—12.jpg：压缩后的编号证书</span><span>3.jpg：微信联系二维码</span><span>d.jpg、h.jpg：训练师证书</span><span>music.mp3：背景音乐素材（按需播放）</span></div></details>
+      <details class="all-media reveal"><summary>查看素材文件夹中的其它文件</summary><div class="media-list"><span>1—12.jpg：压缩后的编号证书</span><span>3.jpg：微信联系二维码</span><span>d.jpg、h.jpg：训练师证书</span><span>music-20260910-web.mp3：压缩后的背景音乐素材（按需播放）</span></div></details>
     </section>
 
     <aside class="section-wrap content-layer-intro layer-lab reveal" aria-label="第三层：交互实验室">
@@ -229,10 +229,8 @@
     <button class="lightbox-next" type="button" aria-label="下一张">›</button>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite">邮箱已复制到剪贴板 ✓</div>
-  <!-- Version query forces browsers to fetch the model fix instead of reusing
-       a cached script that still points at the old fallback configuration. -->
-  <script src="phoenix/phoenix-prototype.js?v=20260913-hires1"></script>
-  <script src="phoenix/phoenix-model.js?v=20260913-mobile-hd1"></script>
+  <!-- Version query keeps the 3D-only model script fresh in static hosting. -->
+  <script src="phoenix/phoenix-model.js?v=20260913-3d-only1"></script>
   <script>
     (function () {
       var status = document.querySelector('#phoenixStatus');

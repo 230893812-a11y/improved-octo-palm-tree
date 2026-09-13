@@ -8,13 +8,13 @@
 
 ## 凤凰 3D
 
-页面优先加载 `phoenix/models/phoenix-bird.glb` 中的真实凤凰模型（NORBERTO-3D，CC BY 4.0），由 `phoenix/phoenix-model.js` 负责 Three.js 场景、动画、灯光、粒子和鼠标/触摸跟随；滚动时凤凰展翼并向下俯冲。Three.js、GLTFLoader、GSAP、ScrollTrigger 通过 jsDelivr CDN 按需加载，滚动交互在模型层也提供原生监听，确保 GitHub Pages 等静态部署环境可用。
+页面优先加载 `phoenix/models/phoenix-bird.glb` 中的真实凤凰模型（NORBERTO-3D，CC BY 4.0），由 `phoenix/phoenix-model.js` 负责 Three.js 场景、动画、灯光、粒子和鼠标/触摸跟随；滚动时凤凰展翼并向下俯冲。Three.js 和 GLTFLoader 从站内文件按需加载，滚动交互由模型层原生监听，确保 GitHub Pages 等静态部署环境可用。
 
-- CDN 或 WebGL 不可用时，自动保留 2D 凤凰海报，不影响简历阅读。
-- `prefers-reduced-motion` 用户默认使用静态海报。
+- CDN、WebGL 或模型不可用时不生成 2D 替代物；页面会保留空的凤凰舞台并提示当前状态。
+- `prefers-reduced-motion` 或低性能设备不会启动 2D 替代物，明确保持 3D-only 视觉边界。
 - IntersectionObserver、页面可见性、设备像素比上限和移动端粒子降级用于控制性能。
 - 桌面端按需加载 WebGL Fluid Enhanced（MIT）作为鼠标跟随的流动背景；手机端自动降级为轻量 Canvas，避免同时运行两个大型 WebGL 场景。
-- 如果模型、CDN 或 WebGL 不可用，会自动切换到 `phoenix-prototype.js` 的程序化凤凰海报；公开发布时请保留 `phoenix/ATTRIBUTION.md` 和页脚中的 NORBERTO-3D / CC BY 4.0 署名。
+- 公开发布时请保留 `phoenix/ATTRIBUTION.md` 和页脚中的 NORBERTO-3D / CC BY 4.0 署名。
 
 ## 主要功能
 

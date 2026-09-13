@@ -17,13 +17,11 @@
 
 > Phoenix bird by NORBERTO-3D, licensed under CC BY 4.0. Source: Sketchfab.
 
-## 备用视觉与依赖
+## 视觉与依赖
 
-当模型下载失败、浏览器不支持 WebGL 或用户启用了减少动态效果时，页面会保留
-`phoenix-prototype.js` 的程序化海报作为降级方案；它不包含第三方模型纹理。
+当前页面只使用本地 `phoenix-bird.glb` 3D 模型；模型下载失败、浏览器不支持 WebGL 或用户
+启用了减少动态效果时，不会生成 2D 替代物。
 
 运行时按需加载：
 
 - [Three.js](https://github.com/mrdoob/three.js)，MIT License
-- [GSAP](https://github.com/greensock/GSAP)，标准版可用于个人与课程展示
-- [ScrollTrigger](https://greensock.com/scrolltrigger/)，随 GSAP 分发

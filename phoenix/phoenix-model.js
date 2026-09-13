@@ -2,38 +2,16 @@
  * Licensed Phoenix model layer
  *
  * This file mounts the locally bundled NORBERTO-3D model. There is no
- * procedural or poster-based 2D Phoenix fallback: if WebGL/model loading is
+ * procedural or poster-based 2D Phoenix fallback. If WebGL/model loading is
  * unavailable, the stage stays empty and the surrounding status explains why.
  */
 (function (global) {
   'use strict';
 
-  var baseApi = global.PhoenixHero;
-  if (!baseApi || typeof baseApi.mount !== 'function') return;
-
   var MODEL_URL = 'phoenix/models/phoenix-bird.glb';
+  var THREE_URL = 'phoenix/vendor/three.min.js';
   var LOADER_URL = 'phoenix/vendor/GLTFLoader.js';
   var dependencyPromise = null;
-
-  function mountLoadingPoster(host) {
-    var poster = document.createElement('img');
-    poster.className = 'phoenix-loading-poster';
-    poster.src = 'media/phoenix-fallback.png';
-    poster.alt = '';
-    poster.setAttribute('aria-hidden', 'true');
-    poster.decoding = 'async';
-    poster.fetchPriority = 'high';
-    host.appendChild(poster);
-    return poster;
-  }
-
-  function removeLoadingPoster(poster) {
-    if (!poster) return;
-    poster.classList.add('is-leaving');
-    global.setTimeout(function () {
-      if (poster.parentNode) poster.parentNode.removeChild(poster);
-    }, 260);
-  }
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -51,7 +29,7 @@
     return saveData || (memory > 0 && memory <= 2) || (cores > 0 && cores <= 2);
   }
 
-  function staticPosterApi(poster) {
+  function unavailableApi(poster) {
     return {
       renderer: null,
       isModel: false,
@@ -96,12 +74,9 @@
 
   function loadDependencies() {
     if (dependencyPromise) return dependencyPromise;
-    var threeUrl = baseApi.cdn && baseApi.cdn.three
-      ? baseApi.cdn.three
-      : 'phoenix/vendor/three.min.js';
     dependencyPromise = (global.THREE
       ? Promise.resolve()
-      : loadScript(threeUrl, function () { return !!global.THREE; }))
+      : loadScript(THREE_URL, function () { return !!global.THREE; }))
       .then(function () {
         if (global.THREE && global.THREE.GLTFLoader) return null;
         return loadScript(LOADER_URL, function () {
@@ -290,8 +265,7 @@
     var scrollStart = null;
     var scrollDistance = 0;
 
-    // The procedural fallback owns its own ScrollTrigger instance, but it is
-    // removed as soon as the licensed GLB is ready.  Keep a small native
+    // Keep a small native
     // scroll driver here so the real model preserves the same "展翼 → 俯冲"
     // interaction even when GSAP is unavailable or still loading.
     function resolveScrollTarget() {
@@ -756,8 +730,8 @@
     // Reduced-motion and genuinely constrained devices do not receive a 2D
     // substitute. This keeps the visual promise explicit: this stage is 3D.
     if ((reduced && options.loadOnReducedMotion !== true) || lowPowerDevice()) {
-      host.classList.add('phoenix-model-fallback');
-      return Promise.resolve(staticPosterApi(null));
+      host.classList.add('phoenix-model-unavailable');
+      return Promise.resolve(unavailableApi(null));
     }
 
     // Mark the page as soon as the model layer is requested.  The main page
@@ -771,19 +745,19 @@
         return modelApi;
       }).catch(function (error) {
         if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
-        host.classList.add('phoenix-model-fallback');
-        return staticPosterApi(null);
+        host.classList.add('phoenix-model-unavailable');
+        return unavailableApi(null);
       });
     }).catch(function (error) {
       if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
-      host.classList.add('phoenix-model-fallback');
-      return staticPosterApi(null);
+      host.classList.add('phoenix-model-unavailable');
+      return unavailableApi(null);
     });
   }
 
   global.PhoenixHero = {
     mount: mount,
-    cdn: baseApi.cdn,
+    cdn: { three: THREE_URL },
     model: {
       title: 'phoenix bird',
       author: 'NORBERTO-3D',

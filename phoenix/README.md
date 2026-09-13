@@ -1,8 +1,8 @@
 # Phoenix Hero
 
-这是一个可降级的凤凰视觉组件。页面优先加载 `models/phoenix-bird.glb`（NORBERTO-3D
-的真实凤鸟模型），用 Three.js 显示凤冠、层叠羽翼和长尾；模型网络加载失败时，自动
-回退到 `phoenix-prototype.js` 的程序化凤凰海报，不影响简历阅读。
+这是一个 3D-only 凤凰视觉组件。页面加载 `models/phoenix-bird.glb`（NORBERTO-3D
+的真实凤鸟模型），用 Three.js 显示凤冠、层叠羽翼和长尾；模型、WebGL 或依赖加载失败时，
+舞台保持为空并显示不可用状态，不再生成 2D 替代物。
 
 ## 接入方式
 
@@ -10,8 +10,8 @@
 
 ```html
 <div id="phoenixStage" class="phoenix-stage" aria-label="凤凰视觉效果"></div>
-<link rel="stylesheet" href="phoenix/phoenix-prototype.css">
-<script src="phoenix/phoenix-prototype.js"></script>
+<link rel="stylesheet" href="phoenix/phoenix-stage.css">
+<script src="phoenix/phoenix-model.js"></script>
 <script>
   PhoenixHero.mount({
     container: '#phoenixStage',
@@ -24,11 +24,10 @@
 </script>
 ```
 
-Three.js、GSAP、ScrollTrigger 和 GLTFLoader 会按需从 jsDelivr CDN 加载。CDN、模型或
-WebGL 不可用时，组件自动保留 2D Canvas 凤凰海报；`prefers-reduced-motion: reduce`
-时只渲染静态模型画面。
+站内的 Three.js 和 GLTFLoader 会按需加载。模型或 WebGL 不可用时，
+组件不会显示 2D 替代物；`prefers-reduced-motion: reduce` 时不启动动态渲染。
 
-依赖说明：Three.js 采用 MIT 许可证；GSAP / ScrollTrigger 遵循 GreenSock 官方许可条款。公开部署前请保留其来源链接并确认项目用途符合许可范围。
+依赖说明：Three.js 采用 MIT 许可证。公开部署前请保留其来源链接并确认项目用途符合许可范围。
 
 ## 与简历布局配合的建议
 

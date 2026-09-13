@@ -3,3 +3,4 @@
 .project-battle-card h3::after{content:"AI Agent 网页战场"}
 .project-portfolio-card h3::after{content:"交互式个人作品集与移动端性能优化"}
 .project-api-card h3::after{content:"OpenAI 兼容接口诊断工具"}
+.project-knowledge-workflow-card h3::after{content:"本地知识治理与 Agent 工作流"}

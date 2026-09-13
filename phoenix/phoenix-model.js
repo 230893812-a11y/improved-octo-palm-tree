@@ -1,10 +1,9 @@
 /*
  * Licensed Phoenix model layer
  *
- * This file keeps the existing procedural PhoenixHero scene as a graceful
- * fallback, while replacing it with the locally bundled NORBERTO-3D model
- * when Three.js and the model loader are available.  It is deliberately a
- * classic script so the static HTML page still works on GitHub Pages.
+ * This file mounts the locally bundled NORBERTO-3D model. There is no
+ * procedural or poster-based 2D Phoenix fallback: if WebGL/model loading is
+ * unavailable, the stage stays empty and the surrounding status explains why.
  */
 (function (global) {
   'use strict';
@@ -754,13 +753,11 @@
     host.classList.add('phoenix-stage');
     if (options.clickable) host.classList.add('phoenix-stage--clickable');
     var reduced = reducedMotion();
-    var loadingPoster = mountLoadingPoster(host);
-
-    // Reduced-motion and genuinely constrained devices keep the real static
-    // Phoenix poster. This avoids an empty stage and skips Three.js/GLB work.
+    // Reduced-motion and genuinely constrained devices do not receive a 2D
+    // substitute. This keeps the visual promise explicit: this stage is 3D.
     if ((reduced && options.loadOnReducedMotion !== true) || lowPowerDevice()) {
       host.classList.add('phoenix-model-fallback');
-      return Promise.resolve(staticPosterApi(loadingPoster));
+      return Promise.resolve(staticPosterApi(null));
     }
 
     // Mark the page as soon as the model layer is requested.  The main page
@@ -768,24 +765,19 @@
     // simulation while the Phoenix scene is loading.
     global.__phoenixRequested = true;
 
-    // Show a real image while the dependencies and GLB download. Previously
-    // baseApi.mount() started a complete procedural WebGL renderer here, so
-    // slow devices briefly ran two 3D scenes at once. The static poster keeps
-    // the first paint immediate without competing for CPU/GPU resources.
     return loadDependencies().then(function (THREE) {
       return createModelScene(host, options, THREE).then(function (modelApi) {
         host.classList.add('phoenix-model-ready');
-        removeLoadingPoster(loadingPoster);
         return modelApi;
       }).catch(function (error) {
         if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
         host.classList.add('phoenix-model-fallback');
-        return staticPosterApi(loadingPoster);
+        return staticPosterApi(null);
       });
     }).catch(function (error) {
       if (options.debug && global.console) console.warn('[PhoenixHero model]', error);
       host.classList.add('phoenix-model-fallback');
-      return staticPosterApi(loadingPoster);
+      return staticPosterApi(null);
     });
   }
 

@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="preload" href="media/phoenix-fallback.png" as="image" fetchpriority="high">
   <link rel="preload" href="phoenix/models/phoenix-bird.glb" as="fetch" type="model/gltf-binary" crossorigin fetchpriority="high">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23263d3c'/%3E%3Cpath d='M16 44V16h8v20h24v8z' fill='%23f7f4ee'/%3E%3Ccircle cx='50' cy='44' r='4' fill='%23eb6a52'/%3E%3C/svg%3E" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -233,7 +232,7 @@
   <!-- Version query forces browsers to fetch the model fix instead of reusing
        a cached script that still points at the old fallback configuration. -->
   <script src="phoenix/phoenix-prototype.js?v=20260913-hires1"></script>
-  <script src="phoenix/phoenix-model.js?v=20260913-hires1"></script>
+  <script src="phoenix/phoenix-model.js?v=20260913-3donly1"></script>
   <script>
     (function () {
       var status = document.querySelector('#phoenixStatus');
@@ -253,7 +252,7 @@
           toggle.textContent = paused ? '继续动画' : '暂停动画';
           toggle.setAttribute('aria-pressed', String(paused));
         }
-        setStatus(paused ? '动画已暂停 · 点击继续' : (api && api.renderer ? (api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲') : '静态海报模式'));
+        setStatus(paused ? '动画已暂停 · 点击继续' : (api && api.renderer ? '鼠标/触摸跟随 · 滚动俯冲' : '3D 凤凰不可用'));
       }
       if (toggle) toggle.addEventListener('click', function () { setPaused(!paused); });
       if (replay) replay.addEventListener('click', function () {
@@ -274,14 +273,14 @@
           }, 40);
         }
       });
-      if (!window.PhoenixHero) { setStatus('静态海报模式 · 当前浏览器未加载 WebGL'); return; }
+      if (!window.PhoenixHero) { setStatus('3D 凤凰不可用 · 当前浏览器未加载 WebGL'); return; }
       window.phoenixMount = window.PhoenixHero.mount({
         container: '#phoenixStage', scrollTrigger: '#about', scrollEnd: '+=480',
         scrollDistanceDesktop: 480, scrollDistanceMobile: 430,
         clickable: true, debug: false
       });
       var loadingTimer = window.setTimeout(function () {
-        if (!api) setStatus('静态海报模式 · 网络较慢，仍可继续浏览');
+        if (!api) setStatus('3D 凤凰不可用 · 网络较慢，仍可继续浏览');
       }, 6000);
       Promise.resolve(window.phoenixMount).then(function (instance) {
         window.clearTimeout(loadingTimer);
@@ -291,8 +290,8 @@
         if (pendingSkip && api && api.skipIntro) { api.skipIntro(); pendingSkip = false; }
         if (paused && api && api.pause) api.pause();
         if (api && api.renderer) setStatus(api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲');
-        else setStatus('静态海报模式 · 可继续浏览');
-      }).catch(function () { setStatus('静态海报模式 · 可继续浏览'); });
+        else setStatus('3D 凤凰不可用 · 可继续浏览');
+      }).catch(function () { setStatus('3D 凤凰不可用 · 可继续浏览'); });
     }());
   </script>
   <script src="script.js?v=20260913-motion1"></script>

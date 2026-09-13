@@ -13,8 +13,8 @@
   <link rel="preload" href="phoenix/models/phoenix-bird.glb" as="fetch" type="model/gltf-binary" crossorigin fetchpriority="high">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23263d3c'/%3E%3Cpath d='M16 44V16h8v20h24v8z' fill='%23f7f4ee'/%3E%3Ccircle cx='50' cy='44' r='4' fill='%23eb6a52'/%3E%3C/svg%3E" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260910-zhimai1" />
-  <link rel="stylesheet" href="project-showcase.css?v=20260910-preview1" />
+  <link rel="stylesheet" href="style.css?v=20260913-motion1" />
+  <link rel="stylesheet" href="project-showcase.css?v=20260913-clean1" />
   <link rel="stylesheet" href="project-type-labels.css?v=20260910-preview1" />
   <link rel="stylesheet" href="project-polish.css?v=20260910-polish1" />
   <link rel="stylesheet" href="phoenix/phoenix-prototype.css?v=20260910-load1" />
@@ -23,6 +23,7 @@
   <canvas id="fluidCanvas" class="fluid-canvas fluid-advanced is-hidden" aria-hidden="true"></canvas>
   <canvas id="fluidFallback" class="fluid-canvas fluid-fallback" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>
+  <div class="resume-orb resume-orb-one" aria-hidden="true"></div><div class="resume-orb resume-orb-two" aria-hidden="true"></div>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="返回顶部">
       <span class="brand-mark">L<span>.</span></span>
@@ -34,7 +35,6 @@
       <a href="#projects">项目</a>
       <a href="#skills">技能</a>
       <a href="#certificates">证书</a>
-      <a href="resume-audit/">简历压力测试</a>
       <a href="#contact">联系</a>
     </nav>
     <div class="top-actions">
@@ -49,14 +49,14 @@
       <div class="hero-copy reveal">
         <p class="eyebrow"><span class="status-dot"></span> READY TO LEARN · ZHONGSHAN / CHINA</p>
         <p class="hero-name">黄鼎</p>
-        <p class="hero-positioning">人工智能技术应用专业大一新生｜目前重点学习 Python、Web 开发和 RAG 知识库应用，希望在真实项目中积累软件开发、数据处理与 AI 应用落地经验。</p>
+        <p class="hero-positioning">人工智能技术应用专业大一学生，正在用 Python、Web 与 AI 应用实践，把想法做成可运行的作品。已完成校园 RAG 知识助手、FSM AI 坦克竞技场、交互式个人作品集和 API 诊断工具，正在寻找 AI 应用与软件开发方向的竞赛机会。</p>
+        <p class="hero-target" aria-label="目标方向：AI 应用开发、Python 工具、Web 交互、竞赛工程实践"><b>目标方向</b><span>AI 应用开发</span><span>Python 工具</span><span>Web 交互</span><span>竞赛工程实践</span></p>
         <h1>让好奇心，<br /><em>展翼起飞。</em></h1>
-        <p class="hero-intro">你好，我是<span class="highlight">黄鼎</span>，中山人，松山职业技术学院人工智能技术应用专业的大一新生。我把凤凰作为探索的视觉符号：保持好奇，持续实践，让每一次尝试都向前一步。</p>
+        <p class="hero-intro">我是一个已经开始持续交付真实项目、并且成长速度很快的大一学生。我把凤凰作为探索的视觉符号：保持好奇，持续实践，用每一个可运行的作品证明自己的进步。</p>
         <div class="hero-facts" aria-label="个人基本信息"><span><b>身份</b>大一新生</span><span><b>专业</b>人工智能技术应用</span><span><b>方向</b>AI · 创意实践</span></div>
         <div class="hero-actions">
           <a class="primary-button" href="#experience">阅读简历 <span>↓</span></a>
           <a class="outline-button ai-cta" href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看校园 AI 助手源码 <span>↗</span></a>
-          <a class="outline-button resume-audit-cta" href="resume-audit/">试试简历压力测试 <span>↗</span></a>
           <a class="text-button hero-project-link" href="#projects">查看项目 <span>↗</span></a>
           <button class="text-button" id="copyEmail" type="button">复制邮箱 <span>⌘</span></button>
         </div>
@@ -88,6 +88,10 @@
       <div class="ticker-track"><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span><b>✳</b><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span></div>
     </section>
 
+    <aside class="section-wrap content-layer-intro layer-core reveal" aria-label="第一层：核心能力主线">
+      <span>01 / CORE PROFILE</span><div><h2>先看我能做什么。</h2><p>个人定位、实习经历、四个重点项目、技术栈与证书构成首页主线，适合导师快速阅读。</p></div>
+    </aside>
+
     <section class="section-wrap split-section" id="experience">
       <div class="section-heading reveal"><p class="section-kicker">01 — JOURNEY</p><h2>经历，<br /><span>是最好的作品集。</span></h2><p class="heading-note">我还在起步阶段，但愿意快速学习、主动承担，把每一次实践都变成下一次进步的基础。</p></div>
       <div class="timeline reveal delay-1">
@@ -102,15 +106,16 @@
     </section>
 
     <section class="section-wrap projects-section" id="projects">
-      <div class="section-heading reveal"><p class="section-kicker">02 — SELECTED PROJECTS</p><h2>不只展示结果，<br /><span>也展示如何落地。</span></h2><p class="heading-note">一个端到端 AI 应用，加上交互、性能和开发工具三个方向的可验证实践。</p></div>
+      <div class="section-heading reveal"><p class="section-kicker">02 — SELECTED PROJECTS</p><h2>不只展示结果，<br /><span>也展示如何落地。</span></h2><p class="heading-note">一个校园知识旗舰项目，加上智能交互、性能工程和接口诊断三个方向的可验证实践。</p></div>
       <div class="project-grid project-showcase-grid reveal delay-1">
-        <article class="project-card project-flagship project-card-ai" id="knowledge-hub"><span class="project-number">01 / FLAGSHIP</span><div class="flagship-layout"><div class="flagship-copy"><span class="project-status">公开测试 · 真机验证</span><h3>知脉·校园知识助手</h3><p class="project-lead">面向校园资料分散、查找困难和公开边界不清的问题，完成小程序问答、管理员资料维护、公共知识库与关系图谱的端到端集成和产品化改造。</p><div class="project-proof"><span><b>本人负责</b>资料整理与切片、RAG 问答接入、小程序交互、审核发布流程、COS 配置、部署调试与真机验证。</span><span><b>已经验证</b>4 份文档、26 个资料片段；游客问答附带来源，未公开资料不进入公共检索。</span></div><div class="project-modules" aria-label="知脉项目组成"><span><i>01</i>游客问答</span><span><i>02</i>资料管理</span><span><i>03</i>公共知识库</span><span><i>04</i>关系图谱</span></div><div class="tech-row project-core-tech"><span>微信小程序</span><span>FastAPI</span><span>RAG</span></div></div><div class="zhimai-proof-grid flagship-gallery" aria-label="知脉小程序功能实证截图"><a href="media/zhimai-showcase/01-home.webp" data-lightbox="zhimai" aria-label="查看知脉小程序游客首页"><img src="media/zhimai-showcase/01-home.webp" alt="知脉 RAG 小程序游客首页，显示公开问答入口" loading="lazy" decoding="async"><span>游客首页</span></a><a href="media/zhimai-showcase/02-admin-stats.webp" data-lightbox="zhimai" aria-label="查看知脉管理员数据概览"><img src="media/zhimai-showcase/02-admin-stats.webp" alt="知脉管理员维护中心，显示4份文档和26个资料片段" loading="lazy" decoding="async"><span>索引概览</span></a><a href="media/zhimai-showcase/03-documents.webp" data-lightbox="zhimai" aria-label="查看知脉文档发布管理"><img src="media/zhimai-showcase/03-documents.webp" alt="知脉已索引文档列表及公开发布管理操作" loading="lazy" decoding="async"><span>发布管理</span></a><a href="media/zhimai-showcase/04-answer-source.webp" data-lightbox="zhimai" aria-label="查看知脉问答与来源引用"><img src="media/zhimai-showcase/04-answer-source.webp" alt="知脉知识库问答结果，回答附有资料来源" loading="lazy" decoding="async"><span>问答溯源</span></a></div></div><div class="project-links flagship-links"><a class="project-primary-link" href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div></article>
+        <article class="project-card project-flagship project-card-ai" id="knowledge-hub"><span class="project-number">01 / FLAGSHIP</span><div class="flagship-layout flagship-layout-text"><div class="flagship-copy"><span class="project-status">公开测试 · 真机验证</span><h3>知脉·校园知识助手</h3><p class="project-lead">面向校园资料分散、查找困难的问题，搭建校园知识助手原型。</p><div class="project-proof compact-proof"><span><b>本人负责</b>资料整理、文档切片、RAG 检索接入、小程序交互和审核发布流程。</span><span><b>已经验证</b>资料默认私有、审核后公开；回答展示来源；完成管理员上传、索引、发布、游客问答和真机验证。</span></div><div class="project-modules" aria-label="知脉项目组成"><span><i>01</i>游客问答</span><span><i>02</i>资料管理</span><span><i>03</i>公共知识库</span><span><i>04</i>关系图谱</span></div><div class="tech-row project-core-tech"><span>微信小程序</span><span>FastAPI</span><span>RAG</span></div></div></div><div class="project-links flagship-links"><a class="project-primary-link" href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div></article>
 
-        <article class="project-card project-compact project-battle-card"><span class="project-number">02</span><div class="project-visual project-image-visual"><img src="media/tank-poster.jpg" alt="浪尖儿战场实际游戏画面" loading="lazy" decoding="async"><b>FSM / CHASE</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>把经典坦克玩法升级为可观察 AI 状态决策的网页战场。</p><div class="project-proof compact-proof"><span><b>本人负责</b>战斗系统、FSM Agent、移动端控制、出生点防重叠与双版本部署。</span><span><b>已经验证</b>快速版可直接运行，支持追击、狙击、绕后、防守与 Boss 状态。</span></div><div class="tech-row"><span>Canvas</span><span>FSM Agent</span><span>WebAssembly</span></div></div><div class="project-links"><a class="project-primary-link" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩 ↗</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">源码</a></div></article>
+        <article class="project-card project-compact project-battle-card"><span class="project-number">02</span><div class="project-visual project-image-visual"><img src="media/tank-arena-showcase.webp" alt="浪尖儿 AI 坦克竞技场实际运行画面，显示有限状态机 Agent 战场与决策观察器" loading="lazy" decoding="async"><b>FSM / AI ARENA</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>可观察有限状态机 Agent 决策过程的网页坦克战场。</p><div class="project-proof compact-proof"><span><b>本人负责</b>战斗系统、FSM Agent、移动端控制、出生点防重叠与双版本部署。</span><span><b>已经验证</b>快速版可直接运行，支持追击、狙击、绕后、防守与 Boss 状态。</span></div><div class="tech-row"><span>JavaScript</span><span>Canvas</span><span>FSM Agent</span></div></div><div class="project-links"><a class="project-primary-link" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩 ↗</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码</a></div></article>
 
-        <article class="project-card project-compact project-portfolio-card"><span class="project-number">03</span><div class="project-visual project-image-visual"><img src="media/phoenix-stage-capture.png" alt="Phoenix Portfolio 凤凰交互区实际画面" loading="lazy" decoding="async"><b>PERFORMANCE CASE</b></div><div><span class="project-status">当前作品 · 已验证</span><h3>Phoenix Portfolio</h3><p>在保留 3D 凤凰和交互表现的同时，持续降低移动端首屏压力。</p><div class="project-proof compact-proof"><span><b>工程处理</b>依赖本地化、静态降级、WebP、离屏暂停和设备性能分级。</span><span><b>已经验证</b>完成手机真机回归，Phoenix 正常运行，加载体验较优化前改善。</span></div><div class="tech-row"><span>Three.js</span><span>WebGL</span><span>性能降级</span></div></div><a class="project-primary-link" href="#top">查看当前作品 ↑</a></article>
+        <article class="project-card project-compact project-portfolio-card"><span class="project-number">03</span><div class="project-visual project-image-visual"><img src="media/phoenix-stage-capture.png" alt="Phoenix Portfolio 凤凰交互区实际画面" loading="lazy" decoding="async"><b>PERFORMANCE CASE</b></div><div><span class="project-status">当前作品 · 已验证</span><h3>Phoenix Portfolio</h3><p>交互式个人作品集与移动端性能优化案例。</p><div class="project-proof compact-proof"><span><b>本人负责</b>Phoenix 交互、页面结构、资源本地化、响应式布局与加载优化。</span><span><b>已经验证</b>保留 Phoenix 视觉效果并完成手机真机回归；通过图片压缩、离屏暂停和设备降级改善加载体验。</span></div><div class="tech-row"><span>Three.js</span><span>WebGL</span><span>性能优化</span></div></div><div class="project-links"><a class="project-primary-link" href="#top">查看当前作品 ↑</a><a href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看实现</a></div></article>
 
-        <article class="project-card project-compact project-audit-card"><span class="project-number">05</span><div class="project-visual audit-visual" aria-hidden="true"><span><i>STRUCTURE</i><b>CHECK</b></span><span><i>EVIDENCE</i><b>SCAN</b></span><span><i>FACTS</i><b>GUARD</b></span><span class="audit-warning"><i>JD MATCH</i><b>MVP</b></span></div><div><span class="project-status">MVP 框架 · 开发中</span><h3>简历压力测试助手</h3><p>面向求职者的简历审阅工具，先检查结构、表达、成果证据和个人贡献，再对照目标岗位识别证据缺口。</p><div class="project-proof compact-proof"><span><b>产品原则</b>不把缺少证据等同于没有能力，不凭空添加数字、职责或成果。</span><span><b>当前范围</b>通用简历体检与目标岗位压力测试的前端框架，后续接入文件解析和安全 AI API。</span></div><div class="tech-row"><span>HTML</span><span>JavaScript</span><span>Evidence-first AI</span></div></div><a class="project-primary-link" href="resume-audit/">立即体验 ↗</a></article>
+        <article class="project-card project-compact project-api-card"><span class="project-number">04</span><div class="project-visual api-visual" aria-hidden="true"><span><i>AUTH</i><b>PASS</b></span><span><i>MODEL LIST</i><b>PASS</b></span><span><i>STREAMING</i><b>PASS</b></span><span class="api-warning"><i>FUNCTION CALLING</i><b>WARNING</b></span><span class="api-check"><i>MODEL CONSISTENCY</i><b>CHECK</b></span></div><div><span class="project-status">已开源 · 本地工具</span><h3>OpenAI 兼容 API 诊断工具</h3><p>检查 OpenAI 兼容接口认证、协议能力和响应字段一致性的命令行工具。</p><div class="project-proof compact-proof"><span><b>本人负责</b>CLI、HTTP 探针、错误分类、评分报告、重试策略与单元测试。</span><span><b>已经验证</b>支持模型列表、流式响应、Function Calling、结构化输出和响应字段检查；不能证明后端模型真实身份。</span></div><div class="tech-row"><span>Python</span><span>SSE</span><span>Function Calling</span></div></div><div class="project-links"><a class="project-primary-link" href="https://github.com/230893812-a11y/miniature-fiesta" target="_blank" rel="noreferrer">查看源码 ↗</a><a href="https://github.com/230893812-a11y/miniature-fiesta#readme" target="_blank" rel="noreferrer">检测说明</a></div></article>
+
       </div>
     </section>
 
@@ -124,7 +129,12 @@
     </section>
 
     <section class="section-wrap certificates-section" id="certificates">
-      <div class="section-heading reveal"><p class="section-kicker">04 — CERTIFICATES</p><h2>19 份证书，<br /><span>记录每一步成长。</span></h2><p class="heading-note">按学习方向分类整理。点击任意证书可查看高清原图，也可以在新窗口中保存。</p></div>
+      <div class="section-heading reveal"><p class="section-kicker">04 — CERTIFICATES</p><h2>19 份证书，<br /><span>最终落到作品里。</span></h2><p class="heading-note">证书记录学习过程，项目检验实际应用。点击证书可查看原图，下面三项展示学习成果如何进入真实作品。</p></div>
+      <div class="certificate-application-grid reveal delay-1" aria-label="学习成果的项目应用">
+        <article><span>01 / FOUNDATION</span><h3>Python 基础</h3><p><b>已应用于</b>API 诊断工具、文件处理和自动化脚本。</p></article>
+        <article><span>02 / AIGC DESIGN</span><h3>AIGC 设计基础</h3><p><b>已应用于</b>个人作品集的视觉设计、内容编排和交互展示。</p></article>
+        <article><span>03 / WEB PRACTICE</span><h3>Web 前端相关学习</h3><p><b>已应用于</b>Phoenix Portfolio、独立摄影空间和浪尖儿战场。</p></article>
+      </div>
       <div class="cert-filter reveal delay-1" role="tablist" aria-label="证书分类">
         <button class="filter-button active" type="button" data-filter="all" role="tab" aria-selected="true">全部 <b>19</b></button>
         <button class="filter-button" type="button" data-filter="cloud" role="tab" aria-selected="false">云计算 / AIGC <b>6</b></button>
@@ -175,26 +185,43 @@
       </details>
     </section>
 
+    <aside class="section-wrap content-layer-intro layer-personal reveal" id="beyond" aria-label="第二层：兴趣与个人表达">
+      <span>02 / PERSONAL SIDE</span><div><h2>再看技术之外的我。</h2><p>摄影与游戏成就集中在这里，不与核心项目争夺第一阅读顺序。</p></div>
+    </aside>
+
     <section class="section-wrap showcase-section">
-      <div class="section-heading reveal"><p class="section-kicker">05 — BEYOND WORK</p><h2>工作之外，<br /><span>我在收集灵感。</span></h2></div>
-      <div class="showcase-grid reveal delay-1"><article class="note-card note-yellow"><span class="note-index">01</span><h3>运动与专注</h3><p>射击场记录代表我对专注和挑战的兴趣，<br />也提醒自己保持稳定的行动力。</p><span class="note-mark">☼</span></article><article class="note-card note-blue"><span class="note-index">02</span><h3>巅峰极速极限组<br />中国第145名</h3><p>游戏成就记录阶段性目标，<br />也体现我喜欢复盘与突破。</p><span class="note-mark">◉</span></article><article class="note-card note-red"><span class="note-index">03</span><h3>生活记录</h3><p>身高 185 cm，体重小于 75 kg，<br />保持规律状态与行动力。</p><span class="note-mark">✳</span></article></div>
+      <div class="section-heading reveal"><p class="section-kicker">05 — PERSONAL NOTES</p><h2>工作之外，<br /><span>我在收集灵感。</span></h2></div>
+      <div class="showcase-grid reveal delay-1"><article class="note-card note-blue"><span class="note-index">01</span><h3>巅峰极速极限组<br />中国第145名</h3><p>游戏成就记录阶段性目标，<br />也体现我喜欢复盘与突破。</p><span class="note-mark">◉</span></article></div>
     </section>
 
     <section class="section-wrap media-section" id="media">
-      <div class="section-heading reveal"><p class="section-kicker">06 — LIFE &amp; MEDIA</p><h2>工作之外，<br /><span>也保留真实的兴趣。</span></h2><p class="heading-note">生活照片、游戏成就和互动作品，帮助别人看到证书之外的我。图片素材可点击查看高清版本。</p></div>
+      <div class="section-heading reveal"><p class="section-kicker">06 — VISUAL ARCHIVE</p><h2>兴趣与记录，<br /><span>进入独立空间。</span></h2><p class="heading-note">摄影与游戏成就集中收纳在第二层，图片可点击查看高清版本。</p></div>
       <div class="media-grid reveal delay-1">
         <a class="media-card photography-entry" href="photography/" target="_blank" rel="noreferrer" aria-label="进入黄鼎的独立摄影空间"><div class="photography-entry-art" aria-hidden="true"><span class="photo-orbit photo-orbit-one"></span><span class="photo-orbit photo-orbit-two"></span><i class="photo-frame frame-one"></i><i class="photo-frame frame-two"></i><i class="photo-frame frame-three"></i><b>22</b><small>FRAMES IN SPACE</small></div><span class="media-caption"><span class="project-status">独立空间 · 交互画廊</span><b>个人摄影 · 光影观察</b><small>用手机记录天空、自然与城市中的光线变化。点击进入独立影像空间。</small></span><span class="photography-entry-cta">进入摄影空间 ↗</span></a>
         <a class="media-card" data-lightbox="media" href="media/a.jpg" target="_blank" rel="noreferrer"><img src="media/a-jpg.webp" alt="巅峰极速极限组中国第145名截图" loading="lazy"><span class="media-caption"><b>巅峰极速极限组 · 中国第145名</b><small>称号截图记录阶段性目标与复盘。</small></span></a>
-        <a class="media-card" data-lightbox="media" href="media/a (2).jpg" target="_blank" rel="noreferrer"><img src="media/a (2)-jpg.webp" alt="生活记录照片" loading="lazy"><span class="media-caption"><b>生活记录</b><small>身高 185 cm，体重小于 75 kg，保持真实状态与行动力。</small></span></a>
-        <a class="media-card" data-lightbox="media" href="media/go.jpg" target="_blank" rel="noreferrer"><img src="media/go-jpg.webp" alt="黄鼎运动与专注：射击场记录" loading="lazy"><span class="media-caption"><b>运动与专注</b><small>射击场记录，展示我对专注、挑战和稳定行动的兴趣。</small></span></a>
         <a class="media-card game-entry" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer" aria-label="打开浪尖儿战场快速版"><div class="game-entry-art"><span class="game-entry-mark">HD</span><span class="game-entry-play" aria-hidden="true">▶</span><small>浪尖儿·战场</small><em>FAST · CLICK TO PLAY</em></div><span class="media-caption"><span class="project-status">快速加载 · 可直接游玩</span><b>浪尖儿战场</b><small>点击进入轻量战场，支持电脑与手机操作。</small><span class="project-details"><span><b>项目背景</b>：把经典坦克玩法升级为可观察 AI 决策的网页战场。</span><span><b>负责内容</b>：战斗系统、FSM Agent、移动端控制、音效整合与双版本部署。</span><span><b>使用技术</b>：JavaScript、Canvas、Python、Pygame、Pygbag、WebAssembly。</span><span><b>项目亮点</b>：追击、狙击、绕后、防守与 Boss Agent，支持实时状态观察。</span></span></span><span class="game-entry-cta">立即开始 ↗</span></a>
       </div>
       <details class="all-media reveal"><summary>查看素材文件夹中的其它文件</summary><div class="media-list"><span>1—12.jpg：压缩后的编号证书</span><span>3.jpg：微信联系二维码</span><span>d.jpg、h.jpg：训练师证书</span><span>music.mp3：背景音乐素材（按需播放）</span></div></details>
     </section>
 
-    <section class="contact-section" id="contact"><div class="section-wrap contact-inner reveal"><div><p class="section-kicker">07 — SAY HELLO</p><h2>从一次交流，<br /><em>开始下一段成长。</em></h2></div><div class="contact-side"><p>如果你想了解我的实习经历、学习方向或合作可能，欢迎和我聊聊。</p><a class="email-link" href="mailto:230893812@qq.com">230893812@qq.com <span>↗</span></a><div class="contact-details"><a href="tel:15362928293">电话 · 153 6292 8293</a><a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y</a></div><div class="socials"><a href="#knowledge-hub">公开知识资源</a><a href="#top">Back to top ↑</a></div></div><div class="contact-qr"><div><p class="section-kicker">CONTACT QR</p><h3>扫码添加微信</h3><p>二维码单独放置在页面最底部，方便联系。</p></div><a class="qr-link" data-lightbox="contact" href="media/3.jpg" target="_blank" rel="noreferrer"><img src="media/3-jpg.webp" alt="黄鼎微信联系二维码" loading="lazy"><span>点击查看高清 ↗</span></a></div></div></section>
+    <aside class="section-wrap content-layer-intro layer-lab reveal" aria-label="第三层：交互实验室">
+      <span>03 / INTERACTION LAB</span><div><h2>最后体验实验性功能。</h2><p>Phoenix、机械凤凰、音乐、3D 摄影和开发中的 MVP 都属于加分项，不作为核心能力的唯一证据。</p></div>
+    </aside>
+
+    <section class="section-wrap interaction-lab-section" id="lab">
+      <div class="section-heading reveal"><p class="section-kicker">07 — OPTIONAL EXPERIENCES</p><h2>高级交互，<br /><span>按需进入。</span></h2><p class="heading-note">这些功能展示视觉与交互探索。它们可以增强记忆点，但不能替代项目结果和工程证据。</p></div>
+      <div class="interaction-lab-grid reveal delay-1">
+        <button class="interaction-lab-card" type="button" data-lab-action="phoenix"><span>3D / WEBGL</span><h3>Phoenix 动画</h3><p>回到首屏并重新播放凤凰展翼。</p><b>重新体验 ↑</b></button>
+        <button class="interaction-lab-card" type="button" data-lab-action="bot"><span>CSS / GUIDE</span><h3>机械凤凰助手</h3><p>打开轻量项目导览，不冒充真实 AI 服务。</p><b>打开助手 ↗</b></button>
+        <button class="interaction-lab-card" type="button" data-lab-action="music"><span>AUDIO / OPTIONAL</span><h3>背景音乐</h3><p>音乐按需播放，不作为页面加载前提。</p><b>播放或暂停 ↗</b></button>
+        <a class="interaction-lab-card" href="photography/" target="_blank" rel="noreferrer"><span>3D / GALLERY</span><h3>3D 摄影空间</h3><p>进入独立影像展厅，浏览 22 张摄影记录。</p><b>进入空间 ↗</b></a>
+        <a class="interaction-lab-card interaction-lab-wide" href="resume-audit/"><span>MVP / IN PROGRESS</span><h3>简历压力测试助手</h3><p>通用体检与目标岗位模式的前端框架；当前展示示例报告，不上传内容，也尚未接入真实 AI。</p><b>体验 MVP ↗</b></a>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact"><div class="section-wrap contact-inner reveal"><div><p class="section-kicker">08 — SAY HELLO</p><h2>从一次交流，<br /><em>开始下一段成长。</em></h2></div><div class="contact-side"><p>如果你想了解我的实习经历、学习方向或合作可能，欢迎和我聊聊。</p><a class="email-link" href="mailto:230893812@qq.com">230893812@qq.com <span>↗</span></a><div class="contact-details"><a href="tel:15362928293">电话 · 153 6292 8293</a><a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y</a></div><div class="socials"><a href="#knowledge-hub">公开知识资源</a><a href="#top">Back to top ↑</a></div></div><div class="contact-qr"><div><p class="section-kicker">CONTACT QR</p><h3>扫码添加微信</h3><p>二维码单独放置在页面最底部，方便联系。</p></div><a class="qr-link" data-lightbox="contact" href="media/3.jpg" target="_blank" rel="noreferrer"><img src="media/3-jpg.webp" alt="黄鼎微信联系二维码" loading="lazy"><span>点击查看高清 ↗</span></a></div></div></section>
   </main>
-  <div class="section-indicator" id="sectionIndicator" aria-hidden="true"><span>PROJECTS</span><b>02 / 07</b></div>
+  <div class="section-indicator" id="sectionIndicator" aria-hidden="true"><span>PROJECTS</span><b>02 / 08</b></div>
   <footer class="footer section-wrap"><span>© 2026 HUANG DING</span><span>DESIGNED &amp; CODED WITH CARE</span><span>中山 · 中国</span><a class="phoenix-footer-credit" href="https://sketchfab.com/3d-models/phoenix-bird-844ba0cf144a413ea92c779f18912042" target="_blank" rel="noreferrer">3D Phoenix · NORBERTO-3D · CC BY 4.0 ↗</a></footer>
   <aside class="ai-bot" id="aiBot" aria-label="AI 项目导览机器人">
     <button class="ai-bot-orb phoenix-pet" id="aiBotToggle" type="button" aria-expanded="false" aria-controls="aiBotPanel" aria-label="打开机械凤凰项目向导"><span class="ai-bot-aura" aria-hidden="true"></span><span class="phoenix-wing phoenix-wing-left" aria-hidden="true"></span><span class="phoenix-wing phoenix-wing-right" aria-hidden="true"></span><span class="phoenix-body" aria-hidden="true"><span class="phoenix-crown"></span><span class="phoenix-eye"></span><span class="phoenix-beak"></span><span class="phoenix-chest"></span><span class="phoenix-tail"></span></span></button>
@@ -216,7 +243,7 @@
   <!-- Version query forces browsers to fetch the model fix instead of reusing
        a cached script that still points at the old fallback configuration. -->
   <script src="phoenix/phoenix-prototype.js?v=20260910-local1"></script>
-  <script src="phoenix/phoenix-model.js?v=20260910-warm1"></script>
+  <script src="phoenix/phoenix-model.js?v=20260911-wings1"></script>
   <script>
     (function () {
       var status = document.querySelector('#phoenixStatus');
@@ -278,7 +305,7 @@
       }).catch(function () { setStatus('静态海报模式 · 可继续浏览'); });
     }());
   </script>
-  <script src="script.js?v=20260910-perf1"></script>
+  <script src="script.js?v=20260913-motion1"></script>
   <script>
     (function () {
       var projects = document.getElementById('projects');

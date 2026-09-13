@@ -35,6 +35,63 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+// 轻量滚动编排：标题逐行进入、卡片交错出现，不引入额外动画库。
+const heroTitle = document.querySelector('.hero-copy h1');
+if (heroTitle) {
+  [...heroTitle.childNodes].forEach(node => {
+    if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) return;
+    const span = document.createElement('span');
+    span.textContent = node.textContent;
+    node.replaceWith(span);
+  });
+  heroTitle.classList.add('title-lines');
+}
+document.querySelectorAll('.project-card,.skill-card,.cert-card,.note-card,.media-card').forEach((card, index) => {
+  card.classList.add('motion-card');
+  card.style.setProperty('--motion-delay', `${Math.min(index % 6, 5) * 70}ms`);
+});
+
+// 当前章节高亮：只观察真正有 id 的主章节，避免导航状态跳动。
+const navLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
+const navSections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+if ('IntersectionObserver' in window && navSections.length) {
+  const navObserver = new IntersectionObserver(entries => {
+    entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio).slice(0, 1).forEach(entry => {
+      navLinks.forEach(link => link.classList.toggle('is-current', link.getAttribute('href') === `#${entry.target.id}`));
+    });
+  }, { rootMargin: '-28% 0px -58% 0px', threshold: [0.05, 0.2, 0.5] });
+  navSections.forEach(section => navObserver.observe(section));
+}
+if ('IntersectionObserver' in window && navSections.length) {
+  const sectionState = new IntersectionObserver(entries => {
+    const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) document.body.dataset.section = visible.target.id;
+  }, { rootMargin: '-20% 0px -65% 0px', threshold: [0.05, 0.25] });
+  navSections.forEach(section => sectionState.observe(section));
+}
+
+// 数字进入视口后递增；∞ 等非数字保持原样。
+document.querySelectorAll('.metric strong').forEach(counter => {
+  const target = Number(counter.textContent.trim());
+  if (!Number.isFinite(target)) return;
+  const value = counter.textContent.trim();
+  counter.textContent = '0';
+  const observer = new IntersectionObserver(([entry], obs) => {
+    if (!entry.isIntersecting) return;
+    const start = performance.now();
+    const tick = now => {
+      const progress = Math.min(1, (now - start) / 720);
+      counter.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3)))).padStart(value.length, '0');
+      if (progress < 1) requestAnimationFrame(tick); else counter.textContent = value;
+    };
+    requestAnimationFrame(tick); obs.disconnect();
+  }, { threshold: 0.55 });
+  observer.observe(counter);
+});
+document.addEventListener('visibilitychange', () => {
+  document.body.classList.toggle('page-hidden', document.hidden);
+});
+
 // 首屏承担视觉记忆，进入正文后自动降低流体背景，让老师更容易阅读。
 const aboutSection = document.querySelector('#about');
 if (aboutSection && 'IntersectionObserver' in window) {
@@ -46,6 +103,19 @@ if (aboutSection && 'IntersectionObserver' in window) {
 
 document.querySelectorAll('.nav a, .brand, .primary-button').forEach(link => {
   link.addEventListener('click', () => document.querySelector('.nav')?.classList.remove('open'));
+});
+
+// 第三层交互实验室：高级效果由用户主动选择，不混入核心项目的阅读顺序。
+document.querySelectorAll('[data-lab-action]').forEach(control => {
+  control.addEventListener('click', () => {
+    const action = control.dataset.labAction;
+    if (action === 'phoenix') {
+      document.querySelector('#top')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => document.querySelector('#phoenixReplay')?.click(), 450);
+    }
+    if (action === 'bot') document.querySelector('#aiBotToggle')?.click();
+    if (action === 'music') document.querySelector('#musicToggle')?.click();
+  });
 });
 
 // 证书筛选：默认展厅突出代表性证书，完整列表仍可展开查看。

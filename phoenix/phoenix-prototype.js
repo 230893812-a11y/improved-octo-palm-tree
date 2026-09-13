@@ -435,9 +435,11 @@
 
     function buildWing(side) {
       var wing = new THREE.Group();
-      wing.position.set(side * .43, .7, .02);
+      // Separate the shoulders slightly in depth so the far wing remains
+      // readable from the front camera instead of hiding behind the near wing.
+      wing.position.set(side * .43, .7, side * .1);
       wing.rotation.z = side * -.22;
-      wing.rotation.y = side * -.1;
+      wing.rotation.y = side * -.22;
       var fan = new THREE.Group();
       wing.add(fan);
       var featherCount = mobile ? 6 : 8;
@@ -636,10 +638,12 @@
       root.position.y = state.baseY + state.introY + state.pointerY * .16;
       root.position.z = state.baseZ + state.introZ;
       var wingOpen = state.wing + (reduced ? 0 : Math.sin(time * .006) * .035);
-      wingLeft.group.rotation.z = -.1 - wingOpen * .22;
-      wingRight.group.rotation.z = .1 + wingOpen * .22;
-      wingLeft.fan.rotation.y = -.05 + state.pointerX * .08;
-      wingRight.fan.rotation.y = .05 + state.pointerX * .08;
+      wingLeft.group.rotation.z = -.2 - wingOpen * .34;
+      wingRight.group.rotation.z = .2 + wingOpen * .34;
+      // Keep both feather fans visibly spread at rest. Pointer movement still
+      // adds a small shared turn without collapsing them into one silhouette.
+      wingLeft.fan.rotation.y = -.22 + state.pointerX * .07;
+      wingRight.fan.rotation.y = .22 + state.pointerX * .07;
       wingLeft.fan.rotation.x = state.pointerY * .06;
       wingRight.fan.rotation.x = state.pointerY * .06;
       chest.scale.y = 1.12 + (reduced ? 0 : Math.sin(time * .002) * .025);

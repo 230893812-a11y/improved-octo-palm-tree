@@ -205,11 +205,17 @@
     var rimLight = new THREE.PointLight(0xffc08a, .9, 9, 2);
     rimLight.position.set(-2.6, 1.2, -1.8);
     scene.add(rimLight);
+    // A soft front-left fill keeps the far wing readable after switching to
+    // the three-quarter camera angle. It is deliberately weaker than the key
+    // light so the feathers retain depth instead of becoming flat and white.
+    var wingFillLight = new THREE.DirectionalLight(0xffd2aa, 1.08);
+    wingFillLight.position.set(-3.2, 1.7, 4.2);
+    scene.add(wingFillLight);
 
     var root = new THREE.Group();
     // A slight desktop-left offset keeps the long tail away from the card's
     // right edge while leaving the bird centered on narrow screens.
-    root.position.set(mobile ? 0 : -.1, .18, 0);
+    root.position.set(mobile ? -.5 : -.38, .18, 0);
     scene.add(root);
     var aura = new THREE.Sprite(new THREE.SpriteMaterial({
       map: makeGlowTexture(THREE),
@@ -369,8 +375,11 @@
 
     function applyWingPose(time) {
       if (!wingBones.length) return;
-      var opening = clamp(state.wing, 0, 1.35) * (mobile ? .11 : .15);
-      var pulse = state.pulse * (mobile ? .09 : .13);
+      // Keep both wing planes separated in screen space. The source model is
+      // authored as a side-flying bird, so the original subtle offset allowed
+      // the far wing to disappear behind the torso for much of the animation.
+      var opening = clamp(state.wing, 0, 1.35) * (mobile ? .2 : .24);
+      var pulse = state.pulse * (mobile ? .12 : .17);
       var flutter = reduced ? 0 : Math.sin(time * .0052) * (mobile ? .018 : .028);
       wingBones.forEach(function (entry) {
         var bone = entry.bone;
@@ -403,13 +412,14 @@
       // footprint creates a safe margin for pointer movement on desktop.
       // Increase the current compact model by roughly 30% while keeping the
       // pointer-safe bounds introduced for desktop.
-      var targetDimension = mobile ? 2.44 : 2.59;
+      var targetDimension = mobile ? 2.3 : 2.82;
       modelScale = targetDimension / maxDimension;
       model.scale.setScalar(modelScale);
       model.position.set(-center.x * modelScale, -center.y * modelScale, -center.z * modelScale);
-      // The source model is a side-flying bird; a tiny yaw keeps the beak and
-      // layered tail readable from the hero camera without flattening depth.
-      model.rotation.y = -.08;
+      // Use a three-quarter view instead of the original near-profile view.
+      // This exposes the far wing while preserving the bird's forward flight
+      // direction, beak silhouette and layered tail.
+      model.rotation.y = -.92;
       model.rotation.x = .04;
       model.traverse(function (object) {
         if (!object.isMesh) return;
@@ -423,6 +433,12 @@
             material.emissive.set(0x2c0b08);
             material.emissiveIntensity = Math.max(Number(material.emissiveIntensity) || 0, .08);
           }
+          // Several feather surfaces in the source GLB are thin planes. With
+          // normal front-face culling, the far wing can vanish as it flaps or
+          // turns. Double-sided rendering keeps both wings present throughout
+          // the authored animation and the additive scroll pose.
+          material.side = THREE.DoubleSide;
+          material.needsUpdate = true;
           if ('roughness' in material && !material.map) material.roughness = Math.min(Number(material.roughness) || .6, .62);
         });
       });
@@ -512,7 +528,7 @@
       var idle = reduced ? 0 : Math.sin(time * .0013) * .025 + Math.sin(time * .00047 + 1.1) * .018;
       root.rotation.y = state.pointerX * (mobile ? .15 : .13) + idle + driftX * .18;
       root.rotation.x = -.06 + state.dive * (mobile ? .64 : .72) + state.pointerY * (mobile ? .075 : .06) + driftY * .12;
-      root.position.x = (mobile ? 0 : -.1) + state.pointerX * (mobile ? .09 : .07) + driftX * .72;
+      root.position.x = (mobile ? -.5 : -.38) + state.pointerX * (mobile ? .09 : .07) + driftX * .72;
       root.position.y = state.baseY + state.introY + state.pointerY * (mobile ? .09 : .07) + driftY;
       root.position.z = state.baseZ + state.introZ;
       if (state.pulse > 0) state.pulse = Math.max(0, state.pulse - dt * 2.1);

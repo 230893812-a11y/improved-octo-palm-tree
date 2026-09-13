@@ -284,10 +284,15 @@ window.addEventListener('pointermove', event => {
 resizeCanvas();
 drawFluid(0);
 
-// 性能优先：不再加载额外的 WebGL 流体库，保留本地低负载 Canvas 背景。
+// 背景流体：电脑端尝试加载 WebGL 液体模拟，手机端继续使用低负载 Canvas。
+// 这是本地预览版，失败时不会影响页面和轻量背景。
 const advancedCanvas = document.querySelector('#fluidCanvas');
 const smallScreen = window.matchMedia?.('(max-width: 760px)').matches;
-if (advancedCanvas && false && (!window.__phoenixRequested || !smallScreen)) {
+const connection = navigator.connection;
+const desktopFluidEnabled = !smallScreen
+  && !reduceMotion
+  && !connection?.saveData;
+if (advancedCanvas && desktopFluidEnabled && 'WebGLRenderingContext' in window) {
   window.addEventListener('pointermove', event => {
     // 库默认监听 canvas 的 mousemove；由于背景不能拦截页面点击，这里把窗口事件安全转发给它。
     advancedCanvas.dispatchEvent(new MouseEvent('mousemove', {
@@ -302,31 +307,35 @@ if (advancedCanvas && false && (!window.__phoenixRequested || !smallScreen)) {
     advancedFluid = fluid;
     fluid.simulation(advancedCanvas, {
       SIM_RESOLUTION: 128,
-      DYE_RESOLUTION: 640,
+      DYE_RESOLUTION: 768,
       TRANSPARENT: true,
       HOVER: true,
       SHADING: true,
       BLOOM: true,
-      BLOOM_INTENSITY: 0.3,
-      BLOOM_THRESHOLD: 0.82,
+      BLOOM_INTENSITY: 0.46,
+      BLOOM_THRESHOLD: 0.62,
       SUNRAYS: false,
-      SPLAT_RADIUS: 0.1,
-      SPLAT_FORCE: 2200,
+      SPLAT_RADIUS: 0.13,
+      SPLAT_FORCE: 4200,
       VELOCITY_DISSIPATION: 0.975,
       DENSITY_DISSIPATION: 0.985,
-      COLOR_UPDATE_SPEED: 3,
-      BRIGHTNESS: 0.38,
-      COLOR_PALETTE: ['#d96f52', '#e7b85e', '#9bb9ae', '#5b4b47'],
+      COLOR_UPDATE_SPEED: 5,
+      BRIGHTNESS: 0.64,
+      COLOR_PALETTE: ['#ef6949', '#f2b84b', '#79c4bb', '#d8845c'],
       BACK_COLOR: '#f7f4ee'
     });
     advancedCanvas.classList.remove('is-hidden');
     canvas?.classList.add('is-hidden');
     document.body.classList.add('advanced-fluid-ready');
+    document.body.dataset.fluidMode = 'advanced';
     if (root.classList.contains('motion-paused')) setAmbientMotion(true);
   }).catch(() => {
     // CDN 不可用或浏览器不支持 WebGL 时，保留本地 Canvas 背景。
     advancedCanvas.classList.add('is-hidden');
+    document.body.dataset.fluidMode = 'lightweight';
   });
+} else {
+  document.body.dataset.fluidMode = 'lightweight';
 }
 
 // The existing Phoenix pause control also quiets the ambient layers.  The

@@ -416,10 +416,10 @@
       modelScale = targetDimension / maxDimension;
       model.scale.setScalar(modelScale);
       model.position.set(-center.x * modelScale, -center.y * modelScale, -center.z * modelScale);
-      // Use a three-quarter view instead of the original near-profile view.
-      // This exposes the far wing while preserving the bird's forward flight
-      // direction, beak silhouette and layered tail.
-      model.rotation.y = -.92;
+      // Restore the original near-profile camera angle. The wing visibility
+      // fix remains active independently, so returning to this angle does not
+      // undo the double-sided materials or fill light.
+      model.rotation.y = -.08;
       model.rotation.x = .04;
       model.traverse(function (object) {
         if (!object.isMesh) return;

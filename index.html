@@ -1,7 +1,434 @@
-cinematic-preview-fixes.css:3:.cinematic-preview .heading-note,.cinematic-preview .hero-text,.cinematic-preview .hero-intro,.cinematic-preview .section-kicker{color:rgba(247,244,238,.72)}
-cinematic-preview.css:1:body.cinematic-preview{--cinema-bg:#070b10;--cinema-panel:rgba(17,27,31,.68);--cinema-line:rgba(247,244,238,.12);--cinema-glow:#f0c96b;background:var(--cinema-bg);color:#f7f4ee}.cinematic-preview .fluid-canvas,.cinematic-preview .grain{opacity:.18}.cinematic-backdrop{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at 50% -10%,rgba(239,194,91,.11),transparent 38%),linear-gradient(180deg,#070b10,#0a1116 52%,#07100f)}.cinematic-backdrop:before{content:"";position:absolute;inset:0;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,#000,transparent 82%)}.cinematic-backdrop:after{content:"";position:absolute;inset:-30%;opacity:.04;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");animation:cinemaNoise 1s steps(2) infinite}.cinema-orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14;will-change:transform;background:var(--orb-color)}.cinema-orb-one{--orb-color:#e3a947;width:42vw;height:42vw;right:-14vw;top:4vh}.cinema-orb-two{--orb-color:#4f9791;width:38vw;height:38vw;left:-16vw;top:48vh}.cinema-orb-three{--orb-color:#d76d51;width:28vw;height:28vw;right:8vw;bottom:-12vw}.cinematic-preview .topbar{background:rgba(7,11,16,.58);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(20px);color:#f7f4ee}.cinematic-preview .brand,.cinematic-preview .nav a{color:#f7f4ee}.cinematic-preview main,.cinematic-preview .footer,.cinematic-preview .topbar{position:relative;z-index:2}.cinematic-preview main>section:not(.ticker):not(.contact-section){position:relative}.cinematic-preview main>section:not(.ticker):not(.contact-section):before{content:"";position:absolute;left:clamp(16px,4vw,56px);right:clamp(16px,4vw,56px);top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(247,244,238,.13),transparent)}.cinematic-preview .section-heading h2,.cinematic-preview .hero h1{color:#f7f4ee;text-shadow:0 14px 50px rgba(0,0,0,.28)}.cinematic-preview .section-heading h2 span,.cinematic-preview .hero h1 em{color:var(--cinema-glow)}.cinematic-preview .heading-note,.cinematic-preview .hero-text,.cinematic-preview .section-kicker{color:rgba(247,244,238,.62)}.cinematic-preview .project-card,.cinematic-preview .skill-card,.cinematic-preview .note-card,.cinematic-preview .media-card,.cinematic-preview .timeline-item,.cinematic-preview .metric,.cinematic-preview .knowledge-card{background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border-color:var(--cinema-line);box-shadow:0 30px 70px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.07);backdrop-filter:blur(14px);color:#f7f4ee}.cinematic-preview .project-card,.cinematic-preview .skill-card,.cinematic-preview .media-card{transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}.cinematic-preview .project-card:hover,.cinematic-preview .skill-card:hover,.cinematic-preview .media-card:hover{transform:translateY(-7px);border-color:rgba(240,201,107,.34);box-shadow:0 34px 80px rgba(0,0,0,.32),0 0 0 1px rgba(240,201,107,.08)}.cinematic-preview .timeline:before,.cinematic-preview .bar{background:rgba(255,255,255,.1)}.cinematic-preview .ticker{position:relative;z-index:2;background:rgba(7,11,16,.8);border-color:rgba(255,255,255,.08);color:rgba(247,244,238,.75)}.cinematic-preview .contact-section{position:relative;z-index:2;background:linear-gradient(145deg,#101b1b,#0b1015)}.cinema-reveal{opacity:0!important;filter:blur(8px);transform:translate3d(0,42px,0) scale(.985)!important;transition:opacity .85s ease,filter .85s ease,transform .85s cubic-bezier(.2,.8,.2,1)!important}.cinema-reveal.cinema-visible{opacity:1!important;filter:none;transform:none!important}.cinema-reveal[data-cinema-direction="left"]{transform:translate3d(-46px,18px,0)!important}.cinema-reveal[data-cinema-direction="right"]{transform:translate3d(46px,18px,0)!important}.cinema-reveal.cinema-visible[data-cinema-direction]{transform:none!important}.cinema-stagger>*{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1),filter .7s ease}.cinema-stagger.cinema-visible>*{opacity:1;transform:none;filter:none}.cinema-stagger.cinema-visible>*:nth-child(2){transition-delay:.08s}.cinema-stagger.cinema-visible>*:nth-child(3){transition-delay:.16s}.cinema-stagger.cinema-visible>*:nth-child(4){transition-delay:.24s}.cinema-stagger.cinema-visible>*:nth-child(5){transition-delay:.32s}.cinema-progress{position:fixed;z-index:25;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;padding:12px 8px;border:1px solid rgba(255,255,255,.09);border-radius:99px;background:rgba(7,11,16,.5);backdrop-filter:blur(12px)}.cinema-progress button{width:7px;height:7px;border:0;padding:0;border-radius:50%;background:rgba(247,244,238,.28);cursor:pointer;transition:.25s}.cinema-progress button.active{height:27px;border-radius:8px;background:var(--cinema-glow);box-shadow:0 0 16px rgba(240,201,107,.45)}.cinema-progress-label{position:fixed;z-index:24;right:42px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:right center;color:rgba(247,244,238,.42);font:500 8px "DM Mono";letter-spacing:.16em;white-space:nowrap}.cinema-scroll-line{position:fixed;z-index:24;left:0;top:0;width:3px;height:calc(var(--cinema-progress,0)*100%);background:linear-gradient(var(--cinema-glow),var(--orange));box-shadow:0 0 15px rgba(240,201,107,.35)}.cinema-section-number{position:absolute;right:clamp(22px,6vw,88px);top:42px;color:rgba(247,244,238,.06);font:700 clamp(70px,12vw,170px) Manrope;letter-spacing:-.08em;pointer-events:none}.cinematic-preview .hero-visual{box-shadow:0 35px 100px rgba(0,0,0,.35),0 0 80px rgba(227,169,71,.08)}@keyframes cinemaNoise{0%{transform:translate(0)}25%{transform:translate(2%,-1%)}50%{transform:translate(-1%,2%)}75%{transform:translate(1%,1%)}}@media(max-width:800px){.cinema-progress,.cinema-progress-label{display:none}.cinema-orb{opacity:.09;filter:blur(65px)}.cinematic-backdrop:after{display:none}.cinematic-preview .project-card:hover,.cinematic-preview .skill-card:hover,.cinematic-preview .media-card:hover{transform:none}.cinema-section-number{top:28px;font-size:72px}.cinema-reveal{filter:blur(4px);transform:translate3d(0,25px,0) scale(.99)!important}}@media(prefers-reduced-motion:reduce){.cinematic-backdrop:after{animation:none}.cinema-reveal,.cinema-stagger>*{transition:none!important;filter:none!important}.cinema-orb{display:none}}
-index.html:1:cinematic-preview-fixes.css:3:.cinematic-preview .heading-note,.cinematic-preview .hero-text,.cinematic-preview .hero-intro,.cinematic-preview .section-kicker{color:rgba(247,244,238,.72)}
-index.html:2:cinematic-preview.css:1:body.cinematic-preview{--cinema-bg:#070b10;--cinema-panel:rgba(17,27,31,.68);--cinema-line:rgba(247,244,238,.12);--cinema-glow:#f0c96b;background:var(--cinema-bg);color:#f7f4ee}.cinematic-preview .fluid-canvas,.cinematic-preview .grain{opacity:.18}.cinematic-backdrop{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at 50% -10%,rgba(239,194,91,.11),transparent 38%),linear-gradient(180deg,#070b10,#0a1116 52%,#07100f)}.cinematic-backdrop:before{content:"";position:absolute;inset:0;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,#000,transparent 82%)}.cinematic-backdrop:after{content:"";position:absolute;inset:-30%;opacity:.04;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");animation:cinemaNoise 1s steps(2) infinite}.cinema-orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14;will-change:transform;background:var(--orb-color)}.cinema-orb-one{--orb-color:#e3a947;width:42vw;height:42vw;right:-14vw;top:4vh}.cinema-orb-two{--orb-color:#4f9791;width:38vw;height:38vw;left:-16vw;top:48vh}.cinema-orb-three{--orb-color:#d76d51;width:28vw;height:28vw;right:8vw;bottom:-12vw}.cinematic-preview .topbar{background:rgba(7,11,16,.58);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(20px);color:#f7f4ee}.cinematic-preview .brand,.cinematic-preview .nav a{color:#f7f4ee}.cinematic-preview main,.cinematic-preview .footer,.cinematic-preview .topbar{position:relative;z-index:2}.cinematic-preview main>section:not(.ticker):not(.contact-section){position:relative}.cinematic-preview main>section:not(.ticker):not(.contact-section):before{content:"";position:absolute;left:clamp(16px,4vw,56px);right:clamp(16px,4vw,56px);top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(247,244,238,.13),transparent)}.cinematic-preview .section-heading h2,.cinematic-preview .hero h1{color:#f7f4ee;text-shadow:0 14px 50px rgba(0,0,0,.28)}.cinematic-preview .section-heading h2 span,.cinematic-preview .hero h1 em{color:var(--cinema-glow)}.cinematic-preview .heading-note,.cinematic-preview .hero-text,.cinematic-preview .section-kicker{color:rgba(247,244,238,.62)}.cinematic-preview .project-card,.cinematic-preview .skill-card,.cinematic-preview .note-card,.cinematic-preview .media-card,.cinematic-preview .timeline-item,.cinematic-preview .metric,.cinematic-preview .knowledge-card{background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border-color:var(--cinema-line);box-shadow:0 30px 70px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.07);backdrop-filter:blur(14px);color:#f7f4ee}.cinematic-preview .project-card,.cinematic-preview .skill-card,.cinematic-preview .media-card{transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}.cinematic-preview .project-card:hover,.cinematic-preview .skill-card:hover,.cinematic-preview .media-card:hover{transform:translateY(-7px);border-color:rgba(240,201,107,.34);box-shadow:0 34px 80px rgba(0,0,0,.32),0 0 0 1px rgba(240,201,107,.08)}.cinematic-preview .timeline:before,.cinematic-preview .bar{background:rgba(255,255,255,.1)}.cinematic-preview .ticker{position:relative;z-index:2;background:rgba(7,11,16,.8);border-color:rgba(255,255,255,.08);color:rgba(247,244,238,.75)}.cinematic-preview .contact-section{position:relative;z-index:2;background:linear-gradient(145deg,#101b1b,#0b1015)}.cinema-reveal{opacity:0!important;filter:blur(8px);transform:translate3d(
-style.css:2:*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans SC",Manrope,sans-serif;line-height:1.6;overflow-x:hidden}.grain{position:fixed;inset:0;pointer-events:none;opacity:.06;z-index:10;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}.section-wrap{width:min(1120px,calc(100% - 80px));margin:0 auto}.topbar{height:84px;width:min(1280px,calc(100% - 80px));margin:auto;display:flex;align-items:center;justify-content:space-between;gap:30px;position:relative;z-index:20}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}.brand-mark{font:800 27px Manrope;letter-spacing:-.08em}.brand-mark span{color:var(--orange)}.brand-copy{font:700 11px Manrope;letter-spacing:.18em;line-height:1.2}.brand-copy small{display:block;color:var(--muted);font:500 8px "DM Mono";letter-spacing:.16em;margin-top:4px}.nav{display:flex;gap:30px}.nav a,.socials a{color:var(--muted);text-decoration:none;font:500 11px "DM Mono";letter-spacing:.08em;transition:color .2s}.nav a:hover,.socials a:hover{color:var(--orange)}.top-actions{display:flex;align-items:center;gap:13px}.icon-button,.download-button,.primary-button{font:600 11px "DM Mono";letter-spacing:.06em;border:0;cursor:pointer}.icon-button{background:none;color:var(--ink);font-size:20px;padding:6px}.download-button{background:var(--ink);color:#fffdf8;border-radius:99px;padding:12px 16px 12px 18px;display:flex;gap:12px;align-items:center}.download-button i{font-style:normal;font-size:15px}.hero{padding:88px 0 112px;display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center}.eyebrow,.section-kicker{font:500 10px "DM Mono";letter-spacing:.15em;color:var(--muted);margin:0 0 22px}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#6fbf79;margin-right:8px;box-shadow:0 0 0 4px rgba(111,191,121,.15)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(48px,6vw,76px);line-height:1.13;letter-spacing:-.06em;margin-bottom:28px;font-weight:800}h1 em,h2 em{color:var(--orange);font-style:normal}.hero-intro{max-width:520px;color:var(--muted);font-size:15px;line-height:2}.highlight{color:var(--ink);font-weight:700;border-bottom:2px solid var(--yellow)}.hero-actions{display:flex;align-items:center;gap:24px;margin-top:34px}.primary-button{display:inline-flex;align-items:center;gap:20px;color:#fff;background:var(--orange);padding:14px 18px;border-radius:3px;text-decoration:none;box-shadow:0 10px 24px rgba(235,106,82,.22);transition:transform .2s}.primary-button:hover{transform:translateY(-2px)}.primary-button span{font-size:18px;line-height:0}.text-button{border:0;background:none;color:var(--ink);font:600 11px "DM Mono";cursor:pointer}.text-button span{color:var(--muted);margin-left:7px}.hero-card{height:420px;position:relative;background:var(--yellow);border-radius:180px 180px 14px 14px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow);transform:rotate(2deg)}.avatar-wrap{position:relative;width:260px;height:260px;z-index:2}.avatar-glow{position:absolute;inset:-24px;background:rgba(255,255,255,.34);filter:blur(28px);border-radius:50%}.avatar{width:100%;height:100%;position:relative}.orbit{position:absolute;border:1px solid rgba(38,61,60,.22);border-radius:50%;z-index:1}.orbit-one{width:450px;height:170px;transform:rotate(26deg)}.orbit-two{width:500px;height:230px;transform:rotate(-34deg)}.card-caption{position:absolute;bottom:20px;left:25px;right:25px;display:flex;justify-content:space-between;font:500 9px "DM Mono";letter-spacing:.08em}.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:16px 0;margin-bottom:120px}.ticker-track{display:flex;justify-content:space-around;align-items:center;gap:35px;min-width:900px;font:500 11px "DM Mono";letter-spacing:.16em;animation:marquee 22s linear infinite}.ticker b{color:var(--yellow);font-size:16px}@keyframes marquee{to{transform:translateX(-33%)}}.split-section{display:grid;grid-template-columns:.75fr 1.25fr;gap:100px;padding-bottom:120px}.section-heading h2{font-size:clamp(34px,4vw,54px);line-height:1.16;letter-spacing:-.05em;margin-bottom:22px}.section-heading h2 span{color:var(--orange)}.heading-note{color:var(--muted);font-size:13px;line-height:1.9;max-width:265px}.timeline{border-top:1px solid var(--line)}.timeline-item{padding:27px 0 29px;border-bottom:1px solid var(--line)}.timeline-item.featured{padding-top:30px}.time-meta{display:flex;justify-content:space-between;color:var(--muted);font:500 10px "DM Mono";letter-spacing:.08em;margin-bottom:15px}.tag{color:var(--orange)}.timeline-item h3{font-size:20px;letter-spacing:-.03em;margin-bottom:10px}.timeline-item h3 small{font-size:12px;color:var(--muted);font-weight:500;margin-left:5px}.timeline-item p{font-size:13px;color:var(--muted);max-width:610px;line-height:1.9;margin-bottom:17px}.timeline-item strong{color:var(--ink)}.tech-row{display:flex;gap:7px;flex-wrap:wrap}.tech-row span,.chip-cloud span{border:1px solid var(--line);padding:4px 9px;border-radius:99px;color:var(--muted);font:500 9px "DM Mono"}.metrics-section{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:37px 0;margin-bottom:125px}.metric{display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);padding-left:24px}.metric:first-child{padding-left:0}.metric:last-child{border:0}.metric strong{font:800 39px Manrope;letter-spacing:-.06em}.metric span{font:11px "DM Mono";color:var(--muted);letter-spacing:.08em}.skills-section{padding-bottom:125px}.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:50px}.skill-card{background:var(--card);border:1px solid var(--line);padding:28px 25px;min-height:350px;position:relative}.skill-card.accent{background:var(--blue);border-color:var(--blue)}.skill-icon{color:var(--orange);font-size:26px;margin-bottom:22px}.skill-card h3{font-size:19px;margin-bottom:7px}.skill-card p{font-size:12px;color:var(--muted);line-height:1.8;max-width:230px}.skill-card.accent p{color:rgba(38,61,60,.7)}.skill-list{margin-top:27px;font:500 10px "DM Mono"}.skill-list>div:not(.bar){display:flex;justify-content:space-between;margin-top:13px}.skill-list b{font-weight:500;color:var(--orange)}.bar{height:3px;background:#e5e3dc;margin-top:7px}.bar i{display:block;height:100%;background:var(--orange)}.chip-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:30px}.chip-cloud span{border-color:rgba(38,61,60,.3);color:var(--ink)}.principles{padding:0;margin:27px 0 0;list-style:none;font-size:12px;line-height:2.8}.principles li{border-bottom:1px dashed var(--line)}.principles li::before{content:"↳";color:var(--orange);margin-right:8px}.showcase-section{padding-bottom:130px}.showcase-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:50px}.note-card{min-height:235px;padding:23px;position:relative;overflow:hidden}.note-yellow{background:var(--yellow)}.note-blue{background:var(--blue)}.note-red{background:var(--orange);color:#fffdf8}.note-index{font:500 10px "DM Mono";opacity:.7}.note-card h3{font-size:21px;letter-spacing:-.04em;margin:49px 0 11px}.note-card p{font-size:12px;line-height:1.8}.note-mark{position:absolute;right:20px;bottom:11px;font-size:62px;line-height:1;opacity:.19}.contact-section{background:var(--ink);color:var(--paper);padding:90px 0 77px}.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:100px}.contact-section .section-kicker{color:rgba(247,244,238,.55)}.contact-section h2{font-size:clamp(42px,5vw,68px);line-height:1.16;letter-spacing:-.06em}.contact-section h2 em{color:var(--yellow)}.contact-side{padding-top:31px}.contact-side p{color:rgba(247,244,238,.68);font-size:14px;line-height:1.9;max-width:330px}.email-link{display:inline-block;color:var(--yellow);font:500 clamp(20px,2.7vw,30px) Manrope;text-decoration:none;border-bottom:1px solid rgba(246,201,94,.45);padding-bottom:7px;margin:23px 0 54px}.email-link span{font-size:.7em;margin-left:12px}.socials{display:flex;gap:22px}.socials a{color:rgba(247,244,238,.62)}.footer{display:flex;justify-content:space-between;padding:25px 0;font:500 9px "DM Mono";letter-spacing:.1em;color:var(--muted)}.toast{position:fixed;right:24px;bottom:24px;background:var(--ink);color:var(--paper);padding:11px 16px;font-size:12px;box-shadow:var(--shadow);transform:translateY(90px);opacity:0;transition:.3s;z-index:50}.toast.show{transform:none;opacity:1}.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}@media(max-width:800px){.section-wrap,.topbar{width:min(100% - 40px,600px)}.topbar{height:70px}.nav{display:none}.brand-copy{font-size:10px}.hero{padding:57px 0 75px;grid-template-columns:1fr;gap:45px}.hero-card{height:340px;border-radius:160px 160px 14px 14px;width:100%;max-width:410px;margin:auto}.avatar-wrap{width:220px;height:220px}.ticker{margin-bottom:80px}.split-section,.contact-inner{grid-template-columns:1fr;gap:42px;padding-bottom:85px}.metrics-section{margin-bottom:85px;grid-template-columns:repeat(2,1fr);gap:24px}.metric{border:0;padding:0}.metric strong{font-size:34px}.skills-section{padding-bottom:85px}.skills-grid,.showcase-grid{grid-template-columns:1fr;margin-top:35px}.skill-card{min-height:auto}.note-card{min-height:200px}.contact-section{padding:68px 0 54px}.email-link{margin-bottom:36px}.footer{width:calc(100% - 40px);flex-wrap:wrap;gap:10px}.footer span:nth-child(2){order:3;width:100%}h1{font-size:52px}}
-style.css:10:.fluid-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.62;mix-blend-mode:multiply}.dark .fluid-canvas{opacity:.32;mix-blend-mode:screen}.topbar,main,.footer{position:relative;z-index:1}.hero-visual{height:420px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(246,201,94,.88),rgba(142,209,209,.72));border-radius:18px 180px 18px 180px;box-shadow:var(--shadow);transform:rotate(2deg);isolation:isolate}.visual-grid{position:absolute;inset:0;opacity:.22;background-image:linear-gradient(rgba(38,61,60,.45) 1px,transparent 1px),linear-gradient(90deg,rgba(38,61,60,.45) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(135deg,black,transparent 68%)}.visual-orbit{position:absolute;border:1px solid rgba(38,61,60,.35);border-radius:50%;z-index:-1}.visual-orbit-one{width:500px;height:210px;right:-150px;top:86px;transform:rotate(-28deg)}.visual-orbit-two{width:450px;height:180px;left:-160px;bottom:10px;transform:rotate(32deg)}.visual-core{position:absolute;width:172px;height:172px;border:1px solid rgba(38,61,60,.38);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,253,248,.2);backdrop-filter:blur(6px)}.visual-core span{font:800 55px Manrope;letter-spacing:-.1em}.visual-core small{font:500 8px "DM Mono";letter-spacing:.16em;margin-top:6px}.visual-note{position:absolute;font:500 9px "DM Mono";letter-spacing:.08em;line-height:1.8}.visual-note b{font-weight:500;color:var(--orange)}.note-top{top:25px;left:27px}.note-bottom{bottom:23px;right:26px;text-align:right}.certificates-section{padding-bottom:125px}.cert-filter{display:flex;flex-wrap:wrap;gap:8px;margin:48px 0 18px}.filter-button{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:99px;padding:9px 13px;cursor:pointer;font:500 10px "DM Mono";letter-spacing:.03em;transition:all .2s}.filter-button b{color:var(--orange);font-weight:500;margin-left:6px}.filter-button:hover,.filter-button.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}.certificate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.cert-card{position:relative;display:block;background:var(--card);border:1px solid var(--line);text-decoration:none;color:var(--ink);overflow:hidden;transition:transform .25s,box-shadow .25s}.cert-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}.cert-card img{display:block;width:100%;aspect-ratio:1.42;object-fit:cover;background:#eef0eb;transition:transform .35s}.cert-card:hover img{transform:scale(1.035)}.cert-meta{display:flex;flex-direction:column;gap:3px;padding:13px 14px 15px}.cert-meta b{font-size:12px;line-height:1.4}.cert-meta small{font:500 9px "DM Mono";letter-spacing:.06em;color:var(--muted)}.cert-open{position:absolute;right:12px;top:12px;padding:5px 8px;border-radius:99px;background:rgba(255,253,248,.92);color:var(--ink);font:500 8px "DM Mono";letter-spacing:.04em;opacity:0;transform:translateY(-4px);transition:all .2s}.cert-card:hover .cert-open,.cert-card:focus-visible .cert-open{opacity:1;transform:none}.media-card{display:block;text-decoration:none;color:var(--ink);position:relative}.media-caption{display:flex;flex-direction:column;gap:5px;padding:14px 16px 17px}.media-caption b{font-size:13px}.media-caption small{font-size:11px;color:var(--muted);line-height:1.6}.media-card img,.media-card video{transition:transform .35s}.media-card:hover img,.media-card:hover video{transform:scale(1.025)}.contact-qr{grid-column:1/-1;border-top:1px solid rgba(247,244,238,.18);margin-top:12px;padding-top:38px;display:flex;align-items:center;justify-content:space-between;gap:28px}.contact-qr .section-kicker{margin-bottom:8px}.contact-qr h3{font-size:24px;margin-bottom:4px}.contact-qr p:not(.section-kicker){font-size:12px;color:rgba(247,244,238,.62);margin:0}.qr-link{display:flex;align-items:center;gap:14px;color:var(--yellow);text-decoration:none;font:500 10px "DM Mono";letter-spacing:.04em}.qr-link img{width:110px;height:110px;object-fit:contain;background:#fff;padding:7px}.lightbox{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(12,25,24,.92);opacity:0;pointer-events:none;transition:opacity .25s}.lightbox.open{opacity:1;pointer-events:auto}.lightbox-figure{margin:0;max-width:min(88vw,1100px);max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:12px}.lightbox-figure img{display:block;max-width:100%;max-height:78vh;object-fit:contain;box-shadow:0 18px 60px rgba(0,0,0,.4)}.lightbox-figure figcaption{color:rgba(247,244,238,.76);font:500 11px "DM Mono";letter-spacing:.06em}.lightbox-close,.lightbox-prev,.lightbox-next{position:absolute;border:0;background:rgba(247,244,238,.12);color:var(--paper);width:42px;height:42px;border-radius:50%;font-size:30px;line-height:1;cursor:pointer}.lightbox-close{top:24px;right:24px}.lightbox-prev{left:24px;top:50%;transform:translateY(-50%)}.lightbox-next{right:24px;top:50%;transform:translateY(-50%)}.lightbox-close:hover,.lightbox-prev:hover,.lightbox-next:hover{background:var(--orange)}
-style.css:152:.certificate-detail{display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(16,42,41,.14);padding-left:24px}.certificate-current{align-self:flex-start;background:var(--yellow);border-radius:99px;padding:6px 10px;font:500 9px "DM Mono"}.certificate-detail .section-kicker{margin:14px 0 7px}.certificate-detail h3{font-size:24px;line-height:1.18;letter-spacing:-.05em;margin:0 0 8px}.certificate-detail>p:not(.section-kicker){font-size:12px;color:var(--muted);margin:0 0 20px}.certificate-open-button{align-self:flex-start;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:99px;padding:10px 13px;cursor:pointer;font:500 10px "DM Mono";letter-spacing:.03em;transition:transform .2s,background .2s}.certificate-open-button:hover,.certificate-open-button:focus-visible{background:var(--orange);border-color:var(--orange);transform:translateY(-2px);outline:none}.certificate-tech{display:flex;gap:6px;flex-wrap:wrap;margin-top:22px}.certificate-tech span{border:1px solid rgba(16,42,41,.16);border-radius:99px;padding:6px 8px;color:var(--muted);font:500 8px "DM Mono"}.certificate-list-toggle{margin-top:20px;border-top:1px solid var(--line);padding-top:17px}.certificate-list-toggle summary{cursor:pointer;color:var(--muted);font:500 10px "DM Mono";letter-spacing:.06em}.certificate-list-toggle .certificate-grid{margin-top:24px}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="黄鼎的在线个人主页——松山职业技术学院人工智能技术应用专业大一新生，含凤凰 3D 互动视觉、实习经历与证书作品集" />
+  <meta name="theme-color" content="#f7f4ee" />
+  <title>黄鼎 · 在线简历</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preload" href="media/phoenix-fallback.png" as="image" fetchpriority="high">
+  <link rel="preload" href="phoenix/models/phoenix-bird.glb" as="fetch" type="model/gltf-binary" crossorigin fetchpriority="high">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23263d3c'/%3E%3Cpath d='M16 44V16h8v20h24v8z' fill='%23f7f4ee'/%3E%3Ccircle cx='50' cy='44' r='4' fill='%23eb6a52'/%3E%3C/svg%3E" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260913-motion1" />
+  <link rel="stylesheet" href="project-showcase.css?v=20260913-clean1" />
+  <link rel="stylesheet" href="project-type-labels.css?v=20260910-preview1" />
+  <link rel="stylesheet" href="project-polish.css?v=20260910-polish1" />
+  <link rel="stylesheet" href="phoenix/phoenix-prototype.css?v=20260910-load1" />
+</head>
+<body>
+  <canvas id="fluidCanvas" class="fluid-canvas fluid-advanced is-hidden" aria-hidden="true"></canvas>
+  <canvas id="fluidFallback" class="fluid-canvas fluid-fallback" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="resume-orb resume-orb-one" aria-hidden="true"></div><div class="resume-orb resume-orb-two" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="返回顶部">
+      <span class="brand-mark">L<span>.</span></span>
+      <span class="brand-copy">HUANG DING<small>PORTFOLIO / 2026</small></span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#about">关于我</a>
+      <a href="#experience">经历</a>
+      <a href="#projects">项目</a>
+      <a href="#skills">技能</a>
+      <a href="#certificates">证书</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-button" id="themeToggle" type="button" aria-label="切换深色模式" title="切换主题">◐</button>
+      <button class="reader-mode-button" id="readerMode" type="button" aria-pressed="false">阅读模式</button>
+      <button class="download-button" id="printResume" type="button"><span>下载简历</span><i>↗</i></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero section-wrap" id="about">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="status-dot"></span> READY TO LEARN · ZHONGSHAN / CHINA</p>
+        <p class="hero-name">黄鼎</p>
+        <p class="hero-positioning">人工智能技术应用专业大一学生，正在用 Python、Web 与 AI 应用实践，把想法做成可运行的作品。已完成校园 RAG 知识助手、FSM AI 坦克竞技场、交互式个人作品集和 API 诊断工具，正在寻找 AI 应用与软件开发方向的竞赛机会。</p>
+        <p class="hero-target" aria-label="目标方向：AI 应用开发、Python 工具、Web 交互、竞赛工程实践"><b>目标方向</b><span>AI 应用开发</span><span>Python 工具</span><span>Web 交互</span><span>竞赛工程实践</span></p>
+        <h1>让好奇心，<br /><em>展翼起飞。</em></h1>
+        <p class="hero-intro">我是一个已经开始持续交付真实项目、并且成长速度很快的大一学生。我把凤凰作为探索的视觉符号：保持好奇，持续实践，用每一个可运行的作品证明自己的进步。</p>
+        <div class="hero-facts" aria-label="个人基本信息"><span><b>身份</b>大一新生</span><span><b>专业</b>人工智能技术应用</span><span><b>方向</b>AI · 创意实践</span></div>
+        <div class="hero-actions">
+          <a class="primary-button" href="#experience">阅读简历 <span>↓</span></a>
+          <a class="outline-button ai-cta" href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看校园 AI 助手源码 <span>↗</span></a>
+          <a class="text-button hero-project-link" href="#projects">查看项目 <span>↗</span></a>
+          <button class="text-button" id="copyEmail" type="button">复制邮箱 <span>⌘</span></button>
+        </div>
+        <div class="hero-contact-links" aria-label="快捷联系方式">
+          <a href="mailto:230893812@qq.com">邮箱 · 230893812@qq.com</a>
+          <a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y ↗</a>
+          <a href="tel:15362928293">电话 · 153 6292 8293</a>
+        </div>
+      </div>
+      <div class="hero-flight" aria-label="凤凰滚动飞行区">
+        <div class="hero-visual phoenix-only reveal delay-1" aria-label="可交互凤凰 3D 视觉区">
+          <div class="visual-grid"></div><div class="visual-orbit visual-orbit-one"></div><div class="visual-orbit visual-orbit-two"></div>
+          <div class="phoenix-decor" aria-hidden="true">
+            <i class="ember ember-1"></i><i class="ember ember-2"></i><i class="ember ember-3"></i><i class="ember ember-4"></i><i class="ember ember-5"></i><i class="ember ember-6"></i>
+            <span class="phoenix-flare flare-left"></span><span class="phoenix-flare flare-right"></span>
+            <span class="phoenix-spark spark-one">✦</span><span class="phoenix-spark spark-two">✦</span>
+          </div>
+          <div id="phoenixStage" class="phoenix-stage" aria-label="凤凰互动舞台"></div>
+          <div class="phoenix-hud" aria-hidden="true"><span>PHOENIX / INTERACTIVE</span></div>
+          <div class="phoenix-instruction" aria-live="polite"><span class="phoenix-status-dot"></span><span id="phoenixStatus">加载凤凰视觉…</span></div>
+          <div class="phoenix-controls"><button class="phoenix-control" id="phoenixReplay" type="button">展翼一次 <span>↗</span></button><button class="phoenix-control" id="phoenixToggle" type="button" aria-pressed="false">暂停动画</button><button class="phoenix-control phoenix-skip" id="phoenixSkip" type="button">跳过凤凰动画</button></div>
+          <div class="visual-core"><span>HD</span><small>LEARN / BUILD / GROW</small></div>
+          <div class="visual-note note-bottom">ZHONGSHAN · 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="个人关键词">
+      <div class="ticker-track"><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span><b>✳</b><span>AI EXPLORER</span><b>✳</b><span>CREATIVE BUILDER</span><b>✳</b><span>DETAIL LOVER</span></div>
+    </section>
+
+    <aside class="section-wrap content-layer-intro layer-core reveal" aria-label="第一层：核心能力主线">
+      <span>01 / CORE PROFILE</span><div><h2>先看我能做什么。</h2><p>个人定位、实习经历、四个重点项目、技术栈与证书构成首页主线，适合导师快速阅读。</p></div>
+    </aside>
+
+    <section class="section-wrap split-section" id="experience">
+      <div class="section-heading reveal"><p class="section-kicker">01 — JOURNEY</p><h2>经历，<br /><span>是最好的作品集。</span></h2><p class="heading-note">我还在起步阶段，但愿意快速学习、主动承担，把每一次实践都变成下一次进步的基础。</p></div>
+      <div class="timeline reveal delay-1">
+        <article class="timeline-item featured"><div class="time-meta"><span>实习 6 个月</span><span class="tag">INTERNSHIP</span></div><h3>实习生 / 协作支持 <small>@ 加华微捷科技有限公司</small></h3><p>协助组长整理任务流程、统一信息记录方式并跟进执行，减少重复沟通，团队协作效率得到提升，工作表现获得主管表扬。</p><div class="tech-row"><span>团队协作</span><span>流程优化</span><span>执行力</span></div></article>
+        <article class="timeline-item"><div class="time-meta"><span>2026.09</span><span class="tag">COMPETITION</span></div><h3>RST 竞赛训练营 <small>入营选拔</small></h3><p>报名参加训练营入营筛选赛，完成在线简历与坦克大战附加题；灵活运用 Codex、DeepSeek 等 AI 工具辅助开发，在小组和社区交流中实践 AI 应用开发与工程交付流程，提前积累竞赛实战经验。</p><div class="tech-row"><span>竞赛实战</span><span>AI 辅助开发</span><span>工程交付</span><span>社区协作</span></div></article>
+        <article class="timeline-item"><div class="time-meta"><span>2026 — 至今</span><span class="tag">CAMPUS</span></div><h3>松山职业技术学院 <small>人工智能技术应用 · 中山</small></h3><p>正式开启大学学习，夯实编程基础，持续探索人工智能、数字媒体与产品实践；希望在人工智能应用、Python 工具开发、RAG 知识库或 Web 交互方向继续学习和实践。</p><div class="tech-row"><span>持续学习</span><span>主动探索</span><span>长期主义</span></div></article>
+      </div>
+    </section>
+
+    <section class="section-wrap metrics-section reveal" aria-label="个人数据">
+      <div class="metric"><strong>6</strong><span>个月实习经历</span></div><div class="metric"><strong>1</strong><span>次主管表扬</span></div><div class="metric"><strong>∞</strong><span>持续学习动力</span></div><div class="metric"><strong>01</strong><span>位大一新生</span></div>
+    </section>
+
+    <section class="section-wrap projects-section" id="projects">
+      <div class="section-heading reveal"><p class="section-kicker">02 — SELECTED PROJECTS</p><h2>不只展示结果，<br /><span>也展示如何落地。</span></h2><p class="heading-note">一个校园知识旗舰项目，加上智能交互、性能工程和接口诊断三个方向的可验证实践。</p></div>
+      <div class="project-grid project-showcase-grid reveal delay-1">
+        <article class="project-card project-flagship project-card-ai" id="knowledge-hub"><span class="project-number">01 / FLAGSHIP</span><div class="flagship-layout flagship-layout-text"><div class="flagship-copy"><span class="project-status">公开测试 · 真机验证</span><h3>知脉·校园知识助手</h3><p class="project-lead">面向校园资料分散、查找困难的问题，搭建校园知识助手原型。</p><div class="project-proof compact-proof"><span><b>本人负责</b>资料整理、文档切片、RAG 检索接入、小程序交互和审核发布流程。</span><span><b>已经验证</b>资料默认私有、审核后公开；回答展示来源；完成管理员上传、索引、发布、游客问答和真机验证。</span></div><div class="project-modules" aria-label="知脉项目组成"><span><i>01</i>游客问答</span><span><i>02</i>资料管理</span><span><i>03</i>公共知识库</span><span><i>04</i>关系图谱</span></div><div class="tech-row project-core-tech"><span>微信小程序</span><span>FastAPI</span><span>RAG</span></div></div></div><div class="project-links flagship-links"><a class="project-primary-link" href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div></article>
+
+        <article class="project-card project-compact project-battle-card"><span class="project-number">02</span><div class="project-visual project-image-visual"><img src="media/tank-arena-showcase.webp" alt="浪尖儿 AI 坦克竞技场实际运行画面，显示有限状态机 Agent 战场与决策观察器" loading="lazy" decoding="async"><b>FSM / AI ARENA</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>可观察有限状态机 Agent 决策过程的网页坦克战场。</p><div class="project-proof compact-proof"><span><b>本人负责</b>战斗系统、FSM Agent、移动端控制、出生点防重叠与双版本部署。</span><span><b>已经验证</b>快速版可直接运行，支持追击、狙击、绕后、防守与 Boss 状态。</span></div><div class="tech-row"><span>JavaScript</span><span>Canvas</span><span>FSM Agent</span></div></div><div class="project-links"><a class="project-primary-link" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩 ↗</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码</a></div></article>
+
+        <article class="project-card project-compact project-portfolio-card"><span class="project-number">03</span><div class="project-visual project-image-visual"><img src="media/phoenix-stage-capture.png" alt="Phoenix Portfolio 凤凰交互区实际画面" loading="lazy" decoding="async"><b>PERFORMANCE CASE</b></div><div><span class="project-status">当前作品 · 已验证</span><h3>Phoenix Portfolio</h3><p>交互式个人作品集与移动端性能优化案例。</p><div class="project-proof compact-proof"><span><b>本人负责</b>Phoenix 交互、页面结构、资源本地化、响应式布局与加载优化。</span><span><b>已经验证</b>保留 Phoenix 视觉效果并完成手机真机回归；通过图片压缩、离屏暂停和设备降级改善加载体验。</span></div><div class="tech-row"><span>Three.js</span><span>WebGL</span><span>性能优化</span></div></div><div class="project-links"><a class="project-primary-link" href="#top">查看当前作品 ↑</a><a href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看实现</a></div></article>
+
+        <article class="project-card project-compact project-api-card"><span class="project-number">04</span><div class="project-visual api-visual" aria-hidden="true"><span><i>AUTH</i><b>PASS</b></span><span><i>MODEL LIST</i><b>PASS</b></span><span><i>STREAMING</i><b>PASS</b></span><span class="api-warning"><i>FUNCTION CALLING</i><b>WARNING</b></span><span class="api-check"><i>MODEL CONSISTENCY</i><b>CHECK</b></span></div><div><span class="project-status">已开源 · 本地工具</span><h3>OpenAI 兼容 API 诊断工具</h3><p>检查 OpenAI 兼容接口认证、协议能力和响应字段一致性的命令行工具。</p><div class="project-proof compact-proof"><span><b>本人负责</b>CLI、HTTP 探针、错误分类、评分报告、重试策略与单元测试。</span><span><b>已经验证</b>支持模型列表、流式响应、Function Calling、结构化输出和响应字段检查；不能证明后端模型真实身份。</span></div><div class="tech-row"><span>Python</span><span>SSE</span><span>Function Calling</span></div></div><div class="project-links"><a class="project-primary-link" href="https://github.com/230893812-a11y/miniature-fiesta" target="_blank" rel="noreferrer">查看源码 ↗</a><a href="https://github.com/230893812-a11y/miniature-fiesta#readme" target="_blank" rel="noreferrer">检测说明</a></div></article>
+
+      </div>
+    </section>
+
+    <section class="section-wrap skills-section" id="skills">
+      <div class="section-heading reveal"><p class="section-kicker">03 — TOOLKIT</p><h2>我的工具箱，<br /><span>也装着好奇心。</span></h2></div>
+      <div class="skills-grid">
+        <article class="skill-card reveal"><div class="skill-icon">✦</div><h3>正在使用</h3><p>把基础技术落实到可运行的作品中。</p><div class="skill-list"><div><span>Python</span><b>FastAPI · 文件处理 · 自动化</b></div><div class="bar"><i style="width:54%"></i></div><div><span>JavaScript</span><b>小程序逻辑 · Canvas · 页面交互</b></div><div class="bar"><i style="width:60%"></i></div><div><span>HTML / CSS</span><b>响应式页面 · 组件布局</b></div><div class="bar"><i style="width:68%"></i></div></div></article>
+        <article class="skill-card accent reveal delay-1"><div class="skill-icon">✺</div><h3>项目实践</h3><p>围绕真实问题学习工具，而不是只罗列名词。</p><div class="chip-cloud"><span>RAG · 文档切片</span><span>向量检索</span><span>来源引用</span><span>CloudBase</span><span>COS</span><span>Git / GitHub</span></div></article>
+        <article class="skill-card reveal delay-2"><div class="skill-icon">↗</div><h3>正在学习</h3><p>把下一阶段能力写清楚，也承认当前边界。</p><ul class="principles"><li>MySQL 与数据持久化</li><li>微信用户身份与 Redis 限流</li><li>测试、监控与数据结构算法</li></ul></article>
+      </div>
+    </section>
+
+    <section class="section-wrap certificates-section" id="certificates">
+      <div class="section-heading reveal"><p class="section-kicker">04 — CERTIFICATES</p><h2>19 份证书，<br /><span>最终落到作品里。</span></h2><p class="heading-note">证书记录学习过程，项目检验实际应用。点击证书可查看原图，下面三项展示学习成果如何进入真实作品。</p></div>
+      <div class="certificate-application-grid reveal delay-1" aria-label="学习成果的项目应用">
+        <article><span>01 / FOUNDATION</span><h3>Python 基础</h3><p><b>已应用于</b>API 诊断工具、文件处理和自动化脚本。</p></article>
+        <article><span>02 / AIGC DESIGN</span><h3>AIGC 设计基础</h3><p><b>已应用于</b>个人作品集的视觉设计、内容编排和交互展示。</p></article>
+        <article><span>03 / WEB PRACTICE</span><h3>Web 前端相关学习</h3><p><b>已应用于</b>Phoenix Portfolio、独立摄影空间和浪尖儿战场。</p></article>
+      </div>
+      <div class="cert-filter reveal delay-1" role="tablist" aria-label="证书分类">
+        <button class="filter-button active" type="button" data-filter="all" role="tab" aria-selected="true">全部 <b>19</b></button>
+        <button class="filter-button" type="button" data-filter="cloud" role="tab" aria-selected="false">云计算 / AIGC <b>6</b></button>
+        <button class="filter-button" type="button" data-filter="llm" role="tab" aria-selected="false">大模型工程 <b>7</b></button>
+        <button class="filter-button" type="button" data-filter="academy" role="tab" aria-selected="false">AI 大学堂 <b>3</b></button>
+        <button class="filter-button" type="button" data-filter="trainer" role="tab" aria-selected="false">Python / 训练师 <b>3</b></button>
+      </div>
+      <div class="certificate-exhibition reveal delay-2" id="certificateExhibition">
+        <div class="certificate-viewport" id="certificateViewport" tabindex="0" role="region" aria-label="左右拖动切换证书，按回车查看高清证书">
+          <div class="certificate-stack" id="certificateStack" aria-live="polite"></div>
+          <div class="certificate-drag-hint" aria-hidden="true"><span>←</span> 左右拖动 · 滚轮切换 <span>→</span></div>
+        </div>
+        <aside class="certificate-detail" aria-live="polite">
+          <span class="certificate-current" id="certificateCurrent">01 / 19</span>
+          <p class="section-kicker">CURRENT CERTIFICATE</p>
+          <h3 id="certificateTitle">阿里云 AIGC 设计基础</h3>
+          <p id="certificateCategory">云计算 / AIGC</p>
+          <button class="certificate-open-button" id="certificateOpen" type="button">查看高清证书 <span>↗</span></button>
+          <div class="certificate-tech"><span>CSS 3D</span><span>DRAG</span><span>TOUCH</span></div>
+        </aside>
+      </div>
+      <details class="certificate-list-toggle">
+        <summary>展开全部 19 张证书列表（含官方认证、课程结业与平台能力证明）</summary>
+      <div class="certificate-grid reveal delay-2">
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/1.jpg" target="_blank" rel="noreferrer"><img src="media/1-jpg.webp" alt="阿里云 AIGC 设计基础证书" loading="lazy"><span class="cert-meta"><b>阿里云 AIGC 设计基础</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-featured="true" data-lightbox="certificate" href="media/2.jpg" target="_blank" rel="noreferrer"><img src="media/2-jpg.webp" alt="阿里云 RAG 应用构建及优化证书" loading="lazy"><span class="cert-meta"><b>RAG 应用构建及优化</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/3a.jpg" target="_blank" rel="noreferrer"><img src="media/3a-jpg.webp" alt="阿里云百炼平台智能体应用证书" loading="lazy"><span class="cert-meta"><b>百炼平台智能体应用</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/4.jpg" target="_blank" rel="noreferrer"><img src="media/4-jpg.webp" alt="阿里云大模型内容生产能力证书" loading="lazy"><span class="cert-meta"><b>大模型内容生产能力</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-lightbox="certificate" href="media/5.jpg" target="_blank" rel="noreferrer"><img src="media/5-jpg.webp" alt="AI 数据分析能力认证证书" loading="lazy"><span class="cert-meta"><b>AI 数据分析能力</b><small>平台能力证明 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="cloud" data-featured="true" data-lightbox="certificate" href="media/az.jpg" target="_blank" rel="noreferrer"><img src="media/az-jpg.webp" alt="华为人工智能初识微认证证书" loading="lazy"><span class="cert-meta"><b>华为人工智能初识微认证</b><small>官方认证 · 云计算 / AIGC</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/6.jpg" target="_blank" rel="noreferrer"><img src="media/6-jpg.webp" alt="大模型微调工程师证书" loading="lazy"><span class="cert-meta"><b>大模型微调工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/7.jpg" target="_blank" rel="noreferrer"><img src="media/7-jpg.webp" alt="大模型工程师证书" loading="lazy"><span class="cert-meta"><b>大模型工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-featured="true" data-lightbox="certificate" href="media/8.jpg" target="_blank" rel="noreferrer"><img src="media/8-jpg.webp" alt="大模型开发工程师证书" loading="lazy"><span class="cert-meta"><b>大模型开发工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/9.jpg" target="_blank" rel="noreferrer"><img src="media/9.jpg" alt="提示词工程师证书" loading="lazy"><span class="cert-meta"><b>提示词工程师</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/10.jpg" target="_blank" rel="noreferrer"><img src="media/10-jpg.webp" alt="智能体工程师（ModelScope）证书" loading="lazy"><span class="cert-meta"><b>智能体工程师（ModelScope）</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/11.jpg" target="_blank" rel="noreferrer"><img src="media/11-jpg.webp" alt="智能体工程师（蚂蚁集团）证书" loading="lazy"><span class="cert-meta"><b>智能体工程师（蚂蚁集团）</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="llm" data-lightbox="certificate" href="media/12.jpg" target="_blank" rel="noreferrer"><img src="media/12.jpg" alt="AI 编程能力认证证书" loading="lazy"><span class="cert-meta"><b>AI 编程能力认证</b><small>平台能力证明 · 大模型工程</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="academy" data-featured="true" data-lightbox="certificate" href="media/Ai大学认证证书.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书-jpg.webp" alt="AI 大学堂智能体工程师认证" loading="lazy"><span class="cert-meta"><b>智能体工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="academy" data-lightbox="certificate" href="media/Ai大学认证证书2.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书2-jpg.webp" alt="AI 大学堂微调工程师认证" loading="lazy"><span class="cert-meta"><b>微调工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="academy" data-lightbox="certificate" href="media/Ai大学认证证书3.jpg" target="_blank" rel="noreferrer"><img src="media/Ai大学认证证书3-jpg.webp" alt="AI 大学堂提示词工程师认证" loading="lazy"><span class="cert-meta"><b>提示词工程师认证</b><small>课程结业 · AI 大学堂</small></span><span class="cert-open">查看高清 ↗</span></a>
+
+        <a class="cert-card" data-category="trainer" data-lightbox="certificate" href="media/certificate.jpg" target="_blank" rel="noreferrer"><img src="media/certificate-jpg.webp" alt="AI4S Cup Python 基础能力认证" loading="eager"><span class="cert-meta"><b>AI4S Cup · Python 基础</b><small>平台能力证明 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="trainer" data-featured="true" data-lightbox="certificate" href="media/d.jpg" target="_blank" rel="noreferrer"><img src="media/d-jpg.webp" alt="人工智能训练师高级证书" loading="eager"><span class="cert-meta"><b>人工智能训练师（高级）</b><small>官方认证 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+        <a class="cert-card" data-category="trainer" data-lightbox="certificate" href="media/h.jpg" target="_blank" rel="noreferrer"><img src="media/h-jpg.webp" alt="人工智能训练师初级证书" loading="eager"><span class="cert-meta"><b>人工智能训练师（初级）</b><small>官方认证 · Python / 训练师</small></span><span class="cert-open">查看高清 ↗</span></a>
+      </div>
+      </details>
+    </section>
+
+    <section class="section-wrap media-section" id="media">
+      <div class="section-heading reveal"><p class="section-kicker">05 — VISUAL ARCHIVE</p><h2>影像与交互，<br /><span>进入独立空间。</span></h2><p class="heading-note">摄影记录与可交互作品在此保留独立入口，点击可继续浏览。</p></div>
+      <div class="media-grid reveal delay-1">
+        <a class="media-card photography-entry" href="photography/" target="_blank" rel="noreferrer" aria-label="进入黄鼎的独立摄影空间"><div class="photography-entry-art" aria-hidden="true"><span class="photo-orbit photo-orbit-one"></span><span class="photo-orbit photo-orbit-two"></span><i class="photo-frame frame-one"></i><i class="photo-frame frame-two"></i><i class="photo-frame frame-three"></i><b>22</b><small>FRAMES IN SPACE</small></div><span class="media-caption"><span class="project-status">独立空间 · 交互画廊</span><b>个人摄影 · 光影观察</b><small>用手机记录天空、自然与城市中的光线变化。点击进入独立影像空间。</small></span><span class="photography-entry-cta">进入摄影空间 ↗</span></a>
+        <a class="media-card" data-lightbox="media" href="media/a.jpg" target="_blank" rel="noreferrer"><img src="media/a-jpg.webp" alt="巅峰极速极限组中国第145名截图" loading="lazy"><span class="media-caption"><b>巅峰极速极限组 · 中国第145名</b><small>称号截图记录阶段性目标与复盘。</small></span></a>
+        <a class="media-card game-entry" href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer" aria-label="打开浪尖儿战场快速版"><div class="game-entry-art"><span class="game-entry-mark">HD</span><span class="game-entry-play" aria-hidden="true">▶</span><small>浪尖儿·战场</small><em>FAST · CLICK TO PLAY</em></div><span class="media-caption"><span class="project-status">快速加载 · 可直接游玩</span><b>浪尖儿战场</b><small>点击进入轻量战场，支持电脑与手机操作。</small><span class="project-details"><span><b>项目背景</b>：把经典坦克玩法升级为可观察 AI 决策的网页战场。</span><span><b>负责内容</b>：战斗系统、FSM Agent、移动端控制、音效整合与双版本部署。</span><span><b>使用技术</b>：JavaScript、Canvas、Python、Pygame、Pygbag、WebAssembly。</span><span><b>项目亮点</b>：追击、狙击、绕后、防守与 Boss Agent，支持实时状态观察。</span></span></span><span class="game-entry-cta">立即开始 ↗</span></a>
+      </div>
+      <details class="all-media reveal"><summary>查看素材文件夹中的其它文件</summary><div class="media-list"><span>1—12.jpg：压缩后的编号证书</span><span>3.jpg：微信联系二维码</span><span>d.jpg、h.jpg：训练师证书</span><span>music.mp3：背景音乐素材（按需播放）</span></div></details>
+    </section>
+
+    <aside class="section-wrap content-layer-intro layer-lab reveal" aria-label="第三层：交互实验室">
+      <span>03 / INTERACTION LAB</span><div><h2>最后体验实验性功能。</h2><p>Phoenix、机械凤凰、音乐、3D 摄影和开发中的 MVP 都属于加分项，不作为核心能力的唯一证据。</p></div>
+    </aside>
+
+    <section class="section-wrap interaction-lab-section" id="lab">
+      <div class="section-heading reveal"><p class="section-kicker">07 — OPTIONAL EXPERIENCES</p><h2>高级交互，<br /><span>按需进入。</span></h2><p class="heading-note">这些功能展示视觉与交互探索。它们可以增强记忆点，但不能替代项目结果和工程证据。</p></div>
+      <div class="interaction-lab-grid reveal delay-1">
+        <button class="interaction-lab-card" type="button" data-lab-action="phoenix"><span>3D / WEBGL</span><h3>Phoenix 动画</h3><p>回到首屏并重新播放凤凰展翼。</p><b>重新体验 ↑</b></button>
+        <button class="interaction-lab-card" type="button" data-lab-action="bot"><span>CSS / GUIDE</span><h3>机械凤凰助手</h3><p>打开轻量项目导览，不冒充真实 AI 服务。</p><b>打开助手 ↗</b></button>
+        <button class="interaction-lab-card" type="button" data-lab-action="music"><span>AUDIO / OPTIONAL</span><h3>背景音乐</h3><p>音乐按需播放，不作为页面加载前提。</p><b>播放或暂停 ↗</b></button>
+        <a class="interaction-lab-card" href="photography/" target="_blank" rel="noreferrer"><span>3D / GALLERY</span><h3>3D 摄影空间</h3><p>进入独立影像展厅，浏览 22 张摄影记录。</p><b>进入空间 ↗</b></a>
+        <a class="interaction-lab-card interaction-lab-wide" href="resume-audit/"><span>MVP / IN PROGRESS</span><h3>简历压力测试助手</h3><p>通用体检与目标岗位模式的前端框架；当前展示示例报告，不上传内容，也尚未接入真实 AI。</p><b>体验 MVP ↗</b></a>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact"><div class="section-wrap contact-inner reveal"><div><p class="section-kicker">08 — SAY HELLO</p><h2>从一次交流，<br /><em>开始下一段成长。</em></h2></div><div class="contact-side"><p>如果你想了解我的实习经历、学习方向或合作可能，欢迎和我聊聊。</p><a class="email-link" href="mailto:230893812@qq.com">230893812@qq.com <span>↗</span></a><div class="contact-details"><a href="tel:15362928293">电话 · 153 6292 8293</a><a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y</a></div><div class="socials"><a href="#knowledge-hub">公开知识资源</a><a href="#top">Back to top ↑</a></div></div><div class="contact-qr"><div><p class="section-kicker">CONTACT QR</p><h3>扫码添加微信</h3><p>二维码单独放置在页面最底部，方便联系。</p></div><a class="qr-link" data-lightbox="contact" href="media/3.jpg" target="_blank" rel="noreferrer"><img src="media/3-jpg.webp" alt="黄鼎微信联系二维码" loading="lazy"><span>点击查看高清 ↗</span></a></div></div></section>
+  </main>
+  <div class="section-indicator" id="sectionIndicator" aria-hidden="true"><span>PROJECTS</span><b>02 / 08</b></div>
+  <footer class="footer section-wrap"><span>© 2026 HUANG DING</span><span>DESIGNED &amp; CODED WITH CARE</span><span>中山 · 中国</span><a class="phoenix-footer-credit" href="https://sketchfab.com/3d-models/phoenix-bird-844ba0cf144a413ea92c779f18912042" target="_blank" rel="noreferrer">3D Phoenix · NORBERTO-3D · CC BY 4.0 ↗</a></footer>
+  <aside class="ai-bot" id="aiBot" aria-label="AI 项目导览机器人">
+    <button class="ai-bot-orb phoenix-pet" id="aiBotToggle" type="button" aria-expanded="false" aria-controls="aiBotPanel" aria-label="打开机械凤凰项目向导"><span class="ai-bot-aura" aria-hidden="true"></span><span class="phoenix-wing phoenix-wing-left" aria-hidden="true"></span><span class="phoenix-wing phoenix-wing-right" aria-hidden="true"></span><span class="phoenix-body" aria-hidden="true"><span class="phoenix-crown"></span><span class="phoenix-eye"></span><span class="phoenix-beak"></span><span class="phoenix-chest"></span><span class="phoenix-tail"></span></span></button>
+    <section class="ai-bot-panel" id="aiBotPanel" hidden><div class="ai-bot-panel-head"><div><span class="ai-bot-kicker">PHOENIX PROJECT GUIDE</span><strong>机械凤凰 · 项目向导</strong></div><button id="aiBotClose" type="button" aria-label="关闭机器人">×</button></div><p id="aiBotMessage">你好，我是黄鼎的机械凤凰助手，可以带你快速了解这个网站和项目。</p><div class="ai-bot-actions"><button type="button" data-bot-message="这里展示我的 Python、Web、RAG 和交互式作品。">看我的项目</button><button type="button" data-bot-message="知脉是一个校园知识助手原型，支持资料检索、来源引用和公开内容管理。">了解知脉</button><button type="button" data-bot-message="我是轻量网页向导，不会替代真实的 AI 问答服务。">怎么使用</button></div></section>
+  </aside>
+  <aside class="music-player" id="musicPlayer" aria-label="背景音乐播放器">
+    <audio id="musicAudio" preload="none" loop src="media/music-20260910-web.mp3?v=20260911"></audio>
+    <div class="player-copy"><span class="player-kicker">NOW PLAYING</span><strong>黄鼎的背景音乐</strong><small id="musicStatus">正在尝试自动播放…</small></div>
+    <button class="player-toggle" id="musicToggle" type="button" aria-label="播放音乐" title="播放音乐"><span class="play-icon">▶</span><span class="pause-icon">Ⅱ</span></button>
+    <div class="player-progress"><span id="musicCurrent">0:00</span><input id="musicProgress" type="range" min="0" max="100" value="0" step="0.1" aria-label="音乐进度"><span id="musicDuration">0:00</span></div>
+  </aside>
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="素材高清预览">
+    <button class="lightbox-close" type="button" aria-label="关闭预览">×</button>
+    <button class="lightbox-prev" type="button" aria-label="上一张">‹</button>
+    <figure class="lightbox-figure"><img id="lightboxImage" alt="高清素材预览"><figcaption id="lightboxCaption"></figcaption></figure>
+    <button class="lightbox-next" type="button" aria-label="下一张">›</button>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite">邮箱已复制到剪贴板 ✓</div>
+  <!-- Version query forces browsers to fetch the model fix instead of reusing
+       a cached script that still points at the old fallback configuration. -->
+  <script src="phoenix/phoenix-prototype.js?v=20260913-hires1"></script>
+  <script src="phoenix/phoenix-model.js?v=20260913-hires1"></script>
+  <script>
+    (function () {
+      var status = document.querySelector('#phoenixStatus');
+      var toggle = document.querySelector('#phoenixToggle');
+      var replay = document.querySelector('#phoenixReplay');
+      var skip = document.querySelector('#phoenixSkip');
+      var api = null;
+      var paused = false;
+      var pendingBurst = false;
+      var pendingSkip = false;
+      function setStatus(text) { if (status) status.textContent = text; }
+      function setPaused(next) {
+        paused = next;
+        if (api) (paused ? api.pause : api.resume)();
+        window.dispatchEvent(new CustomEvent('resume-motion-state', { detail: { paused: paused } }));
+        if (toggle) {
+          toggle.textContent = paused ? '继续动画' : '暂停动画';
+          toggle.setAttribute('aria-pressed', String(paused));
+        }
+        setStatus(paused ? '动画已暂停 · 点击继续' : (api && api.renderer ? (api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲') : '静态海报模式'));
+      }
+      if (toggle) toggle.addEventListener('click', function () { setPaused(!paused); });
+      if (replay) replay.addEventListener('click', function () {
+        if (api && api.burst) api.burst();
+        else pendingBurst = true;
+        setStatus('展翼动作已触发 · 继续探索');
+      });
+      if (skip) skip.addEventListener('click', function () {
+        if (api && api.skipIntro) api.skipIntro();
+        else pendingSkip = true;
+        skip.disabled = true;
+        skip.textContent = '已跳过';
+        setStatus('已跳过凤凰动画 · 正在打开简历');
+        var experience = document.querySelector('#experience');
+        if (experience) {
+          window.setTimeout(function () {
+            experience.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+          }, 40);
+        }
+      });
+      if (!window.PhoenixHero) { setStatus('静态海报模式 · 当前浏览器未加载 WebGL'); return; }
+      window.phoenixMount = window.PhoenixHero.mount({
+        container: '#phoenixStage', scrollTrigger: '#about', scrollEnd: '+=480',
+        scrollDistanceDesktop: 480, scrollDistanceMobile: 430,
+        clickable: true, debug: false
+      });
+      var loadingTimer = window.setTimeout(function () {
+        if (!api) setStatus('静态海报模式 · 网络较慢，仍可继续浏览');
+      }, 6000);
+      Promise.resolve(window.phoenixMount).then(function (instance) {
+        window.clearTimeout(loadingTimer);
+        api = instance;
+        window.phoenixApi = instance;
+        if (pendingBurst && api && api.burst) { api.burst(); pendingBurst = false; }
+        if (pendingSkip && api && api.skipIntro) { api.skipIntro(); pendingSkip = false; }
+        if (paused && api && api.pause) api.pause();
+        if (api && api.renderer) setStatus(api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲');
+        else setStatus('静态海报模式 · 可继续浏览');
+      }).catch(function () { setStatus('静态海报模式 · 可继续浏览'); });
+    }());
+  </script>
+  <script src="script.js?v=20260913-motion1"></script>
+  <script>
+    (function () {
+      var projects = document.getElementById('projects');
+      if (!projects || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (entries) {
+        document.body.classList.toggle('project-section-active', entries[0].isIntersecting);
+      }, { threshold: 0.12 }).observe(projects);
+    }());
+  </script>
+  <script>
+    // Some mobile WebViews keep lazy images as broken placeholders when a
+    // long certificate grid is scrolled quickly. Promote them to eager loads
+    // and retry the original URL once so every card remains visible.
+    (function () {
+      document.querySelectorAll('img[loading="lazy"]').forEach(function (img) {
+        var src = img.getAttribute('src');
+        img.loading = 'eager';
+        img.removeAttribute('loading');
+        if (src && (!img.complete || !img.naturalWidth)) img.src = src;
+      });
+    }());
+  </script>
+  <script>
+    // Horizontal 3D certificate exhibition: the certificate cards remain the
+    // accessible source list, while this stage adds drag, wheel and touch
+    // navigation without duplicating certificate data by hand.
+    (function () {
+      var viewport = document.querySelector('#certificateViewport');
+      var stack = document.querySelector('#certificateStack');
+      var detailTitle = document.querySelector('#certificateTitle');
+      var detailCategory = document.querySelector('#certificateCategory');
+      var current = document.querySelector('#certificateCurrent');
+      var openButton = document.querySelector('#certificateOpen');
+      var sourceCards = Array.from(document.querySelectorAll('.cert-card'));
+      if (!viewport || !stack || !sourceCards.length) return;
+      var cards = sourceCards.map(function (source, index) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'certificate-stage-card';
+        button.setAttribute('aria-label', '查看 ' + (source.querySelector('.cert-meta b')?.textContent.trim() || '证书'));
+        var image = document.createElement('img');
+        image.src = source.querySelector('img')?.getAttribute('src') || '';
+        image.alt = source.querySelector('img')?.alt || '证书 ' + (index + 1);
+        image.loading = index < 5 ? 'eager' : 'lazy';
+        var label = document.createElement('span');
+        label.className = 'stage-label';
+        label.textContent = String(index + 1).padStart(2, '0') + ' / ' + (source.querySelector('.cert-meta small')?.textContent.trim() || 'CERTIFICATE');
+        button.append(image, label);
+        stack.appendChild(button);
+        button.addEventListener('click', function () {
+          if (button.classList.contains('is-current')) source.click();
+          else {
+            var targetIndex = visibleItems.indexOf(cards[index]);
+            if (targetIndex >= 0) setActive(targetIndex);
+          }
+        });
+        return { source: source, node: button };
+      });
+      var activeIndex = 0;
+      // 首次进入只展示 5 张重点证书；展开列表仍保留全部 19 张。
+      var featuredCards = cards.filter(function (entry) { return entry.source.dataset.featured === 'true'; });
+      var visibleItems = featuredCards.length ? featuredCards : cards.slice();
+      function render() {
+        var total = visibleItems.length;
+        if (!total) return;
+        if (activeIndex >= total) activeIndex = 0;
+        var visibleSet = new Set(visibleItems);
+        cards.forEach(function (entry) {
+          if (!visibleSet.has(entry)) {
+            entry.node.hidden = true;
+            entry.node.classList.remove('is-current');
+            entry.node.removeAttribute('aria-current');
+          }
+        });
+        visibleItems.forEach(function (entry, i) {
+          var offset = i - activeIndex;
+          if (offset > total / 2) offset -= total;
+          if (offset < -total / 2) offset += total;
+          var abs = Math.abs(offset);
+          var node = entry.node;
+          var stageLabel = node.querySelector('.stage-label');
+          if (stageLabel) stageLabel.textContent = String(i + 1).padStart(2, '0') + ' / ' + (entry.source.querySelector('.cert-meta small')?.textContent.trim() || 'CERTIFICATE');
+          var transforms = {
+            '-2': 'translate(-50%,-50%) translateX(-520px) translateZ(-90px) rotateY(-52deg) scale(.7)',
+            '-1': 'translate(-50%,-50%) translateX(-300px) translateZ(-30px) rotateY(-28deg) scale(.87)',
+            '0': 'translate(-50%,-50%) translateY(0) translateZ(70px) scale(1.06)',
+            '1': 'translate(-50%,-50%) translateX(300px) translateZ(-30px) rotateY(28deg) scale(.87)',
+            '2': 'translate(-50%,-50%) translateX(520px) translateZ(-90px) rotateY(52deg) scale(.7)'
+          };
+          node.hidden = abs > 2;
+          node.classList.toggle('is-current', offset === 0);
+          node.style.transform = transforms[String(Math.max(-2, Math.min(2, offset)))] || transforms['0'];
+          node.style.opacity = abs > 2 ? '0' : String(1 - abs * .16);
+          node.style.filter = abs === 0 ? 'none' : 'blur(' + Math.min(2.2, abs * .7) + 'px)';
+          node.style.zIndex = String(10 - abs);
+          node.setAttribute('aria-current', offset === 0 ? 'true' : 'false');
+        });
+        var entry = visibleItems[activeIndex];
+        var title = entry.source.querySelector('.cert-meta b')?.textContent.trim() || '证书';
+        var category = entry.source.querySelector('.cert-meta small')?.textContent.trim() || '学习成果';
+        if (detailTitle) detailTitle.textContent = title;
+        if (detailCategory) detailCategory.textContent = category;
+        if (current) current.textContent = String(activeIndex + 1).padStart(2, '0') + ' / ' + total;
+      }
+      function setActive(index) {
+        if (!visibleItems.length) return;
+        activeIndex = (index + visibleItems.length) % visibleItems.length;
+        render();
+      }
+      function applyFilter(filter) {
+        visibleItems = filter === 'all'
+          ? (featuredCards.length ? featuredCards.slice() : cards.slice())
+          : cards.filter(function (entry) { return entry.source.dataset.category === filter; });
+        activeIndex = 0;
+        render();
+      }
+      document.querySelectorAll('.filter-button').forEach(function (button) {
+        button.addEventListener('click', function () { applyFilter(button.dataset.filter || 'all'); });
+      });
+      if (openButton) openButton.addEventListener('click', function () { visibleItems[activeIndex]?.source.click(); });
+      viewport.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowUp') { event.preventDefault(); setActive(activeIndex - 1); }
+        if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); }
+        if (event.key === 'Enter') { event.preventDefault(); visibleItems[activeIndex]?.source.click(); }
+      });
+      viewport.addEventListener('wheel', function (event) { event.preventDefault(); var delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY; setActive(activeIndex + (delta > 0 ? 1 : -1)); }, { passive: false });
+      var startX = null;
+      viewport.addEventListener('pointerdown', function (event) { startX = event.clientX; viewport.setPointerCapture?.(event.pointerId); });
+      viewport.addEventListener('pointerup', function (event) { if (startX == null) return; var delta = event.clientX - startX; if (Math.abs(delta) > 24) setActive(activeIndex + (delta < 0 ? 1 : -1)); startX = null; });
+      viewport.addEventListener('pointercancel', function () { startX = null; });
+      render();
+    }());
+  </script>
+</body>
+</html>

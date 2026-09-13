@@ -92,6 +92,14 @@ body[data-section="projects"] .resume-orb-one{background:#8ed1d1}body[data-secti
 @media(prefers-reduced-motion:reduce){.resume-orb,.title-lines>span,.title-lines>em{animation:none!important;opacity:1;transform:none}.motion-card,.reveal.visible .motion-card{transition:none!important}}
 .fluid-canvas{opacity:.22;filter:saturate(.78) blur(.15px)}
 .fluid-advanced{opacity:.12;mix-blend-mode:normal}
+.advanced-fluid-ready .fluid-advanced{opacity:.22;mix-blend-mode:screen}
+/* Desktop WebGL fluid needs to sit above the paper/grid background to remain
+ * visible, but below all resume content and controls. */
+/* When the desktop fluid is active, remove the competing checker grid and
+ * keep the interaction as a concentrated light field instead of a full-page
+ * visual layer. The resume copy remains the visual priority. */
+body.advanced-fluid-ready::after{background:radial-gradient(ellipse at 82% 19%,rgba(142,209,209,.14),transparent 32%),radial-gradient(ellipse at 16% 79%,rgba(246,201,94,.12),transparent 34%),linear-gradient(135deg,rgba(255,253,248,.05),rgba(235,106,82,.025));mask-image:none}
+body.advanced-fluid-ready .fluid-advanced{z-index:.7;opacity:.38;mix-blend-mode:normal;filter:saturate(1.26) contrast(1.06) blur(.1px);-webkit-mask-image:radial-gradient(ellipse 58% 64% at 55% 58%,#000 0%,rgba(0,0,0,.9) 38%,rgba(0,0,0,.34) 64%,transparent 84%);mask-image:radial-gradient(ellipse 58% 64% at 55% 58%,#000 0%,rgba(0,0,0,.9) 38%,rgba(0,0,0,.34) 64%,transparent 84%)}
 .dark .fluid-canvas{opacity:.14;filter:saturate(.7) blur(.15px);mix-blend-mode:screen}
 .dark .fluid-advanced{opacity:.13;mix-blend-mode:screen}
 .hero-visual{background:linear-gradient(135deg,rgba(246,201,94,.82),rgba(235,106,82,.34) 58%,rgba(142,209,209,.38));}

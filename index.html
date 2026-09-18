@@ -108,7 +108,22 @@
     <section class="section-wrap projects-section" id="projects">
       <div class="section-heading reveal"><p class="section-kicker">02 — SELECTED PROJECTS</p><h2>不只展示结果，<br /><span>也展示如何落地。</span></h2><p class="heading-note">一个校园知识旗舰项目，加上智能交互、性能工程和接口诊断三个方向的可验证实践。</p></div>
       <div class="project-grid project-showcase-grid reveal delay-1">
-        <article class="project-card project-flagship project-card-ai" id="knowledge-hub"><span class="project-number">01 / FLAGSHIP</span><div class="flagship-layout flagship-layout-text"><div class="flagship-copy"><span class="project-status">公开测试 · 真机验证</span><h3>知脉·校园知识助手</h3><p class="project-lead">面向校园资料分散、查找困难的问题，搭建校园知识助手原型。</p><div class="project-proof compact-proof"><span><b>本人负责</b>资料整理、文档切片、RAG 检索接入、小程序交互和审核发布流程。</span><span><b>已经验证</b>资料默认私有、审核后公开；回答展示来源；完成管理员上传、索引、发布、游客问答和真机验证。</span></div><div class="project-modules" aria-label="知脉项目组成"><span><i>01</i>游客问答</span><span><i>02</i>资料管理</span><span><i>03</i>公共知识库</span><span><i>04</i>关系图谱</span></div><div class="tech-row project-core-tech"><span>微信小程序</span><span>FastAPI</span><span>RAG</span></div></div></div><div class="project-links flagship-links"><a class="project-primary-link" href="works/zhimai/">进入独立空间 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div></article>
+        <article class="project-card project-flagship project-card-ai" id="knowledge-hub">
+          <span class="project-number">01 / FLAGSHIP</span>
+          <div class="flagship-layout flagship-layout-text"><div class="flagship-copy">
+            <span class="project-status">AI 辅助开发 · 资料管理与 RAG 问答实践</span>
+            <h3>知脉 · 校园知识助手</h3>
+            <p class="project-lead">校园资料分散，查找成本较高；新上传资料需要审核，不能直接进入公共问答。</p>
+            <div class="project-proof compact-proof">
+              <span><b>重点实现</b>在 AI 工具辅助下完成资料上传、解析切片、索引、审核发布与来源展示链路。公共问答由后端固定启用公开资料过滤，仅检索 visibility='public' 且 status='ready' 的片段。</span>
+              <span><b>验证方式</b>通过小程序真机测试对比资料发布前后的检索范围；补充权限隔离测试，当前本地测试集共 11 项，全部通过，覆盖范围包括参数传递、角色权限分支与 SQL 构造。</span>
+              <span><b>当前边界</b>测试使用替身数据库与依赖覆盖；真实 JWT、真实数据库及当前线上环境尚需独立验收。</span>
+            </div>
+            <div class="project-modules" aria-label="知脉核心流程"><span><i>01</i>资料上传</span><span><i>02</i>解析索引</span><span><i>03</i>审核发布</span><span><i>04</i>来源追溯</span></div>
+            <div class="tech-row project-core-tech"><span>微信小程序</span><span>FastAPI</span><span>RAG</span></div>
+          </div></div>
+          <div class="project-links flagship-links"><a class="project-primary-link" href="works/zhimai/">进入独立空间 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div>
+        </article>
 
         <article class="project-card project-compact project-battle-card"><span class="project-number">02</span><div class="project-visual project-image-visual"><img src="media/tank-arena-showcase.webp" alt="浪尖儿 AI 坦克竞技场实际运行画面，显示有限状态机 Agent 战场与决策观察器" loading="lazy" decoding="async"><b>FSM / AI ARENA</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>可观察有限状态机 Agent 决策过程的网页坦克战场。</p><div class="project-proof compact-proof"><span><b>本人负责</b>战斗系统、FSM Agent、移动端控制、出生点防重叠与双版本部署。</span><span><b>已经验证</b>快速版可直接运行，支持追击、狙击、绕后、防守与 Boss 状态。</span></div><div class="tech-row"><span>JavaScript</span><span>Canvas</span><span>FSM Agent</span></div></div><div class="project-links"><a class="project-primary-link" href="works/tank-battle/">进入独立空间 ↗</a><a href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码</a></div></article>
 

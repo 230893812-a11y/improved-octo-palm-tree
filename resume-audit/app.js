@@ -71,6 +71,13 @@
       document.getElementById('issueQuestion'+n).textContent=gap&&gap.related_evidence?('相关原文：'+gap.related_evidence):((analysis.follow_up_questions||[])[i]||'请补充可验证的真实事实。');
     }
     document.getElementById('nextStepText').textContent=analysis.safety_note||'结果仅基于你提供的简历和岗位信息。';
+    var preview=(resumeText.value||'').trim();
+    var previewNode=document.getElementById('originalTextPreview');
+    if(previewNode)previewNode.textContent=preview.length>1200?preview.slice(0,1200)+'\n……（仅展示前 1,200 字）':preview||'未提供可展示的文本';
+    var readiness=document.getElementById('rewriteReadiness');
+    if(readiness)readiness.textContent=analysis.rewrite_readiness==='ready_for_limited_rewrite'?'已有足够证据，可进入人工确认后的有限改写。':'先补充并确认下列事实，再进行安全改写；当前不会替你编造内容。';
+    var facts=document.getElementById('rewriteFacts');
+    if(facts){facts.innerHTML='';gaps.slice(0,5).forEach(function(gap){var li=document.createElement('li');li.textContent=(gap.category||'待确认事实')+'：'+(gap.claim||gap.explanation||'请补充可验证信息');facts.appendChild(li);});}
     var badge=document.querySelector('.demo-badge');
     if(badge)badge.textContent=analysis.provider==='deepseek'?'DeepSeek 结果':'规则结果';
   }

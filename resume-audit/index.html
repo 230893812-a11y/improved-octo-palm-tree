@@ -76,19 +76,13 @@
         <article class="result-card"><span class="result-label" id="issueLabel3">优先级 03 · 表达清晰度</span><h3 id="issueTitle3">技能和经历没有连起来</h3><p id="issueBody3">技能列表中的工具或技术没有在项目经历中出现使用场景，容易被看成关键词堆砌。</p><button type="button" class="question-button" id="issueQuestion3">可能追问：在哪个项目中实际使用？</button></article>
       </div>
       <div class="next-step"><strong>下一步</strong><span id="nextStepText">补充真实事实后，系统才会生成安全改写。当前演示不会替你编造数字、职责或成果。</span></div>
-    </section>
-
-    <section class="audit-evidence" aria-labelledby="evidenceTitle">
-      <div class="evidence-heading">
-        <p class="eyebrow">INTERFACE / EVIDENCE</p>
-        <h2 id="evidenceTitle">从填写到结果，保留真实流程。</h2>
-        <p>下面的截图用于展示已完成的界面流程；它们是历史运行证据，不等于当前分析接口始终在线。</p>
-      </div>
-      <div class="evidence-gallery">
-        <figure><img src="../media/project-spaces/resume-home.jpg" alt="简历压力测试助手首页"><figcaption>01 · 首页：通用简历体检与目标岗位压力测试入口。</figcaption></figure>
-        <figure><img src="../media/project-spaces/resume-form.jpg" alt="简历压力测试助手填写页面"><figcaption>02 · 填写页：上传简历、粘贴文本和加入岗位 JD。</figcaption></figure>
-        <figure><img src="../media/project-spaces/resume-result.jpg" alt="简历压力测试助手针对性分析结果"><figcaption>03 · 结果页：按证据缺口输出针对性分析。</figcaption></figure>
-      </div>
+      <section class="evidence-compare" aria-labelledby="evidenceCompareTitle">
+        <div class="compare-heading"><div><span class="result-label">EVIDENCE / REWRITE</span><h3 id="evidenceCompareTitle">原稿证据与安全改写准备</h3></div><span class="compare-badge">需人工核实</span></div>
+        <div class="compare-grid">
+          <article class="compare-pane compare-original"><span class="compare-label">原稿文本（本次输入）</span><pre id="originalTextPreview">分析完成后显示本次输入的文字摘要。</pre></article>
+          <article class="compare-pane compare-rewrite"><span class="compare-label">保守改写准备</span><p id="rewriteReadiness">系统会先列出需要确认的事实；线上接口尚未返回经过事实核验的最终改写，因此不会自动替你补写。</p><ul id="rewriteFacts"></ul></article>
+        </div>
+      </section>
     </section>
 
     <footer class="audit-footer"><a href="../">黄鼎 · Portfolio</a><span>Evidence-first resume review · MVP</span></footer>

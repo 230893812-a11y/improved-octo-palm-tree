@@ -349,6 +349,16 @@
       }
     }
 
+    function clearWingPose() {
+      // Undo our previous additive pose BEFORE the mixer writes this frame.
+      wingBones.forEach(function (entry) {
+        entry.bone.rotation.x -= entry.lastX;
+        entry.bone.rotation.y -= entry.lastY;
+        entry.bone.rotation.z -= entry.lastZ;
+        entry.lastX = entry.lastY = entry.lastZ = 0;
+      });
+    }
+
     function applyWingPose(time) {
       if (!wingBones.length) return;
       // Keep both wing planes separated in screen space. The source model is
@@ -359,12 +369,7 @@
       var flutter = reduced ? 0 : Math.sin(time * .0052) * (mobile ? .018 : .028);
       wingBones.forEach(function (entry) {
         var bone = entry.bone;
-        // Remove the offset written on the previous frame.  The mixer has
-        // already applied the GLB track for this frame, so this preserves the
-        // authored animation instead of accumulating Euler rotations.
-        bone.rotation.x -= entry.lastX;
-        bone.rotation.y -= entry.lastY;
-        bone.rotation.z -= entry.lastZ;
+        // The mixer has now supplied the clean authored pose.
         var weight = entry.weight;
         var x = -entry.side * (opening + pulse) * weight + flutter * entry.side * weight;
         var z = entry.side * (opening * .48 + pulse * .72) * weight;
@@ -392,11 +397,9 @@
       modelScale = targetDimension / maxDimension;
       model.scale.setScalar(modelScale);
       model.position.set(-center.x * modelScale, -center.y * modelScale, -center.z * modelScale);
-      // Restore the original near-profile camera angle. The wing visibility
-      // fix remains active independently, so returning to this angle does not
-      // undo the double-sided materials or fill light.
-      model.rotation.y = -.08;
-      model.rotation.x = .04;
+      // Oblique presentation reduces overlap of the near and far wings.
+      model.rotation.y = -.48;
+      model.rotation.x = .16;
       model.traverse(function (object) {
         if (!object.isMesh) return;
         object.frustumCulled = false;
@@ -518,6 +521,7 @@
       particles.material.opacity = .32 + state.energy * .18;
       keyLight.intensity = 3.1 + state.energy * 1.5 + state.pulse * 1.1;
       if (action) syncWingAction();
+      clearWingPose();
       if (mixer && modelReady) mixer.update(dt);
       applyWingPose(time);
     }

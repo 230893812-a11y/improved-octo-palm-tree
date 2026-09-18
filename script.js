@@ -478,12 +478,23 @@ const projectGrid = document.querySelector('.project-showcase-grid');
 if (projectGrid && !projectGrid.querySelector('.project-resume-audit-card')) {
   const card = document.createElement('article');
   card.className = 'project-card project-compact project-resume-audit-card';
-  card.dataset.spaceHref = 'resume-audit/';
+  card.dataset.spaceHref = 'works/resume-audit/';
   card.tabIndex = 0;
   card.setAttribute('role', 'link');
-  card.setAttribute('aria-label', '打开简历压力测试助手');
-  card.innerHTML = `<span class="project-number">07</span><div class="project-visual resume-audit-visual" aria-hidden="true"><span class="resume-audit-line">LIVE / DEEPSEEK API</span><span class="resume-audit-grid"></span><b>STRUCTURE · EVIDENCE · MATCH</b></div><div><span class="project-status">在线分析 · CloudBase</span><h3>简历压力测试助手</h3><p>先做规则检查，再输出结构、证据和岗位匹配分析。</p><div class="project-proof compact-proof"><span><b>分析边界</b>文件在浏览器内存中读取，提交分析后才发送提取文本。</span><span><b>已经接入</b>CloudBase 分析接口与 DeepSeek 引擎，结果按结构、证据和匹配维度输出。</span></div><div class="tech-row"><span>CloudBase</span><span>DeepSeek</span><span>Evidence</span></div></div><div class="project-links"><a class="project-primary-link" href="resume-audit/">体验在线分析 ↗</a><a href="resume-audit/README.md">查看说明</a></div>`;
+  card.setAttribute('aria-label', '打开简历压力测试助手项目说明');
+card.innerHTML = `<span class="project-number">07</span><div class="project-visual resume-audit-visual" aria-hidden="true"><span class="resume-audit-line">LIVE / DEEPSEEK API</span><span class="resume-audit-grid"></span><b>STRUCTURE · EVIDENCE · MATCH</b></div><div><span class="project-status">在线分析 · CloudBase</span><h3>简历压力测试助手</h3><p>先做规则检查，再输出结构、证据和岗位匹配分析。</p><div class="project-proof compact-proof"><span><b>分析边界</b>文件在浏览器内存中读取，提交分析后才发送提取文本。</span><span><b>已经接入</b>CloudBase 分析接口与 DeepSeek 引擎，结果按结构、证据和匹配维度输出。</span></div><div class="tech-row"><span>CloudBase</span><span>DeepSeek</span><span>Evidence</span></div></div><div class="project-links"><a class="project-primary-link" href="resume-audit/">体验在线分析 ↗</a><a href="works/resume-audit/">查看说明</a></div>`;
   projectGrid.appendChild(card);
+  card.addEventListener('click', (event) => {
+    if (event.target.closest('a,button,input,select,textarea')) return;
+    window.location.href = card.dataset.spaceHref;
+  });
+  card.addEventListener('keydown', (event) => {
+    if (event.target !== card) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      window.location.href = card.dataset.spaceHref;
+    }
+  });
 }
 projectSpaceMap.forEach(([selector, href]) => {
   const card = document.querySelector(selector);

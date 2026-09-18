@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="简历压力测试助手：在 AI 工具辅助下实现文件文本提取、通用与岗位定向分析，以结构、证据和匹配三个维度帮助发现简历表达缺口。">
+  <title>简历压力测试助手 · 项目说明</title>
+  <link rel="stylesheet" href="../space.css">
+  <style>
+    :root{--space-bg:#f5f4ee;--space-text:#263e3d;--space-muted:#5e706e;--space-line:#d6dcd6;--space-accent:#a43e2e}
+    .space-hero h1{font-size:clamp(38px,6.6vw,78px);line-height:1.18;letter-spacing:-.04em}
+    .space-hero{margin-top:80px}.space-button-primary{color:#fff}
+    .overview{padding:32px;margin:36px 0 56px;border:1px solid var(--space-line);border-radius:24px;background:linear-gradient(130deg,#ece4f4,#fffdf7)}
+    .overview-label{color:var(--space-accent);font-size:12px;letter-spacing:.14em}
+    .pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:24px}
+    .pillars h2{font-size:22px;margin:0 0 12px}.pillars p{color:var(--space-muted);line-height:1.8;margin:0}
+    .space-section p+p{margin-top:16px}.space-section ul,.space-section ol{padding-left:22px;margin:0;color:var(--space-muted);line-height:1.9}
+    .space-section li+li{margin-top:12px}.note{font-size:13px}
+    a:focus-visible{outline:3px solid var(--space-accent);outline-offset:5px}
+    @media(max-width:720px){.pillars{grid-template-columns:1fr}.overview{padding:24px}.space-hero{margin-top:56px}}
+  </style>
+</head>
+<body>
+<main class="space-page"><div class="space-shell">
+  <nav class="space-nav" aria-label="项目导航"><a class="space-back" href="../../#projects">← 返回作品集</a><span class="space-index">PROJECT / RESUME AUDIT</span></nav>
+  <header class="space-hero">
+    <p class="space-kicker">AI 辅助开发 · 简历证据分析实践</p>
+    <h1>简历压力测试助手</h1>
+    <p>先找出表达缺口，再讨论如何修改。围绕简历结构、经历证据与岗位匹配，帮助求职者看清“写了什么”和“还需要补充什么”。</p>
+    <div class="space-actions"><a class="space-button space-button-primary" href="../../resume-audit/">体验在线分析 ↗</a><a class="space-button" href="#implementation">了解实现与边界</a></div>
+    <div class="space-tags"><span>浏览器文本提取</span><span>CloudBase 接口</span><span>DeepSeek API</span></div>
+  </header>
+  <section class="overview" aria-label="分析维度">
+    <p class="overview-label">STRUCTURE · EVIDENCE · MATCH</p>
+    <div class="pillars">
+      <div><h2>01 / 结构</h2><p>检查信息组织与表达完整度，帮助读者更快理解经历。</p></div>
+      <div><h2>02 / 证据</h2><p>关注职责、行动和成果的依据；缺少描述不等于缺少能力。</p></div>
+      <div><h2>03 / 匹配</h2><p>结合目标岗位 JD，识别简历中已体现的关联与待补充的信息。</p></div>
+    </div>
+  </section>
+  <section class="space-section"><h2>解决什么问题</h2><div><p>初次写简历时，容易罗列技术名词或笼统描述“参与项目”，却没有说清个人职责、具体行动与交付结果。直接让模型润色，又可能得到缺乏事实依据的漂亮句子。</p><p>本项目先做诊断与证据整理，让用户确认真实经历，再准备后续修改；不把模型评分当作招聘结论。</p></div></section>
+  <section class="space-section" id="implementation"><h2>重点实现</h2><div><p>在 AI 工具辅助下搭建并迭代网页、分析接口与结果展示，串联文件读取、文本提取、通用分析、岗位定向分析和中文错误提示。</p><ul><li>支持粘贴文本，或在浏览器中提取 TXT、DOCX、文字型 PDF 的内容。</li><li>通用模式检查简历表达；岗位定向模式结合用户输入的 JD 分析匹配证据。</li><li>通过 CloudBase 分析接口调用 DeepSeek，按结构、证据和匹配维度展示结果。</li><li>展示原稿片段与待确认事实，帮助用户为后续安全改写做准备。</li></ul></div></section>
+  <section class="space-section"><h2>一次分析如何完成</h2><ol><li>选择文件或粘贴简历，检查提取出的文本是否完整。</li><li>选择通用模式，或填写目标岗位 JD 进入定向模式。</li><li>主动提交后，前端把简历文本及适用的 JD 发送给分析接口。</li><li>查看分析结果，回到真实经历补充证据，由本人确认修改方向。</li></ol></section>
+  <section class="space-section"><h2>验证方式与记录</h2><div><p>开发过程中已记录手机端通用分析与 JD 定向分析成功的反馈，并围绕文件提取、PDF 换行、移动端字号和错误提示进行迭代。</p><p>这些是特定时间和输入下的运行记录，不代表所有文件格式、设备、网络及模型输出都已完成验收，也不证明分析接口持续在线。</p></div></section>
+  <section class="space-section"><h2>隐私与数据流向</h2><div><p>文件在浏览器内存中读取；提交分析时会向后端发送提取的简历文本，岗位定向模式还会发送 JD。分析涉及后端及模型服务，不是完全离线处理。</p><p>建议使用脱敏文本：删除姓名、电话、邮箱、住址、证件号码及不宜外传的信息。不在此承诺后端或第三方“绝不留存”，实际留存规则需结合服务配置与平台政策核实。</p></div></section>
+  <section class="space-section"><h2>当前边界</h2><ul><li>当前线上展示的是诊断、原稿片段与改写准备，不是完整简历自动重写，也不是逐字高亮的 Diff 对比工具。</li><li>扫描 PDF、图片与复杂排版可能无法正确提取；当前页面没有 OCR 识别能力，文字型 PDF 也需要人工核对。</li><li>模型可能误判或遗漏信息；证据不足不能直接推断能力不足，更不能补造数字、职责或成果。</li><li>本工具不等于企业 ATS 实测，不提供录用保证；网络、接口配额和模型响应时间仍会影响体验。</li></ul></section>
+  <div class="space-actions"><a class="space-button space-button-primary" href="../../resume-audit/">体验在线分析 ↗</a><a class="space-button" href="../../#projects">返回作品集</a></div>
+  <p class="note">项目说明更新于 2026-09-18。本页为项目介绍，不是分析接口实时状态监控。</p>
+</div></main>
+</body>
+</html>

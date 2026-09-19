@@ -94,8 +94,6 @@ huang-ding-online-resume-final-v7/
 │  ├─ style.css
 │  ├─ game.js
 │  └─ README.md
-├─ certificate-3d-mockup.html
-├─ certificate-vertical-glass-mockup.html
 ├─ .nojekyll
 └─ README.md
 ```

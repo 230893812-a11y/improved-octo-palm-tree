@@ -26,7 +26,7 @@
 - “浪尖儿坦克大战”卡片可直接打开 GitHub Pages 在线游戏。
 - 精选项目区新增“知脉·校园知识库智能问答”，通过新窗口打开在线 RAG 全库图谱页面：`https://zhimai-rag-knowledge.pages.dev/全库图谱?refresh=1`；简历首屏也提供“体验校园 AI 助手”快捷入口。当前采用外链方式接入，避免 GitHub Pages 静态站点与 Cloudflare Pages 应用之间的跨域嵌入问题。
 - 游戏入口采用“浪尖儿·战场”启动卡片：HD 标识、播放图标、在线状态和启动按钮集中在同一张卡片中。
-- 一键打印 / 导出 PDF、复制邮箱、键盘操作、阅读模式和动画降级；首屏提供邮箱、电话与 GitHub 快捷入口。
+- 桌面端提供项目、PDF 简历和 GitHub 入口；手机首屏只保留“查看项目”和“下载简历”，邮箱、电话与微信集中放在联系区。公开 PDF 位于 `assets/resume/huang-ding-resume.pdf`。
 
 ## 本地预览与部署
 

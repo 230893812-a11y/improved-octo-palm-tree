@@ -12,10 +12,10 @@
   <link rel="preload" href="phoenix/models/phoenix-bird.glb" as="fetch" type="model/gltf-binary" crossorigin fetchpriority="high">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23263d3c'/%3E%3Cpath d='M16 44V16h8v20h24v8z' fill='%23f7f4ee'/%3E%3Ccircle cx='50' cy='44' r='4' fill='%23eb6a52'/%3E%3C/svg%3E" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260918-compact-music2" />
+  <link rel="stylesheet" href="style.css?v=20260919-mobile-focus1" />
   <link rel="stylesheet" href="project-showcase.css?v=20260913-clean1" />
   <link rel="stylesheet" href="project-type-labels.css?v=20260910-preview1" />
-  <link rel="stylesheet" href="project-polish.css?v=20260910-polish1" />
+  <link rel="stylesheet" href="project-polish.css?v=20260919-project-priority1" />
   <link rel="stylesheet" href="phoenix/phoenix-stage.css?v=20260913-3d-only1" />
 </head>
 <body>
@@ -28,7 +28,7 @@
       <span class="brand-mark">L<span>.</span></span>
       <span class="brand-copy">HUANG DING<small>PORTFOLIO / 2026</small></span>
     </a>
-    <nav class="nav" aria-label="主导航">
+    <nav class="nav" id="mainNav" aria-label="主导航">
       <a href="#about">关于我</a>
       <a href="#experience">经历</a>
       <a href="#projects">项目</a>
@@ -40,7 +40,8 @@
     <div class="top-actions">
       <button class="icon-button" id="themeToggle" type="button" aria-label="切换深色模式" title="切换主题">◐</button>
       <button class="reader-mode-button" id="readerMode" type="button" aria-pressed="false">阅读模式</button>
-      <button class="download-button" id="printResume" type="button"><span>下载简历</span><i>↗</i></button>
+      <a class="download-button top-resume-download" href="assets/resume/huang-ding-resume.pdf?v=20260919" download="黄鼎-个人简历.pdf"><span>下载简历</span><i>↓</i></a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开导航菜单"><span></span><span></span><span></span></button>
     </div>
   </header>
 
@@ -53,17 +54,15 @@
         <p class="hero-target" aria-label="目标方向：AI 应用开发、Web 开发"><b>目标方向</b><span>AI 应用开发</span><span>Web 开发</span></p>
         <h1>把想法做出来，<br /><em>再一步步改好。</em></h1>
         <p class="hero-intro">我想参加 AI 应用和 Web 开发方向的项目或竞赛。这里放的是我做过的作品、测试记录，以及目前还没解决好的问题。</p>
-        <div class="hero-facts" aria-label="代表项目"><span><b>代表项目</b><a href="works/zhimai/">知脉 · 校园知识助手</a></span><span><a href="resume-audit/">简历证据分析工具</a></span><span><a href="works/tank-battle/">FSM 坦克竞技场</a></span></div>
+        <div class="hero-facts" aria-label="代表项目"><b>代表项目</b><a href="works/zhimai/">知脉</a><a href="works/resume-audit/">简历分析</a><a href="works/tank-battle/">FSM 坦克</a></div>
         <div class="hero-actions">
-          <a class="primary-button" href="#experience">阅读简历 <span>↓</span></a>
-          <a class="outline-button ai-cta" href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看作品集源码 <span>↗</span></a>
-          <a class="text-button hero-project-link" href="#projects">查看项目 <span>↗</span></a>
-          <button class="text-button" id="copyEmail" type="button">复制邮箱 <span>⌘</span></button>
+          <a class="primary-button hero-project-link" href="#projects">查看项目 <span>↓</span></a>
+          <a class="outline-button hero-resume-download" href="assets/resume/huang-ding-resume.pdf?v=20260919" download="黄鼎-个人简历.pdf">下载简历 <span>↓</span></a>
+          <a class="text-button hero-source-link" href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看源码 <span>↗</span></a>
         </div>
         <div class="hero-contact-links" aria-label="快捷联系方式">
           <a href="mailto:230893812@qq.com">邮箱 · 230893812@qq.com</a>
           <a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y ↗</a>
-          <a href="tel:15362928293">电话 · 153 6292 8293</a>
         </div>
       </div>
       <div class="hero-flight" aria-label="凤凰滚动飞行区">
@@ -125,9 +124,11 @@
           <div class="project-links flagship-links"><a class="project-primary-link" href="works/zhimai/">进入独立空间 ↗</a><a href="https://zhimai-rag-knowledge.pages.dev/" target="_blank" rel="noreferrer">浏览公开资料</a><a href="https://zhimai-rag-knowledge.pages.dev/全屏知识图谱/" target="_blank" rel="noreferrer">关系图谱</a></div>
         </article>
 
-        <article class="project-card project-compact project-battle-card"><span class="project-number">02</span><div class="project-visual project-image-visual"><img src="media/tank-arena-showcase.webp" alt="浪尖儿 AI 坦克竞技场实际运行画面，显示有限状态机 Agent 战场与决策观察器" loading="lazy" decoding="async"><b>FSM / AI ARENA</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>一个可以直接观察 Agent 状态变化的网页坦克游戏。</p><div class="project-proof compact-proof"><span><b>我做的部分</b>战斗系统、FSM Agent、移动端控制、出生点防重叠和两个网页版本的部署。</span><span><b>当前结果</b>快速版可以直接运行，Agent 会在追击、狙击、绕后、防守和 Boss 状态之间切换。</span></div><div class="tech-row"><span>JavaScript</span><span>Canvas</span><span>FSM Agent</span></div></div><div class="project-links"><a class="project-primary-link" href="works/tank-battle/">进入独立空间 ↗</a><a href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码</a></div></article>
+        <article class="project-card project-compact project-battle-card project-featured-secondary"><span class="project-number">03</span><div class="project-visual project-image-visual"><img src="media/tank-arena-showcase.webp" alt="浪尖儿 AI 坦克竞技场实际运行画面，显示有限状态机 Agent 战场与决策观察器" loading="lazy" decoding="async"><b>FSM / AI ARENA</b></div><div><span class="project-status">已上线 · 可游玩</span><h3>浪尖儿战场</h3><p>一个可以直接观察 Agent 状态变化的网页坦克游戏。</p><div class="project-proof compact-proof"><span><b>我做的部分</b>战斗系统、FSM Agent、移动端控制、出生点防重叠和两个网页版本的部署。</span><span><b>当前结果</b>快速版可以直接运行，Agent 会在追击、狙击、绕后、防守和 Boss 状态之间切换。</span></div><div class="tech-row"><span>JavaScript</span><span>Canvas</span><span>FSM Agent</span></div></div><div class="project-links"><a class="project-primary-link" href="works/tank-battle/">进入独立空间 ↗</a><a href="tank-battle-fast/index.html?v=20260910-spawnfix1" target="_blank" rel="noreferrer">立即游玩</a><a href="https://github.com/230893812-a11y/legendary-goggles" target="_blank" rel="noreferrer">查看源码</a></div></article>
 
-        <article class="project-card project-compact project-portfolio-card"><span class="project-number">03</span><div class="project-visual project-image-visual"><img src="media/phoenix-stage-capture.png" alt="Phoenix Portfolio 凤凰交互区实际画面" loading="lazy" decoding="async"><b>PERFORMANCE CASE</b></div><div><span class="project-status">当前作品 · 已验证</span><h3>Phoenix Portfolio</h3><p>这个网站本身也是项目，我用它练习 3D 交互和手机端适配。</p><div class="project-proof compact-proof"><span><b>我做的部分</b>Phoenix 交互、页面结构、资源本地化、响应式布局和加载调整。</span><span><b>怎么改进</b>在保留凤凰效果的同时压缩图片、暂停离屏动画，并为性能较弱的设备降低渲染负担。</span></div><div class="tech-row"><span>Three.js</span><span>WebGL</span><span>性能优化</span></div></div><div class="project-links"><a class="project-primary-link" href="works/phoenix/">进入独立空间 ↗</a><a href="#top">查看当前作品 ↑</a><a href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看实现</a></div></article>
+        <div class="project-subsection-heading"><span>MORE PRACTICE</span><h3>更多实践</h3><p>这些项目保留完整入口，首页先用更紧凑的方式展示。</p></div>
+
+        <article class="project-card project-compact project-portfolio-card"><span class="project-number">04</span><div class="project-visual project-image-visual"><img src="media/phoenix-stage-capture.png" alt="Phoenix Portfolio 凤凰交互区实际画面" loading="lazy" decoding="async"><b>PERFORMANCE CASE</b></div><div><span class="project-status">当前作品 · 已验证</span><h3>Phoenix Portfolio</h3><p>这个网站本身也是项目，我用它练习 3D 交互和手机端适配。</p><div class="project-proof compact-proof"><span><b>我做的部分</b>Phoenix 交互、页面结构、资源本地化、响应式布局和加载调整。</span><span><b>怎么改进</b>在保留凤凰效果的同时压缩图片、暂停离屏动画，并为性能较弱的设备降低渲染负担。</span></div><div class="tech-row"><span>Three.js</span><span>WebGL</span><span>性能优化</span></div></div><div class="project-links"><a class="project-primary-link" href="works/phoenix/">进入独立空间 ↗</a><a href="#top">查看当前作品 ↑</a><a href="https://github.com/230893812-a11y/improved-octo-palm-tree" target="_blank" rel="noreferrer">查看实现</a></div></article>
 
         <article class="project-card project-compact project-api-card"><span class="project-number">04</span><div class="project-visual api-visual" aria-hidden="true"><span><i>AUTH</i><b>PASS</b></span><span><i>MODEL LIST</i><b>PASS</b></span><span><i>STREAMING</i><b>PASS</b></span><span class="api-warning"><i>FUNCTION CALLING</i><b>WARNING</b></span><span class="api-check"><i>MODEL CONSISTENCY</i><b>CHECK</b></span></div><div><span class="project-status">已开源 · 本地工具</span><h3>OpenAI 兼容 API 诊断工具</h3><p>用命令行检查接口认证、流式响应和常见协议能力。</p><div class="project-proof compact-proof"><span><b>我做的部分</b>CLI、HTTP 探针、错误分类、评分报告、重试策略和单元测试。</span><span><b>能检查什么</b>模型列表、流式响应、Function Calling、结构化输出和响应字段；这些结果不能证明后端模型的真实身份。</span></div><div class="tech-row"><span>Python</span><span>SSE</span><span>Function Calling</span></div></div><div class="project-links"><a class="project-primary-link" href="works/api-diagnostic/">进入独立空间 ↗</a><a href="https://github.com/230893812-a11y/miniature-fiesta" target="_blank" rel="noreferrer">查看源码</a><a href="https://github.com/230893812-a11y/miniature-fiesta#readme" target="_blank" rel="noreferrer">检测说明</a></div></article>
 
@@ -241,7 +242,6 @@
     <figure class="lightbox-figure"><img id="lightboxImage" alt="高清素材预览"><figcaption id="lightboxCaption"></figcaption></figure>
     <button class="lightbox-next" type="button" aria-label="下一张">›</button>
   </div>
-  <div class="toast" id="toast" role="status" aria-live="polite">邮箱已复制到剪贴板 ✓</div>
   <!-- Version query keeps the 3D-only model script fresh in static hosting. -->
   <script src="phoenix/phoenix-model.js?v=20260918-wing-order1"></script>
   <script>
@@ -305,7 +305,7 @@
       }).catch(function () { setStatus('3D 凤凰不可用 · 可继续浏览'); });
     }());
   </script>
-  <script src="script.js?v=20260919-human-copy1"></script>
+  <script src="script.js?v=20260919-mobile-focus1"></script>
   <script>
     (function () {
       var projects = document.getElementById('projects');

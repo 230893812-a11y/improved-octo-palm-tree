@@ -1,9 +1,8 @@
 const root = document.body;
 const themeToggle = document.querySelector('#themeToggle');
-const printResume = document.querySelector('#printResume');
-const copyEmail = document.querySelector('#copyEmail');
-const toast = document.querySelector('#toast');
 const readerMode = document.querySelector('#readerMode');
+const navToggle = document.querySelector('#navToggle');
+const mainNav = document.querySelector('#mainNav');
 
 const savedTheme = localStorage.getItem('resume-theme');
 if (savedTheme === 'dark') root.classList.add('dark');
@@ -12,14 +11,16 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('resume-theme', root.classList.contains('dark') ? 'dark' : 'light');
 });
 
-printResume.addEventListener('click', () => window.print());
-
-copyEmail.addEventListener('click', async () => {
-  const email = '230893812@qq.com';
-  try { await navigator.clipboard.writeText(email); } catch { /* 兼容不支持剪贴板 API 的浏览器 */ }
-  toast.classList.add('show');
-  window.setTimeout(() => toast.classList.remove('show'), 2200);
-});
+function setMobileNav(open) {
+  if (!navToggle || !mainNav) return;
+  mainNav.classList.toggle('is-open', open);
+  navToggle.classList.toggle('is-open', open);
+  navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.setAttribute('aria-label', open ? '关闭导航菜单' : '打开导航菜单');
+}
+navToggle?.addEventListener('click', () => setMobileNav(!mainNav?.classList.contains('is-open')));
+mainNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileNav(false)));
+document.addEventListener('keydown', event => { if (event.key === 'Escape') setMobileNav(false); });
 
 readerMode?.addEventListener('click', () => {
   const enabled = root.classList.toggle('reader-mode');
@@ -439,12 +440,12 @@ musicStatus.textContent = '点击播放 · 按需加载音乐';
 const aiBot = document.querySelector('#aiBot');
 // Repair legacy card markup from older portfolio revisions at runtime: an
 // orphan project wrapper must not occupy a visible grid slot, and the daily
-// automation card follows the restored knowledge-workflow card as project 06.
+// automation card follows the restored knowledge-workflow card as project 07.
 document.querySelectorAll('.project-showcase-grid > article').forEach((card) => {
   if (!card.querySelector('h3')) card.remove();
 });
 document.querySelectorAll('.project-ai-daily-card .project-number').forEach((number) => {
-  number.textContent = '06';
+  number.textContent = '07';
 });
 const aiBotToggle = document.querySelector('#aiBotToggle');
 const aiBotPanel = document.querySelector('#aiBotPanel');
@@ -477,13 +478,13 @@ const projectSpaceMap = [
 const projectGrid = document.querySelector('.project-showcase-grid');
 if (projectGrid && !projectGrid.querySelector('.project-resume-audit-card')) {
   const card = document.createElement('article');
-  card.className = 'project-card project-compact project-resume-audit-card';
+  card.className = 'project-card project-compact project-resume-audit-card project-featured-secondary';
   card.dataset.spaceHref = 'works/resume-audit/';
   card.tabIndex = 0;
   card.setAttribute('role', 'link');
   card.setAttribute('aria-label', '打开简历压力测试助手项目说明');
-  card.innerHTML = `<span class="project-number">07</span><div class="project-visual resume-audit-visual" aria-hidden="true"><span class="resume-audit-line">LIVE / DEEPSEEK API</span><span class="resume-audit-grid"></span><b>STRUCTURE · EVIDENCE · MATCH</b></div><div><span class="project-status">在线分析 · CloudBase</span><h3>简历压力测试助手</h3><p>先检查简历里的表达和证据，再结合岗位 JD 找出需要补充的内容。</p><div class="project-proof compact-proof"><span><b>文件处理</b>浏览器先读取文件；点击分析后，页面才会发送提取出的文字。</span><span><b>分析方式</b>CloudBase 接口调用 DeepSeek，结果按结构、证据和岗位匹配分组展示。</span></div><div class="tech-row"><span>CloudBase</span><span>DeepSeek</span><span>Evidence</span></div></div><div class="project-links"><a class="project-primary-link" href="resume-audit/">体验在线分析 ↗</a><a href="works/resume-audit/">查看说明</a></div>`;
-  projectGrid.appendChild(card);
+  card.innerHTML = `<span class="project-number">02</span><div class="project-visual resume-audit-visual" aria-hidden="true"><span class="resume-audit-line">LIVE / DEEPSEEK API</span><span class="resume-audit-grid"></span><b>STRUCTURE · EVIDENCE · MATCH</b></div><div><span class="project-status">在线分析 · CloudBase</span><h3>简历压力测试助手</h3><p>先检查简历里的表达和证据，再结合岗位 JD 找出需要补充的内容。</p><div class="project-proof compact-proof"><span><b>文件处理</b>浏览器先读取文件；点击分析后，页面才会发送提取出的文字。</span><span><b>分析方式</b>CloudBase 接口调用 DeepSeek，结果按结构、证据和岗位匹配分组展示。</span></div><div class="tech-row"><span>CloudBase</span><span>DeepSeek</span><span>Evidence</span></div></div><div class="project-links"><a class="project-primary-link" href="resume-audit/">体验在线分析 ↗</a><a href="works/resume-audit/">查看说明</a></div>`;
+  projectGrid.insertBefore(card, projectGrid.querySelector('.project-battle-card'));
   card.addEventListener('click', (event) => {
     if (event.target.closest('a,button,input,select,textarea')) return;
     window.location.href = card.dataset.spaceHref;
@@ -496,6 +497,18 @@ if (projectGrid && !projectGrid.querySelector('.project-resume-audit-card')) {
     }
   });
 }
+[
+  ['#knowledge-hub', '01 / FLAGSHIP'],
+  ['.project-resume-audit-card', '02'],
+  ['.project-battle-card', '03'],
+  ['.project-portfolio-card', '04'],
+  ['.project-api-card', '05'],
+  ['.project-knowledge-workflow-card', '06'],
+  ['.project-ai-daily-card', '07'],
+].forEach(([selector, value]) => {
+  const number = document.querySelector(`${selector} .project-number`);
+  if (number) number.textContent = value;
+});
 projectSpaceMap.forEach(([selector, href]) => {
   const card = document.querySelector(selector);
   if (!card) return;

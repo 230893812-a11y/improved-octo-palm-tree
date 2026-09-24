@@ -397,9 +397,10 @@
       modelScale = targetDimension / maxDimension;
       model.scale.setScalar(modelScale);
       model.position.set(-center.x * modelScale, -center.y * modelScale, -center.z * modelScale);
-      // Oblique presentation reduces overlap of the near and far wings.
-      model.rotation.y = -.48;
-      model.rotation.x = .16;
+      // Phones need a little more three-quarter view so the far (left) wing
+      // stays separated from the torso inside the narrow hero stage.
+      model.rotation.y = mobile ? -.62 : -.48;
+      model.rotation.x = mobile ? .04 : .16;
       model.traverse(function (object) {
         if (!object.isMesh) return;
         object.frustumCulled = false;

@@ -360,7 +360,10 @@
     }
 
     function applyWingPose(time) {
-      if (!wingBones.length) return;
+      // The GLB animation already keeps both wings aligned. On narrow mobile
+      // screens, adding a second Euler rotation to the mirrored bone chains
+      // causes visible left/right drift, so let the authored track drive them.
+      if (mobile || !wingBones.length) return;
       // Keep both wing planes separated in screen space. The source model is
       // authored as a side-flying bird, so the original subtle offset allowed
       // the far wing to disappear behind the torso for much of the animation.

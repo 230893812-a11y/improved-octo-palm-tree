@@ -65,9 +65,18 @@
           <a href="https://github.com/230893812-a11y" target="_blank" rel="noreferrer">GitHub · 230893812-a11y ↗</a>
         </div>
       </div>
-      <div class="hero-flight" aria-label="液体背景视觉区">
-        <div class="hero-visual phoenix-only reveal delay-1" aria-label="黑色液体背景视觉区">
+      <div class="hero-flight" aria-label="凤凰滚动飞行区">
+        <div class="hero-visual phoenix-only reveal delay-1" aria-label="可交互凤凰 3D 视觉区">
           <div class="visual-grid"></div><div class="visual-orbit visual-orbit-one"></div><div class="visual-orbit visual-orbit-two"></div>
+          <div class="phoenix-decor" aria-hidden="true">
+            <i class="ember ember-1"></i><i class="ember ember-2"></i><i class="ember ember-3"></i><i class="ember ember-4"></i><i class="ember ember-5"></i><i class="ember ember-6"></i>
+            <span class="phoenix-flare flare-left"></span><span class="phoenix-flare flare-right"></span>
+            <span class="phoenix-spark spark-one">✦</span><span class="phoenix-spark spark-two">✦</span>
+          </div>
+          <div id="phoenixStage" class="phoenix-stage" aria-label="凤凰互动舞台"></div>
+          <div class="phoenix-hud" aria-hidden="true"><span>PHOENIX / INTERACTIVE</span></div>
+          <div class="phoenix-instruction" aria-live="polite"><span class="phoenix-status-dot"></span><span id="phoenixStatus">加载凤凰视觉…</span></div>
+          <div class="phoenix-controls"><button class="phoenix-control" id="phoenixReplay" type="button">展翼一次 <span>↗</span></button><button class="phoenix-control" id="phoenixToggle" type="button" aria-pressed="false">暂停动画</button><button class="phoenix-control phoenix-skip" id="phoenixSkip" type="button">跳过凤凰动画</button></div>
           <div class="visual-core"><span>HD</span><small>LEARN / BUILD / GROW</small></div>
           <div class="visual-note note-bottom">ZHONGSHAN · 2026</div>
         </div>
@@ -233,6 +242,69 @@
     <figure class="lightbox-figure"><img id="lightboxImage" alt="高清素材预览"><figcaption id="lightboxCaption"></figcaption></figure>
     <button class="lightbox-next" type="button" aria-label="下一张">›</button>
   </div>
+  <!-- Version query keeps the 3D-only model script fresh in static hosting. -->
+  <script src="phoenix/phoenix-model.js?v=20260924-mobile-wing5"></script>
+  <script>
+    (function () {
+      var status = document.querySelector('#phoenixStatus');
+      var toggle = document.querySelector('#phoenixToggle');
+      var replay = document.querySelector('#phoenixReplay');
+      var skip = document.querySelector('#phoenixSkip');
+      var api = null;
+      var paused = false;
+      var pendingBurst = false;
+      var pendingSkip = false;
+      function setStatus(text) { if (status) status.textContent = text; }
+      function setPaused(next) {
+        paused = next;
+        if (api) (paused ? api.pause : api.resume)();
+        window.dispatchEvent(new CustomEvent('resume-motion-state', { detail: { paused: paused } }));
+        if (toggle) {
+          toggle.textContent = paused ? '继续动画' : '暂停动画';
+          toggle.setAttribute('aria-pressed', String(paused));
+        }
+        setStatus(paused ? '动画已暂停 · 点击继续' : (api && api.renderer ? '鼠标/触摸跟随 · 滚动俯冲' : '3D 凤凰不可用'));
+      }
+      if (toggle) toggle.addEventListener('click', function () { setPaused(!paused); });
+      if (replay) replay.addEventListener('click', function () {
+        if (api && api.burst) api.burst();
+        else pendingBurst = true;
+        setStatus('展翼动作已触发 · 继续探索');
+      });
+      if (skip) skip.addEventListener('click', function () {
+        if (api && api.skipIntro) api.skipIntro();
+        else pendingSkip = true;
+        skip.disabled = true;
+        skip.textContent = '已跳过';
+        setStatus('已跳过凤凰动画 · 正在打开简历');
+        var experience = document.querySelector('#experience');
+        if (experience) {
+          window.setTimeout(function () {
+            experience.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+          }, 40);
+        }
+      });
+      if (!window.PhoenixHero) { setStatus('3D 凤凰不可用 · 当前浏览器未加载 WebGL'); return; }
+      window.phoenixMount = window.PhoenixHero.mount({
+        container: '#phoenixStage', scrollTrigger: '#about', scrollEnd: '+=480',
+        scrollDistanceDesktop: 480, scrollDistanceMobile: 430,
+        clickable: true, debug: false
+      });
+      var loadingTimer = window.setTimeout(function () {
+        if (!api) setStatus('3D 凤凰不可用 · 网络较慢，仍可继续浏览');
+      }, 6000);
+      Promise.resolve(window.phoenixMount).then(function (instance) {
+        window.clearTimeout(loadingTimer);
+        api = instance;
+        window.phoenixApi = instance;
+        if (pendingBurst && api && api.burst) { api.burst(); pendingBurst = false; }
+        if (pendingSkip && api && api.skipIntro) { api.skipIntro(); pendingSkip = false; }
+        if (paused && api && api.pause) api.pause();
+        if (api && api.renderer) setStatus(api.isModel ? '鼠标/触摸跟随 · 滚动俯冲' : '备用凤凰视觉 · 滚动俯冲');
+        else setStatus('3D 凤凰不可用 · 可继续浏览');
+      }).catch(function () { setStatus('3D 凤凰不可用 · 可继续浏览'); });
+    }());
+  </script>
   <script src="script.js?v=20260919-mobile-focus1"></script>
   <script>
     (function () {

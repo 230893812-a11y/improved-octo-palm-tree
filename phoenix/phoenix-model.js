@@ -360,10 +360,7 @@
     }
 
     function applyWingPose(time) {
-      // The GLB animation already keeps both wings aligned. On narrow mobile
-      // screens, adding a second Euler rotation to the mirrored bone chains
-      // causes visible left/right drift, so let the authored track drive them.
-      if (mobile || !wingBones.length) return;
+      if (!wingBones.length) return;
       // Keep both wing planes separated in screen space. The source model is
       // authored as a side-flying bird, so the original subtle offset allowed
       // the far wing to disappear behind the torso for much of the animation.
@@ -374,8 +371,8 @@
         var bone = entry.bone;
         // The mixer has now supplied the clean authored pose.
         var weight = entry.weight;
-        var x = -entry.side * (opening + pulse) * weight + flutter * entry.side * weight;
-        var z = entry.side * (opening * .48 + pulse * .72) * weight;
+        var x = mobile ? flutter * entry.side * weight : -entry.side * (opening + pulse) * weight + flutter * entry.side * weight;
+        var z = entry.side * (mobile ? .12 : (opening * .48 + pulse * .72)) * weight;
         bone.rotation.x += x;
         bone.rotation.z += z;
         entry.lastX = x;

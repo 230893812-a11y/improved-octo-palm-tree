@@ -1,3 +1,4 @@
+// DEPLOY_VERSION_20261004: redeploy parser dependencies and PDF extraction runtime
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
@@ -818,3 +819,5 @@ server.listen(PORT, "0.0.0.0", () => {
   console.log(`Resume audit API is running at http://localhost:${PORT}`);
   console.log(`Test endpoint: POST http://localhost:${PORT}/api/analyze`);
 });
+
+

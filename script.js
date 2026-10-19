@@ -505,6 +505,7 @@ if (projectGrid && !projectGrid.querySelector('.project-resume-audit-card')) {
   ['.project-api-card', '05'],
   ['.project-knowledge-workflow-card', '06'],
   ['.project-ai-daily-card', '07'],
+  ['.project-agent-playbook-card', '08'],
 ].forEach(([selector, value]) => {
   const number = document.querySelector(`${selector} .project-number`);
   if (number) number.textContent = value;

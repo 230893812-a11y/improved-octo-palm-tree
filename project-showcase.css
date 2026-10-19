@@ -12,3 +12,10 @@
 .resume-audit-line{position:relative;z-index:1;color:#ed6a52;font:600 11px/1.2 "DM Mono",monospace;letter-spacing:.14em}
 .resume-audit-grid{position:absolute;inset:16px;border:1px solid rgba(237,106,82,.24);border-radius:50%;transform:rotate(-12deg);box-shadow:30px 12px 0 -29px rgba(237,106,82,.55),-48px 42px 0 -47px rgba(237,106,82,.55)}
 .resume-audit-visual b{position:absolute;left:26px;bottom:22px;z-index:1;font-size:11px;letter-spacing:.1em;color:#556b68}
+.agent-playbook-visual{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(145deg,#202d2b,#111a19);color:#e4efeb}
+.agent-playbook-node{position:relative;z-index:1;padding:7px 8px;border:1px solid rgba(142,209,209,.38);background:rgba(255,255,255,.05);font:500 7px "DM Mono",monospace;letter-spacing:.08em}
+.agent-playbook-node.node-review{border-color:rgba(246,201,94,.5);color:#f6c95e}
+.agent-playbook-node.node-handoff{border-color:rgba(235,106,82,.5);color:#f0a18f}
+.agent-playbook-path{position:absolute;left:23%;right:23%;top:50%;height:1px;background:linear-gradient(90deg,#8ed1d1,#f6c95e,#eb6a52);opacity:.58}
+.agent-playbook-visual b{position:absolute;left:18px;bottom:12px;color:#a9c2bc;font:500 7px "DM Mono",monospace;letter-spacing:.1em}
+.project-agent-playbook-card{background:linear-gradient(155deg,rgba(246,201,94,.1),var(--card) 58%)}

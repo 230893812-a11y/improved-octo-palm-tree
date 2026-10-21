@@ -19,3 +19,6 @@
 .agent-playbook-path{position:absolute;left:23%;right:23%;top:50%;height:1px;background:linear-gradient(90deg,#8ed1d1,#f6c95e,#eb6a52);opacity:.58}
 .agent-playbook-visual b{position:absolute;left:18px;bottom:12px;color:#a9c2bc;font:500 7px "DM Mono",monospace;letter-spacing:.1em}
 .project-agent-playbook-card{background:linear-gradient(155deg,rgba(246,201,94,.1),var(--card) 58%)}
+.certificate-navigation{display:flex;gap:8px;margin:0 0 4px}
+.certificate-navigation button{width:38px;height:38px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font:500 18px/1 "DM Mono",monospace}
+.certificate-navigation button:hover,.certificate-navigation button:focus-visible{border-color:var(--orange);color:var(--orange)}

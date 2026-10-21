@@ -6,9 +6,14 @@ const mainNav = document.querySelector('#mainNav');
 
 const savedTheme = localStorage.getItem('resume-theme');
 if (savedTheme === 'dark') root.classList.add('dark');
+function syncThemeToggle() {
+  themeToggle.setAttribute('aria-label', root.classList.contains('dark') ? '切换浅色模式' : '切换深色模式');
+}
+syncThemeToggle();
 themeToggle.addEventListener('click', () => {
   root.classList.toggle('dark');
   localStorage.setItem('resume-theme', root.classList.contains('dark') ? 'dark' : 'light');
+  syncThemeToggle();
 });
 
 function setMobileNav(open) {
@@ -20,7 +25,12 @@ function setMobileNav(open) {
 }
 navToggle?.addEventListener('click', () => setMobileNav(!mainNav?.classList.contains('is-open')));
 mainNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileNav(false)));
-document.addEventListener('keydown', event => { if (event.key === 'Escape') setMobileNav(false); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && mainNav?.classList.contains('is-open')) {
+    setMobileNav(false);
+    navToggle.focus();
+  }
+});
 
 readerMode?.addEventListener('click', () => {
   const enabled = root.classList.toggle('reader-mode');
@@ -45,7 +55,6 @@ if (heroTitle) {
     span.textContent = node.textContent;
     node.replaceWith(span);
   });
-  heroTitle.classList.add('title-lines');
 }
 document.querySelectorAll('.project-card,.skill-card,.cert-card,.note-card,.media-card').forEach((card, index) => {
   card.classList.add('motion-card');
@@ -106,55 +115,23 @@ document.querySelectorAll('.nav a, .brand, .primary-button').forEach(link => {
   link.addEventListener('click', () => document.querySelector('.nav')?.classList.remove('open'));
 });
 
-// 第三层交互实验室：高级效果由用户主动选择，不混入核心项目的阅读顺序。
-document.querySelectorAll('[data-lab-action]').forEach(control => {
-  control.addEventListener('click', () => {
-    const action = control.dataset.labAction;
-    if (action === 'phoenix') {
-      document.querySelector('#top')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      window.setTimeout(() => document.querySelector('#phoenixReplay')?.click(), 450);
-    }
-    if (action === 'bot') document.querySelector('#aiBotToggle')?.click();
-    if (action === 'music') document.querySelector('#musicToggle')?.click();
-  });
-});
-
-// 证书筛选：默认展厅突出代表性证书，完整列表仍可展开查看。
-const filterButtons = [...document.querySelectorAll('.filter-button')];
-const certificateCards = [...document.querySelectorAll('.cert-card')];
-certificateCards.forEach(card => {
-  const label = card.querySelector('.cert-meta small');
-  if (!label) return;
-  const text = label.textContent;
-  label.dataset.level = text.includes('官方认证') ? 'official' : (text.includes('课程结业') ? 'course' : 'platform');
-});
-filterButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const filter = button.dataset.filter;
-    filterButtons.forEach(item => {
-      const active = item === button;
-      item.classList.toggle('active', active);
-      item.setAttribute('aria-selected', String(active));
-    });
-    certificateCards.forEach(card => {
-      card.hidden = filter !== 'all' && card.dataset.category !== filter;
-    });
-  });
-});
-
 // 图片灯箱：证书、兴趣照片和底部二维码均可点击查看高清版本。
 const lightbox = document.querySelector('#lightbox');
 const lightboxImage = document.querySelector('#lightboxImage');
 const lightboxCaption = document.querySelector('#lightboxCaption');
+const lightboxClose = document.querySelector('.lightbox-close');
 const lightboxItems = [...document.querySelectorAll('a[data-lightbox]')];
 let lightboxGroup = [];
 let lightboxIndex = 0;
+let lightboxTrigger = null;
 
 function itemTitle(item) {
   return item.querySelector('.cert-meta b, .media-caption b')?.textContent.trim() || item.querySelector('img')?.alt || '素材预览';
 }
 function showLightbox(index) {
   if (!lightboxGroup.length) return;
+  const opening = !lightbox.classList.contains('open');
+  if (opening) lightboxTrigger = document.activeElement;
   lightboxIndex = (index + lightboxGroup.length) % lightboxGroup.length;
   const item = lightboxGroup[lightboxIndex];
   lightboxImage.src = item.href;
@@ -162,13 +139,18 @@ function showLightbox(index) {
   lightboxCaption.textContent = `${itemTitle(item)} · ${lightboxIndex + 1} / ${lightboxGroup.length}`;
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
+  lightbox.removeAttribute('inert');
   document.body.style.overflow = 'hidden';
+  if (opening) lightboxClose.focus();
 }
 function closeLightbox() {
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
+  lightbox.setAttribute('inert', '');
   lightboxImage.removeAttribute('src');
   document.body.style.overflow = '';
+  if (lightboxTrigger?.isConnected) lightboxTrigger.focus();
+  lightboxTrigger = null;
 }
 lightboxItems.forEach(item => {
   item.addEventListener('click', event => {
@@ -177,7 +159,7 @@ lightboxItems.forEach(item => {
     showLightbox(lightboxGroup.indexOf(item));
   });
 });
-document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+lightboxClose.addEventListener('click', closeLightbox);
 document.querySelector('.lightbox-prev').addEventListener('click', () => showLightbox(lightboxIndex - 1));
 document.querySelector('.lightbox-next').addEventListener('click', () => showLightbox(lightboxIndex + 1));
 lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
@@ -186,6 +168,13 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape') closeLightbox();
   if (event.key === 'ArrowLeft') showLightbox(lightboxIndex - 1);
   if (event.key === 'ArrowRight') showLightbox(lightboxIndex + 1);
+  if (event.key === 'Tab') {
+    const focusable = [...lightbox.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
 });
 
 // 视频封面点击即播放：保留原生 controls，同时为触摸设备补一层明确的
@@ -225,6 +214,7 @@ let fluidRunning = true;
 let fluidLastFrame = 0;
 let advancedFluid = null;
 let advancedFluidPaused = false;
+let advancedFluidLoading = false;
 const pointer = { x: 0.5, y: 0.45, active: false };
 const blobs = [
   { color: [235, 106, 82], size: 0.44, x: 0.16, y: 0.19, phase: 0.2 },
@@ -303,37 +293,51 @@ if (advancedCanvas && desktopFluidEnabled && 'WebGLRenderingContext' in window) 
   // v0.6.1 exposes the simulation(canvas, options) API used below.  Newer
   // releases use a class-based API, so pin this compatible MIT version for
   // a stable static-page deployment.
-  import('https://esm.run/webgl-fluid-enhanced@0.6.1').then(module => {
-    const fluid = module.default || module;
-    advancedFluid = fluid;
-    fluid.simulation(advancedCanvas, {
-      SIM_RESOLUTION: 128,
-      DYE_RESOLUTION: 768,
-      TRANSPARENT: true,
-      HOVER: true,
-      SHADING: true,
-      BLOOM: true,
-      BLOOM_INTENSITY: 0.46,
-      BLOOM_THRESHOLD: 0.62,
-      SUNRAYS: false,
-      SPLAT_RADIUS: 0.13,
-      SPLAT_FORCE: 4200,
-      VELOCITY_DISSIPATION: 0.975,
-      DENSITY_DISSIPATION: 0.985,
-      COLOR_UPDATE_SPEED: 5,
-      BRIGHTNESS: 0.64,
-      COLOR_PALETTE: ['#ef6949', '#f2b84b', '#79c4bb', '#d8845c'],
-      BACK_COLOR: '#f7f4ee'
+  const loadAdvancedFluid = () => {
+    if (advancedFluidLoading || advancedFluid) return;
+    advancedFluidLoading = true;
+    import('https://esm.run/webgl-fluid-enhanced@0.6.1').then(module => {
+      const fluid = module.default || module;
+      advancedFluid = fluid;
+      fluid.simulation(advancedCanvas, {
+        SIM_RESOLUTION: 128,
+        DYE_RESOLUTION: 768,
+        TRANSPARENT: true,
+        HOVER: true,
+        SHADING: true,
+        BLOOM: true,
+        BLOOM_INTENSITY: 0.46,
+        BLOOM_THRESHOLD: 0.62,
+        SUNRAYS: false,
+        SPLAT_RADIUS: 0.13,
+        SPLAT_FORCE: 4200,
+        VELOCITY_DISSIPATION: 0.975,
+        DENSITY_DISSIPATION: 0.985,
+        COLOR_UPDATE_SPEED: 5,
+        BRIGHTNESS: 0.64,
+        COLOR_PALETTE: ['#ef6949', '#f2b84b', '#79c4bb', '#d8845c'],
+        BACK_COLOR: '#f7f4ee'
+      });
+      advancedCanvas.classList.remove('is-hidden');
+      canvas?.classList.add('is-hidden');
+      if (fluidRaf) window.cancelAnimationFrame(fluidRaf);
+      fluidRaf = 0;
+      document.body.classList.add('advanced-fluid-ready');
+      document.body.dataset.fluidMode = 'advanced';
+      if (root.classList.contains('motion-paused')) setAmbientMotion(true);
+    }).catch(() => {
+      advancedCanvas.classList.add('is-hidden');
+      canvas?.classList.remove('is-hidden');
+      document.body.dataset.fluidMode = 'lightweight';
+      if (!reduceMotion && fluidRunning && !fluidRaf) fluidRaf = window.requestAnimationFrame(drawFluid);
     });
-    advancedCanvas.classList.remove('is-hidden');
-    canvas?.classList.add('is-hidden');
-    document.body.classList.add('advanced-fluid-ready');
-    document.body.dataset.fluidMode = 'advanced';
-    if (root.classList.contains('motion-paused')) setAmbientMotion(true);
-  }).catch(() => {
-    // CDN 不可用或浏览器不支持 WebGL 时，保留本地 Canvas 背景。
-    advancedCanvas.classList.add('is-hidden');
-    document.body.dataset.fluidMode = 'lightweight';
+  };
+  const requestAdvancedFluid = () => {
+    if (window.matchMedia('(pointer: fine)').matches) loadAdvancedFluid();
+  };
+  window.addEventListener('pointermove', requestAdvancedFluid, { once: true, passive: true });
+  document.querySelectorAll('#phoenixReplay, #phoenixToggle, #phoenixSkip').forEach(control => {
+    control.addEventListener('click', loadAdvancedFluid, { once: true });
   });
 } else {
   document.body.dataset.fluidMode = 'lightweight';
@@ -363,7 +367,9 @@ document.addEventListener('visibilitychange', () => {
     if (fluidRaf) window.cancelAnimationFrame(fluidRaf);
     fluidRaf = 0;
   } else if (!reduceMotion && fluidRunning && !fluidRaf) {
-    fluidRaf = window.requestAnimationFrame(drawFluid);
+    if (!advancedFluid || document.body.dataset.fluidMode !== 'advanced') {
+      fluidRaf = window.requestAnimationFrame(drawFluid);
+    }
   }
 });
 const phoenixToggle = document.querySelector('#phoenixToggle');
@@ -376,8 +382,7 @@ if (phoenixToggle) {
   syncPhoenixPause();
 }
 
-// 右下角音乐播放器：尝试自动播放（浏览器若拦截，会提示用户点击），
-// 同时支持播放 / 暂停和拖动进度。
+// 右下角音乐播放器：页面加载时尝试有声播放，浏览器拦截后回退静音。
 const musicPlayer = document.querySelector('#musicPlayer');
 const musicAudio = document.querySelector('#musicAudio');
 const musicToggle = document.querySelector('#musicToggle');
@@ -432,9 +437,17 @@ musicProgress.addEventListener('input', () => {
   if (musicAudio.duration) musicAudio.currentTime = (Number(musicProgress.value) / 100) * musicAudio.duration;
 });
 
-// 音乐默认不自动播放，访客点击播放器后再加载并播放，避免打扰访客。
 musicAudio.volume = 0.42;
-musicStatus.textContent = '点击播放 · 按需加载音乐';
+musicStatus.textContent = '正在尝试自动播放…';
+musicAudio.play().catch(async () => {
+  musicAudio.muted = true;
+  try {
+    await musicAudio.play();
+  } catch {
+    musicAudio.muted = false;
+    musicStatus.textContent = '点击播放 · 浏览器需要授权';
+  }
+});
 
 // 纯前端项目导览机器人：只展示预设信息，不在 GitHub Pages 暴露任何密钥。
 const aiBot = document.querySelector('#aiBot');

@@ -22,3 +22,36 @@
 .project-subsection-heading h3{margin:8px 0 5px;font-size:25px;letter-spacing:-.04em}
 .project-subsection-heading p{margin:0;color:var(--muted);font-size:11px;line-height:1.7}
 @media(max-width:800px){.project-showcase-grid{grid-template-columns:1fr}.project-subsection-heading{margin-top:22px;padding-top:22px}}
+
+/* Compact project cards. */
+.project-showcase-grid{gap:14px;margin-top:30px;align-items:start}
+.project-showcase-grid .project-card{padding:18px;gap:12px;min-height:0;border-radius:16px}
+.project-showcase-grid .project-card h3{font-size:20px;line-height:1.35;margin:8px 0}
+.project-showcase-grid .project-card p{max-width:none;margin-bottom:10px;line-height:1.65}
+.project-showcase-grid .project-visual{height:110px;min-height:110px;margin:-18px -18px 0;border-radius:15px 15px 0 0}
+.project-showcase-grid .project-proof{gap:6px;margin-top:10px}
+.project-showcase-grid .project-proof>span{padding:7px 9px}
+.project-flagship .project-proof{grid-template-columns:repeat(3,minmax(0,1fr))}
+.project-flagship .project-lead{max-width:none;line-height:1.65!important}
+.project-showcase-grid .project-modules{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:10px}
+.project-showcase-grid .tech-row{margin-top:10px}
+.project-showcase-grid .project-links{gap:10px}
+.project-showcase-grid .project-primary-link{padding:8px 12px}
+.project-subsection-heading{margin:12px 0 0;padding-top:16px}
+.project-subsection-heading h3{font-size:21px}
+@media(max-width:800px){.project-showcase-grid .project-card{padding:16px}.project-showcase-grid .project-visual{height:96px;min-height:96px;margin:-16px -16px 0}.project-flagship .project-proof{grid-template-columns:1fr}.project-showcase-grid .project-modules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.secondary-projects{grid-column:1/-1}
+.secondary-projects-heading{grid-column:1/-1;margin:0;padding:12px 0 0;color:var(--ink);font-size:13px;font-weight:700}
+.secondary-project-grid{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:2px}
+.secondary-project{min-height:0!important;padding:16px!important;gap:10px!important}
+.secondary-project h3{margin:0 0 5px!important;font-size:16px!important}
+.secondary-project p{margin:0!important;font-size:11px!important}
+.secondary-project .project-links{margin-top:2px}
+.skills-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.skill-card{min-width:0}
+.skill-list{gap:18px}
+.skill-list>div{gap:5px}
+.skill-list>div b{line-height:1.55}
+@media(max-width:800px){.secondary-project-grid{grid-template-columns:1fr}}
+@media(max-width:800px){.skills-grid{grid-template-columns:1fr;gap:14px}}

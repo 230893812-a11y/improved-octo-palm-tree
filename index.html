@@ -288,6 +288,8 @@
       var stage = document.querySelector('#phoenixStage');
       var visual = document.querySelector('.hero-visual.phoenix-only');
       if (visual) {
+        visual.addEventListener('pointerenter', loadPhoenix, { once: true, passive: true });
+        visual.addEventListener('pointermove', loadPhoenix, { once: true, passive: true });
         visual.addEventListener('pointerdown', loadPhoenix, { once: true });
         visual.addEventListener('touchstart', loadPhoenix, { once: true, passive: true });
       }

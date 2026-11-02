@@ -3,32 +3,181 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>页面已迁移 · 黄鼎的个人网站</title>
+<title>正在前往 huangding-portfolio · 黄鼎的作品集</title>
 <link rel="canonical" href="https://230893812-a11y.github.io/huangding-portfolio/">
-<meta http-equiv="refresh" content="0; url=https://230893812-a11y.github.io/huangding-portfolio/">
+<!-- 兜底：如果脚本被禁用，2 秒后仍然跳到新站首页 -->
+<meta http-equiv="refresh" content="2; url=https://230893812-a11y.github.io/huangding-portfolio/">
 <meta name="robots" content="noindex">
 <style>
-  html, body { height: 100%; margin: 0; }
-  body {
-    display: flex; align-items: center; justify-content: center;
-    background: #f6f3ee; color: #2b2b2b;
-    font: 16px/1.7 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
-    text-align: center; padding: 24px;
+  :root {
+    --paper: #f6f3ee;
+    --ink: #2b2b2b;
+    --muted: #6b6259;
+    --faint: #9a9086;
+    --accent: #8c5a2b;
+    --ease: cubic-bezier(.2, .8, .2, 1);
   }
-  a { color: #8c5a2b; text-underline-offset: 3px; }
-  p { margin: 8px 0; }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.7 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .stage {
+    padding: 32px 24px;
+    animation: exit .30s cubic-bezier(.4, 0, 1, 1) .72s forwards;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 600;
+    letter-spacing: .08em;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise .50s var(--ease) .12s forwards;
+  }
+
+  .sub {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise .50s var(--ease) .22s forwards;
+  }
+
+  .sub strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .progress {
+    width: 128px;
+    height: 2px;
+    margin: 26px auto 0;
+    border-radius: 2px;
+    background: rgba(43, 43, 43, .08);
+    overflow: hidden;
+    opacity: 0;
+    animation: fade .2s ease .30s forwards;
+  }
+
+  .progress i {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: var(--accent);
+    animation: fill .50s cubic-bezier(.4, 0, .2, 1) .32s forwards;
+  }
+
+  .fallback {
+    margin: 22px 0 0;
+    font-size: 12px;
+    color: var(--faint);
+    opacity: 0;
+    animation: fade .3s ease .45s forwards;
+  }
+
+  .fallback a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+
+  .replay {
+    margin: 18px 0 0;
+    padding: 6px 14px;
+    border: 1px solid rgba(140, 90, 43, .35);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .replay:hover { background: rgba(140, 90, 43, .08); }
+
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @keyframes fade { to { opacity: 1; } }
+  @keyframes fill { to { width: 100%; } }
+  @keyframes exit {
+    to {
+      opacity: 0;
+      transform: translateY(-10px) scale(1.02);
+      filter: blur(3px);
+    }
+  }
+
+  /* 静态预览（?still）：停在最终状态，不执行退场 */
+  .still-mode .stage { animation: none; }
+
+  /* 用户在系统里关掉动效时，直接静态呈现并尽快跳转 */
+  .no-motion .stage { animation: none; }
+  .no-motion h1,
+  .no-motion .sub,
+  .no-motion .progress,
+  .no-motion .fallback { opacity: 1; transform: none; animation: none; }
+  .no-motion .progress i { width: 100%; animation: none; }
+
+  @media print { .replay { display: none; } }
 </style>
-<script>
-  // 保留锚点，例如 /improved-octo-palm-tree/#projects → /huangding-portfolio/#projects
-  location.replace("https://230893812-a11y.github.io/huangding-portfolio/" + location.hash);
-</script>
 </head>
 <body>
-  <main>
-    <p>这个地址已经改名为 <strong>huangding-portfolio</strong>。</p>
-    <p>正在跳转，如果没有反应请点这里：
-      <a href="https://230893812-a11y.github.io/huangding-portfolio/">230893812-a11y.github.io/huangding-portfolio/</a>
-    </p>
+  <main class="stage">
+    <h1>地址已更新</h1>
+    <p class="sub">正在前往 <strong>huangding-portfolio</strong></p>
+    <div class="progress" aria-hidden="true"><i></i></div>
+    <p class="fallback">没有自动跳转？<a href="https://230893812-a11y.github.io/huangding-portfolio/">点这里</a></p>
+    <button class="replay" type="button" hidden>重播</button>
   </main>
+
+<script>
+  (function () {
+    var BASE = 'https://230893812-a11y.github.io/huangding-portfolio';
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var preview = /[?&]preview($|&|=)/.test(location.search);
+    var still = /[?&]still($|&|=)/.test(location.search);
+
+    // 保留原来的深链接：/improved-octo-palm-tree/works/phoenix/ -> /huangding-portfolio/works/phoenix/
+    function target() {
+      var rest = location.pathname.replace(/^\/improved-octo-palm-tree/, '');
+      if (!rest || rest === '/') rest = '/';
+      return BASE + rest + location.search + location.hash;
+    }
+
+    if (reduced) document.documentElement.classList.add('no-motion');
+
+    if (preview || still) {
+      // 预览时不要被 meta refresh 带走
+      var meta = document.querySelector('meta[http-equiv="refresh"]');
+      if (meta) { meta.setAttribute('content', '3600'); meta.parentNode.removeChild(meta); }
+      if (still) document.documentElement.classList.add('still-mode');
+      var btn = document.querySelector('.replay');
+      btn.addEventListener('click', function () { location.reload(); });
+      if (still) { btn.hidden = false; } else { setTimeout(function () { btn.hidden = false; }, 1200); }
+      return;
+    }
+
+    // 动画约 1.02s 收尾；关掉动效的用户 120ms 就走
+    var delay = reduced ? 120 : 1050;
+    try {
+      setTimeout(function () { location.replace(target()); }, delay);
+    } catch (e) {
+      setTimeout(function () { location.href = BASE + '/'; }, delay);
+    }
+  })();
+</script>
 </body>
 </html>
